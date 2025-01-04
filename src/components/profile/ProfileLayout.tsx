@@ -1,3 +1,9 @@
+/**
+ * ProfileLayout Component
+ * 
+ * Main layout component for the user profile page.
+ * Handles loading states and organizes the layout of profile sections.
+ */
 import React from 'react';
 import { motion } from "framer-motion";
 import Navigation from '@/components/layout/Navigation';
@@ -44,12 +50,9 @@ export const ProfileLayout: React.FC<ProfileLayoutProps> = ({
           <h1 className="text-4xl font-bold text-sage-500 mb-8">Gaming Profile</h1>
           
           <div className="grid gap-8 lg:grid-cols-3">
-            {/* Game Stats Section - Takes up 2/3 of the space */}
             <div className="lg:col-span-2">
               <GameStatsSection stats={stats} />
             </div>
-            
-            {/* Personal Info Section - Takes up 1/3 of the space */}
             <div className="lg:col-span-1">
               <UserInfoSection
                 profile={profile}
