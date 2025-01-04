@@ -76,7 +76,6 @@ const Auth = () => {
                   },
                 },
               }}
-              providers={["google", "github"]}
               redirectTo={window.location.origin}
             />
           </div>
