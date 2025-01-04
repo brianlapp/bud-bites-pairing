@@ -69,7 +69,7 @@ export const useSocialFeatures = (userId?: string) => {
         .from('follows')
         .select(`
           *,
-          follower:profiles!follower_profile_fkey(*)
+          follower:profiles!follows_follower_profile_fkey(*)
         `)
         .eq('following_id', userId);
       
@@ -87,7 +87,7 @@ export const useSocialFeatures = (userId?: string) => {
         .from('follows')
         .select(`
           *,
-          following:profiles!following_profile_fkey(*)
+          following:profiles!follows_following_profile_fkey(*)
         `)
         .eq('follower_id', userId);
       
