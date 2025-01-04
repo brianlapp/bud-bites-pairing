@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Facebook, Twitter, Linkedin, Instagram, Youtube } from "lucide-react";
+import { Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
 import { PairingExplanation } from "./PairingExplanation";
 import { RecipeHeader } from "../recipe/RecipeHeader";
 import { RecipeMetadata } from "../recipe/RecipeMetadata";
@@ -112,39 +112,31 @@ export const RecipeCard = ({ strain, pairingData }: RecipeCardProps) => {
 
         <div className="flex flex-wrap justify-center gap-4 pt-6">
           <Button
-            variant="outline"
-            size="lg"
             onClick={() => handleShare('facebook')}
-            className="flex items-center gap-2 hover:bg-blue-50"
+            className="bg-coral-500 hover:bg-coral-600 text-white flex items-center gap-2 px-6 py-2 rounded-full transition-all duration-300 shadow-md hover:shadow-lg"
           >
-            <Facebook className="w-5 h-5 text-blue-600" />
+            <Facebook className="w-5 h-5" />
             Share
           </Button>
           <Button
-            variant="outline"
-            size="lg"
             onClick={() => handleShare('twitter')}
-            className="flex items-center gap-2 hover:bg-sky-50"
+            className="bg-coral-500 hover:bg-coral-600 text-white flex items-center gap-2 px-6 py-2 rounded-full transition-all duration-300 shadow-md hover:shadow-lg"
           >
-            <Twitter className="w-5 h-5 text-sky-500" />
+            <Twitter className="w-5 h-5" />
             Tweet
           </Button>
           <Button
-            variant="outline"
-            size="lg"
             onClick={() => handleShare('linkedin')}
-            className="flex items-center gap-2 hover:bg-blue-50"
+            className="bg-coral-500 hover:bg-coral-600 text-white flex items-center gap-2 px-6 py-2 rounded-full transition-all duration-300 shadow-md hover:shadow-lg"
           >
-            <Linkedin className="w-5 h-5 text-blue-700" />
+            <Linkedin className="w-5 h-5" />
             Share
           </Button>
           <Button
-            variant="outline"
-            size="lg"
             onClick={() => handleShare('instagram')}
-            className="flex items-center gap-2 hover:bg-pink-50"
+            className="bg-coral-500 hover:bg-coral-600 text-white flex items-center gap-2 px-6 py-2 rounded-full transition-all duration-300 shadow-md hover:shadow-lg"
           >
-            <Instagram className="w-5 h-5 text-pink-600" />
+            <Instagram className="w-5 h-5" />
             Share
           </Button>
         </div>
