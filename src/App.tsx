@@ -6,6 +6,7 @@ import "./App.css";
 import Index from "./pages/Index";
 import Recipe from "./pages/Recipe";
 import Calculator from "./pages/Calculator";
+import Budget from "./pages/Budget";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/recipe/:id" element={<AnimatePresence mode="wait"><Recipe /></AnimatePresence>} />
           <Route path="/calculator" element={<AnimatePresence mode="wait"><Calculator /></AnimatePresence>} />
           <Route path="/tools/calculator" element={<AnimatePresence mode="wait"><Calculator /></AnimatePresence>} />
+          <Route path="/tools/budget" element={<AnimatePresence mode="wait"><Budget /></AnimatePresence>} />
           <Route path="/tools" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
           <Route path="/games" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
           <Route path="/about" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
