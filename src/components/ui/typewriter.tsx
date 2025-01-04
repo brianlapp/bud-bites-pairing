@@ -51,6 +51,11 @@ const Typewriter = ({
   const [currentTextIndex, setCurrentTextIndex] = useState(0)
 
   const texts = Array.isArray(text) ? text : [text]
+  
+  // Find the longest text to ensure consistent width
+  const longestText = texts.reduce((longest, current) => 
+    current.length > longest.length ? current : longest
+  , texts[0])
 
   useEffect(() => {
     let timeout: NodeJS.Timeout
@@ -107,7 +112,7 @@ const Typewriter = ({
 
   return (
     <motion.div 
-      className={`inline whitespace-pre-wrap tracking-tight ${className}`}
+      className={`inline-flex items-center justify-center min-w-[${longestText.length}ch] ${className}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
