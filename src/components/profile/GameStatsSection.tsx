@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserStats } from "@/pages/Profile";
-import { ChartBar, Star, Award } from "lucide-react";
+import { Trophy, Star, Award, ChartBar, Gamepad2 } from "lucide-react";
 
 interface GameStatsSectionProps {
   stats: UserStats | null;
@@ -10,29 +10,35 @@ export const GameStatsSection = ({ stats }: GameStatsSectionProps) => {
   if (!stats) return null;
 
   const StatCard = ({ title, value, icon: Icon }: { title: string; value: string | number; icon: any }) => (
-    <div className="flex items-center space-x-3 p-4 bg-sage-50 rounded-lg">
+    <div className="flex items-center space-x-3 p-4 bg-sage-50 rounded-lg hover:bg-sage-100 transition-colors">
       <div className="bg-sage-100 p-2 rounded-full">
-        <Icon className="h-5 w-5 text-sage-500" />
+        <Icon className="h-6 w-6 text-sage-500" />
       </div>
       <div>
         <p className="text-sm text-sage-400">{title}</p>
-        <p className="text-lg font-semibold text-sage-600">{value}</p>
+        <p className="text-xl font-semibold text-sage-600">{value}</p>
       </div>
     </div>
   );
 
   return (
-    <Card className="bg-white shadow-md">
-      <CardHeader>
-        <CardTitle className="text-xl font-semibold text-sage-500">
-          Game Statistics
-        </CardTitle>
+    <Card className="bg-white shadow-lg border-sage-200">
+      <CardHeader className="border-b border-sage-100">
+        <div className="flex items-center gap-2">
+          <Trophy className="h-6 w-6 text-sage-500" />
+          <CardTitle className="text-2xl font-bold text-sage-500">
+            Gaming Achievements
+          </CardTitle>
+        </div>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-8 p-6">
         <div>
-          <h3 className="text-lg font-medium text-sage-500 mb-3">
-            Cannabis Wordle
-          </h3>
+          <div className="flex items-center gap-2 mb-4">
+            <Gamepad2 className="h-5 w-5 text-sage-500" />
+            <h3 className="text-xl font-semibold text-sage-500">
+              Cannabis Wordle
+            </h3>
+          </div>
           <div className="grid gap-4">
             <StatCard
               title="Games Played"
@@ -53,9 +59,12 @@ export const GameStatsSection = ({ stats }: GameStatsSectionProps) => {
         </div>
 
         <div>
-          <h3 className="text-lg font-medium text-sage-500 mb-3">
-            Cannabis Tycoon
-          </h3>
+          <div className="flex items-center gap-2 mb-4">
+            <Trophy className="h-5 w-5 text-sage-500" />
+            <h3 className="text-xl font-semibold text-sage-500">
+              Cannabis Tycoon
+            </h3>
+          </div>
           <div className="grid gap-4">
             <StatCard
               title="Total Sales"

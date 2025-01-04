@@ -27,9 +27,9 @@ export const UserInfoSection = ({ profile, onUpdate }: UserInfoSectionProps) => 
 
   return (
     <Card className="bg-white shadow-md">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-xl font-semibold text-sage-500">
-          Personal Information
+      <CardHeader className="flex flex-row items-center justify-between border-b border-sage-100 pb-4">
+        <CardTitle className="text-lg font-semibold text-sage-500">
+          Basic Info
         </CardTitle>
         <Button
           variant="ghost"
@@ -37,12 +37,12 @@ export const UserInfoSection = ({ profile, onUpdate }: UserInfoSectionProps) => 
           onClick={() => setIsEditing(!isEditing)}
           className="text-sage-500"
         >
-          <Edit className="h-5 w-5" />
+          <Edit className="h-4 w-4" />
         </Button>
       </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
+      <CardContent className="pt-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <div className="space-y-1">
             <label className="text-sm font-medium text-sage-500">
               Display Name
             </label>
@@ -53,16 +53,17 @@ export const UserInfoSection = ({ profile, onUpdate }: UserInfoSectionProps) => 
                   setFormData({ ...formData, display_name: e.target.value })
                 }
                 placeholder="Enter your display name"
+                className="h-8 text-sm"
               />
             ) : (
               <div className="flex items-center space-x-2 text-sage-500">
-                <User className="h-5 w-5" />
-                <span>{profile?.display_name || "No display name set"}</span>
+                <User className="h-4 w-4" />
+                <span className="text-sm">{profile?.display_name || "No display name set"}</span>
               </div>
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <label className="text-sm font-medium text-sage-500">Bio</label>
             {isEditing ? (
               <Textarea
@@ -71,14 +72,15 @@ export const UserInfoSection = ({ profile, onUpdate }: UserInfoSectionProps) => 
                   setFormData({ ...formData, bio: e.target.value })
                 }
                 placeholder="Tell us about yourself"
-                rows={4}
+                rows={2}
+                className="text-sm"
               />
             ) : (
-              <p className="text-sage-500">{profile?.bio || "No bio set"}</p>
+              <p className="text-sm text-sage-500">{profile?.bio || "No bio set"}</p>
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <label className="text-sm font-medium text-sage-500">
               Favorite Strain
             </label>
@@ -89,25 +91,27 @@ export const UserInfoSection = ({ profile, onUpdate }: UserInfoSectionProps) => 
                   setFormData({ ...formData, favorite_strain: e.target.value })
                 }
                 placeholder="What's your favorite strain?"
+                className="h-8 text-sm"
               />
             ) : (
-              <p className="text-sage-500">
+              <p className="text-sm text-sage-500">
                 {profile?.favorite_strain || "No favorite strain set"}
               </p>
             )}
           </div>
 
           {isEditing && (
-            <div className="flex justify-end space-x-2">
+            <div className="flex justify-end space-x-2 pt-2">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => setIsEditing(false)}
+                size="sm"
               >
                 Cancel
               </Button>
-              <Button type="submit" className="bg-sage-500 hover:bg-sage-600">
-                Save Changes
+              <Button type="submit" className="bg-sage-500 hover:bg-sage-600" size="sm">
+                Save
               </Button>
             </div>
           )}

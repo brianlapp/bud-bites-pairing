@@ -147,16 +147,23 @@ const Profile = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-4xl mx-auto"
+          className="max-w-5xl mx-auto"
         >
-          <h1 className="text-4xl font-bold text-sage-500 mb-8">Your Profile</h1>
+          <h1 className="text-4xl font-bold text-sage-500 mb-8">Gaming Profile</h1>
           
-          <div className="grid gap-8 md:grid-cols-2">
-            <UserInfoSection
-              profile={profile}
-              onUpdate={handleProfileUpdate}
-            />
-            <GameStatsSection stats={stats} />
+          <div className="grid gap-8 lg:grid-cols-3">
+            {/* Game Stats Section - Takes up 2/3 of the space */}
+            <div className="lg:col-span-2">
+              <GameStatsSection stats={stats} />
+            </div>
+            
+            {/* Personal Info Section - Takes up 1/3 of the space */}
+            <div className="lg:col-span-1">
+              <UserInfoSection
+                profile={profile}
+                onUpdate={handleProfileUpdate}
+              />
+            </div>
           </div>
         </motion.div>
       </main>
