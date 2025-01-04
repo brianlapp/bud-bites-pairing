@@ -57,13 +57,13 @@ const Auth = () => {
             Welcome to CannaPair
           </h2>
           <p className="mt-2 text-center text-sm text-sage-400">
-            Sign in or create an account to continue
+            Sign in to your account to continue
           </p>
           
           <div className="mt-4 p-4 bg-blue-50 rounded-lg flex items-start gap-3">
             <Info className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
             <p className="text-sm text-blue-700">
-              Create an account or sign in with your email and password or magic link. Your session will be kept active indefinitely until you explicitly sign out.
+              Sign in with your existing account using email and password or magic link. Your session will be kept active indefinitely until you explicitly sign out. If you don't have an account yet, click the sign up link below.
             </p>
           </div>
 
@@ -82,7 +82,7 @@ const Auth = () => {
                 },
               }}
               providers={[]}
-              view="sign_up"
+              view="sign_in"
               showLinks={true}
               redirectTo={window.location.origin}
             />
