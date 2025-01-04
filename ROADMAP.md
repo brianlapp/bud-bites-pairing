@@ -10,8 +10,8 @@ This document outlines the planned features and improvements for the Cannabis St
 - [x] Recent pairings showcase
 - [x] Basic responsive design
 - [ ] OpenAI integration for meal pairing suggestions
-- [ ] Pairing history storage
-- [ ] User feedback system
+- [x] Pairing history storage
+- [x] User feedback system
 
 ### Phase 2: Tools & Calculators
 - [ ] Cannabis Dosing Calculator
