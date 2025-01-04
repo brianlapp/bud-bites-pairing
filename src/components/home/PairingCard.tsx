@@ -1,4 +1,4 @@
-import { Cannabis, Flower, Leaf, Sprout, ArrowRight } from "lucide-react";
+import { Cannabis, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { StrainPairing } from "@/types/strain";
 import {
@@ -21,16 +21,16 @@ const getStrainType = (strainName: string): 'sativa' | 'indica' | 'hybrid' => {
   return 'hybrid';
 };
 
-const StrainIcon = ({ type }: { type: 'sativa' | 'indica' | 'hybrid' }) => {
+const getStrainColor = (type: 'sativa' | 'indica' | 'hybrid'): string => {
   switch (type) {
     case 'sativa':
-      return <Leaf className="w-5 h-5 text-sage-500" />;
+      return 'text-purple-500';
     case 'indica':
-      return <Flower className="w-5 h-5 text-sage-500" />;
+      return 'text-pink-500';
     case 'hybrid':
-      return <Sprout className="w-5 h-5 text-sage-500" />;
+      return 'text-sage-500'; // Keep existing green color for hybrid
     default:
-      return <Cannabis className="w-5 h-5 text-sage-500" />;
+      return 'text-sage-500';
   }
 };
 
@@ -47,6 +47,7 @@ export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
 
   const pairingData = cleanAndParseJSON(pair.pairing_suggestion);
   const strainType = getStrainType(pair.strain_name);
+  const iconColor = getStrainColor(strainType);
   
   if (!pairingData) {
     return (
@@ -61,7 +62,7 @@ export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
       <CardHeader className="p-6 space-y-6">
         <div className="flex items-center gap-3">
           <div className="p-2.5 bg-sage-50 rounded-full">
-            <StrainIcon type={strainType} />
+            <Cannabis className={`w-5 h-5 ${iconColor}`} />
           </div>
           <h3 className="text-lg font-semibold text-sage-500">
             {pair.strain_name}
