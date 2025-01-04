@@ -17,17 +17,15 @@ interface RecipeCardProps {
 
 export const RecipeCard = ({ strain, pairingData }: RecipeCardProps) => {
   const { toast } = useToast();
-  // Split recipe steps into an array
   const recipeSteps = pairingData.recipe
     .split(/\d+\./)
     .filter(Boolean)
     .map(step => step.trim());
 
-  // Fetch the appropriate image
   const { data: imageUrl, isLoading: isImageLoading } = useQuery({
     queryKey: ['recipe-image', pairingData.dishName],
     queryFn: () => getMatchingImage(pairingData.dishName, pairingData.description),
-    staleTime: Infinity, // Cache the image URL indefinitely
+    staleTime: Infinity,
   });
 
   const handleSave = () => {
@@ -42,7 +40,7 @@ export const RecipeCard = ({ strain, pairingData }: RecipeCardProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="bg-gradient-to-br from-white via-sage-50/50 to-sage-100/30 rounded-3xl shadow-xl overflow-hidden mt-8 border border-sage-100 transform hover:scale-[1.02] transition-all duration-300"
+      className="bg-gradient-to-br from-white via-sage-50/50 to-sage-100/30 rounded-3xl shadow-xl overflow-hidden mt-8 border-2 border-coral-500 transform hover:scale-[1.02] transition-all duration-300"
       itemScope
       itemType="https://schema.org/Recipe"
     >
@@ -73,7 +71,7 @@ export const RecipeCard = ({ strain, pairingData }: RecipeCardProps) => {
         <div className="flex items-center justify-between">
           <RecipeHeader dishName={pairingData.dishName} />
           <motion.button
-            className="p-3 bg-sage-50/80 backdrop-blur-sm rounded-full shadow-lg border border-sage-100 hover:bg-white transition-colors group"
+            className="p-3 bg-white rounded-full shadow-lg border border-sage-100 hover:bg-sage-50 transition-colors group z-10"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleSave}
@@ -82,6 +80,7 @@ export const RecipeCard = ({ strain, pairingData }: RecipeCardProps) => {
             <Heart className="w-6 h-6 text-coral-500 group-hover:scale-110 transition-transform" />
           </motion.button>
         </div>
+        
         <RecipeMetadata />
 
         <motion.p 
