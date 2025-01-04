@@ -20,21 +20,28 @@ export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
   try {
     const pairingData = JSON.parse(pair.pairing_suggestion);
     return (
-      <Card className="bg-white/80 backdrop-blur-md hover:shadow-lg transition-shadow animate-fade-up">
-        <CardHeader className="border-b border-sage-100">
-          <div className="flex items-center gap-2 text-sage-500 mb-2">
-            <Cannabis className="w-5 h-5" />
-            <span className="text-sm font-medium">Strain Pairing</span>
+      <Card className="relative overflow-hidden bg-white shadow-lg rounded-xl hover:shadow-xl transition-shadow duration-300 animate-fade-up">
+        <CardHeader className="space-y-4 pb-6 border-b border-sage-100">
+          <div className="flex items-center gap-2">
+            <div className="p-2 bg-sage-50 rounded-full">
+              <Cannabis className="w-5 h-5 text-sage-500" />
+            </div>
+            <span className="text-sm font-medium text-sage-500">Strain Pairing</span>
           </div>
-          <CardTitle className="text-2xl font-bold text-sage-500 flex items-center gap-2">
-            {pair.strain_name} × {pairingData.dishName}
-          </CardTitle>
-          <PairingMetadata />
-          <CardDescription className="mt-4 text-sage-400 leading-relaxed">
+          
+          <div className="space-y-2">
+            <CardTitle className="text-2xl font-bold text-sage-500">
+              {pair.strain_name} × {pairingData.dishName}
+            </CardTitle>
+            <PairingMetadata />
+          </div>
+          
+          <CardDescription className="text-sage-400 leading-relaxed">
             {pairingData.description}
           </CardDescription>
         </CardHeader>
-        <CardContent className="pt-6">
+        
+        <CardContent className="pt-6 space-y-6">
           <PairingAccordion
             pairingReason={pairingData.pairingReason}
             recipe={pairingData.recipe}
@@ -51,7 +58,7 @@ export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
     );
   } catch (error) {
     return (
-      <Card className="bg-white/80 backdrop-blur-md hover:shadow-lg transition-shadow animate-fade-up">
+      <Card className="bg-white shadow-lg rounded-xl">
         <CardHeader>
           <CardTitle className="text-xl text-sage-500">{pair.strain_name}</CardTitle>
           <CardDescription className="text-sage-400">{pair.pairing_suggestion}</CardDescription>
