@@ -13,9 +13,6 @@ const Calculator = () => {
     >
       <Navigation />
       <main className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-sage-500 mb-8 text-center">
-          Cannabis Dosing Calculator
-        </h1>
         <DosingCalculator />
       </main>
       <Footer />
