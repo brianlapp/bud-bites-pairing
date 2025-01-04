@@ -63,7 +63,7 @@ const Auth = () => {
           <div className="mt-4 p-4 bg-blue-50 rounded-lg flex items-start gap-3">
             <Info className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
             <p className="text-sm text-blue-700">
-              You can sign in with email and password or use the magic link option. Your session will be remembered.
+              Sign in with your email address. We'll send you a magic link that will keep you logged in indefinitely.
             </p>
           </div>
 
@@ -82,9 +82,11 @@ const Auth = () => {
                 },
               }}
               providers={[]}
-              view="sign_in"
-              showLinks={true}
+              view="magic_link"
+              showLinks={false}
               redirectTo={window.location.origin}
+              magicLink={true}
+              persistSession={true}
             />
           </div>
         </div>
