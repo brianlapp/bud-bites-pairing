@@ -24,7 +24,7 @@ const Auth = () => {
     });
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_IN") {
         toast({
           title: "Welcome!",
@@ -35,6 +35,13 @@ const Auth = () => {
         toast({
           title: "Signed out",
           description: "You have been signed out successfully.",
+        });
+      } else if (event === "USER_UPDATED") {
+        console.log("User updated:", session);
+      } else if (event === "PASSWORD_RECOVERY") {
+        toast({
+          title: "Password Recovery",
+          description: "Please check your email for password reset instructions.",
         });
       }
     });
@@ -80,11 +87,22 @@ const Auth = () => {
                     },
                   },
                 },
+                className: {
+                  message: 'text-red-500 text-sm',
+                }
               }}
               providers={[]}
               view="sign_in"
               showLinks={true}
               redirectTo={window.location.origin}
+              onError={(error) => {
+                console.error('Auth error:', error);
+                toast({
+                  title: "Authentication Error",
+                  description: error.message,
+                  variant: "destructive",
+                });
+              }}
             />
           </div>
         </div>
