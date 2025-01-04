@@ -1,0 +1,26 @@
+{
+  "edible": {
+    "tips": [
+      "Start with a low dose (5-10mg) and wait at least 2 hours before consuming more",
+      "Effects can take 30-90 minutes to begin",
+      "Duration: 4-8 hours",
+      "Store edibles safely away from children and pets"
+    ]
+  },
+  "flower": {
+    "tips": [
+      "Start with one small inhalation and wait 15 minutes",
+      "Effects are typically immediate",
+      "Duration: 1-3 hours",
+      "Use in a well-ventilated area"
+    ]
+  },
+  "concentrate": {
+    "tips": [
+      "Start with a very small amount (rice grain size)",
+      "Effects are immediate and intense",
+      "Duration: 2-4 hours",
+      "Use appropriate equipment and temperature control"
+    ]
+  }
+}
