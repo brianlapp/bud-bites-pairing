@@ -24,9 +24,9 @@ const getStrainType = (strainName: string): 'sativa' | 'indica' | 'hybrid' => {
 const getStrainColor = (type: 'sativa' | 'indica' | 'hybrid'): string => {
   switch (type) {
     case 'sativa':
-      return 'text-purple-500';
+      return 'text-coral-500'; // Using our site's coral color for sativa
     case 'indica':
-      return 'text-pink-500';
+      return 'text-indigo-500'; // Using indigo for indica
     case 'hybrid':
       return 'text-sage-500'; // Keep existing green color for hybrid
     default:
