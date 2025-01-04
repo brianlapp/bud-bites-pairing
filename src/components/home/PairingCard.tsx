@@ -1,4 +1,4 @@
-import { Cannabis, ArrowRight, Heart } from "lucide-react";
+import { Cannabis, ArrowRight, Heart, Share2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { StrainPairing } from "@/types/strain";
@@ -105,6 +105,53 @@ export const PairingCard = ({ pair, onVote, isFavorited = false }: PairingCardPr
     }
   };
 
+  const handleShare = async () => {
+    const pairingData = cleanAndParseJSON(pair.pairing_suggestion);
+    if (!pairingData) return;
+
+    const shareText = `Check out this amazing cannabis and food pairing on BudBites!\n\n${pair.strain_name} paired with ${pairingData.dishName}`;
+    const shareUrl = `${window.location.origin}/recipe/${pair.id}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'BudBites Pairing',
+          text: shareText,
+          url: shareUrl,
+        });
+        toast({
+          title: "Shared successfully",
+          description: "Thanks for sharing this pairing!",
+        });
+      } catch (error) {
+        if ((error as Error).name !== 'AbortError') {
+          console.error('Error sharing:', error);
+          toast({
+            title: "Error",
+            description: "Failed to share. Please try again.",
+            variant: "destructive",
+          });
+        }
+      }
+    } else {
+      // Fallback to copying to clipboard
+      try {
+        await navigator.clipboard.writeText(`${shareText}\n\n${shareUrl}`);
+        toast({
+          title: "Link copied",
+          description: "Share link has been copied to your clipboard",
+        });
+      } catch (error) {
+        console.error('Error copying to clipboard:', error);
+        toast({
+          title: "Error",
+          description: "Failed to copy link. Please try again.",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+  
   const pairingData = cleanAndParseJSON(pair.pairing_suggestion);
   const strainType = getStrainType(pair.strain_name);
   const iconColor = getStrainColor(strainType);
@@ -129,14 +176,24 @@ export const PairingCard = ({ pair, onVote, isFavorited = false }: PairingCardPr
               {pair.strain_name}
             </h3>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleFavorite}
-            className={`${isLiked ? 'text-red-500' : 'text-sage-400'} hover:text-red-500`}
-          >
-            <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleShare}
+              className="text-sage-400 hover:text-sage-500"
+            >
+              <Share2 className="w-5 h-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleFavorite}
+              className={`${isLiked ? 'text-red-500' : 'text-sage-400'} hover:text-red-500`}
+            >
+              <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
+            </Button>
+          </div>
         </div>
         
         <div className="space-y-4">
