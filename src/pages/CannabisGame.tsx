@@ -67,9 +67,9 @@ export const CannabisGame = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm rounded-lg p-8"
+              className="max-w-2xl mx-auto bg-white rounded-lg p-8 shadow-lg"
             >
-              <h3 className="text-2xl font-bold mb-4 text-center">Here's how to get started:</h3>
+              <h3 className="text-2xl font-bold mb-4 text-center text-sage-500">Here's how to get started:</h3>
               <ul className="space-y-3">
                 {[
                   "Plant your first seed (costs $100)",
@@ -82,7 +82,7 @@ export const CannabisGame = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.6 + index * 0.1 }}
-                    className="flex items-center gap-3 text-sage-100"
+                    className="flex items-center gap-3 text-sage-500"
                   >
                     <Sprout className="w-5 h-5 flex-shrink-0" />
                     <span>{step}</span>
