@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { ArrowRight, Heart, Leaf, Clock, Users } from "lucide-react";
+import { ArrowRight, Heart, Leaf, Clock, Users, BookmarkPlus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { generateMealPairing } from "@/utils/openai";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
 const StrainForm = () => {
@@ -102,26 +103,68 @@ const StrainForm = () => {
               )}
             </motion.button>
           </form>
+        </CardContent>
+      </Card>
 
-          {pairing && (
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-8"
-            >
-              {(() => {
-                const pairingData = cleanAndParseJSON(pairing);
-                if (!pairingData) return null;
+      {pairing && (
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-8 space-y-6"
+        >
+          {(() => {
+            const pairingData = cleanAndParseJSON(pairing);
+            if (!pairingData) return null;
 
-                return (
-                  <div className="bg-white rounded-xl shadow-lg p-6 space-y-6">
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 bg-sage-50 rounded-full">
-                        <Heart className="w-6 h-6 text-coral-500" />
+            return (
+              <>
+                {/* Why This Pairing Works Section */}
+                <Card className="bg-coral-50 border-2 border-coral-100 shadow-lg">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Leaf className="w-6 h-6 text-coral-500" />
+                      <h3 className="font-bold text-xl text-sage-500">
+                        Why {strain} Works Perfect With This Dish
+                      </h3>
+                    </div>
+                    <p className="text-sage-400 leading-relaxed text-lg">
+                      {pairingData.pairingReason}
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Recipe Card */}
+                <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                  {/* Recipe Image */}
+                  <img
+                    src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+                    alt={pairingData.dishName}
+                    className="w-full h-64 object-cover"
+                  />
+
+                  <div className="p-6 space-y-6">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 bg-sage-50 rounded-full">
+                          <Heart className="w-6 h-6 text-coral-500" />
+                        </div>
+                        <h2 className="text-2xl font-bold text-sage-500">
+                          {pairingData.dishName}
+                        </h2>
                       </div>
-                      <h2 className="text-2xl font-bold text-sage-500">
-                        {pairingData.dishName}
-                      </h2>
+                      <Button
+                        variant="outline"
+                        className="flex items-center gap-2"
+                        onClick={() => {
+                          toast({
+                            title: "Recipe Saved!",
+                            description: "This recipe has been saved to your collection.",
+                          });
+                        }}
+                      >
+                        <BookmarkPlus className="w-4 h-4" />
+                        Save Recipe
+                      </Button>
                     </div>
 
                     <div className="flex flex-wrap gap-4">
@@ -149,14 +192,6 @@ const StrainForm = () => {
                       {pairingData.description}
                     </p>
 
-                    <div className="bg-coral-50 rounded-lg p-6 border-2 border-coral-100">
-                      <div className="flex items-center gap-3 mb-4">
-                        <Leaf className="w-5 h-5 text-coral-500" />
-                        <h3 className="font-bold text-lg text-sage-500">Why {strain} Works Perfect With This Dish</h3>
-                      </div>
-                      <p className="text-sage-400 leading-relaxed">{pairingData.pairingReason}</p>
-                    </div>
-
                     <div className="space-y-4">
                       <div className="bg-sage-50 rounded-lg p-4">
                         <h3 className="font-semibold text-sage-500 mb-2">Recipe</h3>
@@ -169,12 +204,12 @@ const StrainForm = () => {
                       </div>
                     </div>
                   </div>
-                );
-              })()}
-            </motion.div>
-          )}
-        </CardContent>
-      </Card>
+                </div>
+              </>
+            );
+          })()}
+        </motion.div>
+      )}
     </div>
   );
 };
