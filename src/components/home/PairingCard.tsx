@@ -3,9 +3,7 @@ import { StrainPairing } from "@/types/strain";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { PairingMetadata } from "./PairingMetadata";
 import { PairingAccordion } from "./PairingAccordion";
@@ -20,30 +18,30 @@ export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
   try {
     const pairingData = JSON.parse(pair.pairing_suggestion);
     return (
-      <Card className="group relative overflow-hidden bg-white border-sage-100 shadow-md hover:shadow-lg transition-all duration-300 animate-fade-up rounded-2xl">
-        <CardHeader className="space-y-6 pb-6 border-b border-sage-100">
+      <Card className="bg-white border border-sage-100 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl overflow-hidden">
+        <CardHeader className="space-y-6 p-6 border-b border-sage-100">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-sage-50 rounded-full">
-                <Cannabis className="w-6 h-6 text-sage-500" />
+              <div className="p-2 bg-sage-50 rounded-full">
+                <Cannabis className="w-5 h-5 text-sage-500" />
               </div>
               <span className="text-sm font-medium text-sage-500">Strain Pairing</span>
             </div>
           </div>
           
           <div className="space-y-4">
-            <CardTitle className="text-2xl font-bold text-sage-500 leading-tight">
+            <h3 className="text-xl font-semibold text-sage-500 leading-tight">
               {pair.strain_name} × {pairingData.dishName}
-            </CardTitle>
+            </h3>
             <PairingMetadata />
           </div>
           
-          <CardDescription className="text-sage-400 leading-relaxed text-base">
+          <p className="text-sage-400 text-sm leading-relaxed">
             {pairingData.description}
-          </CardDescription>
+          </p>
         </CardHeader>
         
-        <CardContent className="pt-6 space-y-6">
+        <CardContent className="p-6 space-y-6">
           <PairingAccordion
             pairingReason={pairingData.pairingReason}
             recipe={pairingData.recipe}
@@ -60,10 +58,10 @@ export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
     );
   } catch (error) {
     return (
-      <Card className="bg-white shadow-lg rounded-xl p-6">
+      <Card className="bg-white border border-sage-100 shadow-sm rounded-2xl p-6">
         <CardHeader>
-          <CardTitle className="text-xl text-sage-500">{pair.strain_name}</CardTitle>
-          <CardDescription className="text-sage-400">{pair.pairing_suggestion}</CardDescription>
+          <h3 className="text-xl font-semibold text-sage-500">{pair.strain_name}</h3>
+          <p className="text-sage-400 text-sm">{pair.pairing_suggestion}</p>
         </CardHeader>
         <CardContent>
           <PairingVoteButtons
