@@ -1,4 +1,4 @@
-import { Cannabis, ArrowRight } from "lucide-react";
+import { Cannabis, Flower, Leaf, Sprout, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { StrainPairing } from "@/types/strain";
 import {
@@ -14,6 +14,26 @@ interface PairingCardProps {
   onVote: (pairingId: string, isHelpful: boolean) => Promise<void>;
 }
 
+const getStrainType = (strainName: string): 'sativa' | 'indica' | 'hybrid' => {
+  const lowerName = strainName.toLowerCase();
+  if (lowerName.includes('sativa')) return 'sativa';
+  if (lowerName.includes('indica')) return 'indica';
+  return 'hybrid';
+};
+
+const StrainIcon = ({ type }: { type: 'sativa' | 'indica' | 'hybrid' }) => {
+  switch (type) {
+    case 'sativa':
+      return <Leaf className="w-5 h-5 text-sage-500" />;
+    case 'indica':
+      return <Flower className="w-5 h-5 text-sage-500" />;
+    case 'hybrid':
+      return <Sprout className="w-5 h-5 text-sage-500" />;
+    default:
+      return <Cannabis className="w-5 h-5 text-sage-500" />;
+  }
+};
+
 export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
   const cleanAndParseJSON = (jsonString: string) => {
     try {
@@ -26,6 +46,7 @@ export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
   };
 
   const pairingData = cleanAndParseJSON(pair.pairing_suggestion);
+  const strainType = getStrainType(pair.strain_name);
   
   if (!pairingData) {
     return (
@@ -40,7 +61,7 @@ export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
       <CardHeader className="p-6 space-y-6">
         <div className="flex items-center gap-3">
           <div className="p-2.5 bg-sage-50 rounded-full">
-            <Cannabis className="w-5 h-5 text-sage-500" />
+            <StrainIcon type={strainType} />
           </div>
           <h3 className="text-lg font-semibold text-sage-500">
             {pair.strain_name}
