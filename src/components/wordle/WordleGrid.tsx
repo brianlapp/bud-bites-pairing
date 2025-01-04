@@ -46,7 +46,10 @@ const WordleGrid = ({ guesses, currentGuess, targetWord, maxAttempts }: WordleGr
               key={`current-${i}`}
               initial={{ scale: 1 }}
               animate={{ scale: currentGuess[i] ? 1.1 : 1 }}
-              className="w-14 h-14 flex items-center justify-center text-2xl font-bold rounded-lg border-2 border-sage-300 bg-white"
+              className={cn(
+                "w-14 h-14 flex items-center justify-center text-2xl font-bold rounded-lg border-2",
+                currentGuess[i] ? "border-sage-500 bg-sage-50 text-sage-900" : "border-sage-300 bg-white text-sage-900"
+              )}
             >
               {currentGuess[i] || ''}
             </motion.div>

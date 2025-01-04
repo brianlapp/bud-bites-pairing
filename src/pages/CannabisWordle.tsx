@@ -124,6 +124,24 @@ const CannabisWordle = () => {
     }
   };
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (gameWon || guesses.length >= maxAttempts) return;
+      
+      const key = event.key.toUpperCase();
+      if (key === 'ENTER') {
+        handleEnter();
+      } else if (key === 'BACKSPACE') {
+        handleBackspace();
+      } else if (/^[A-Z]$/.test(key)) {
+        handleKeyPress(key);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentGuess, gameWon, guesses.length]);
+
   return (
     <div className="min-h-screen bg-sage-50 dark:bg-sage-900">
       <Navigation />
@@ -152,6 +170,7 @@ const CannabisWordle = () => {
               <li>• Each guess must be a valid word</li>
               <li>• Colors will show how close your guess was</li>
               <li>• You have 6 attempts to guess the word</li>
+              <li>• Use your keyboard or click the letters below</li>
             </ul>
           </motion.div>
           
