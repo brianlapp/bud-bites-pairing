@@ -1,110 +1,78 @@
-import { motion, Variants } from "framer-motion";
+import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { useTypewriter } from "@/hooks/useTypewriter";
 
 interface TypewriterProps {
-  text: string | string[];
+  text: string[];
   speed?: number;
-  initialDelay?: number;
-  waitTime?: number;
   deleteSpeed?: number;
-  loop?: boolean;
+  waitTime?: number;
   className?: string;
-  showCursor?: boolean;
-  hideCursorOnType?: boolean;
-  cursorChar?: string | React.ReactNode;
-  cursorClassName?: string;
-  cursorAnimationVariants?: {
-    initial: Variants["initial"];
-    animate: Variants["animate"];
-  };
+  cursorChar?: string;
   iconSrc?: string;
 }
 
-/**
- * Typewriter component that animates text with a typing effect
- * @param text - Single string or array of strings to type
- * @param speed - Typing speed in milliseconds (default: 50)
- * @param initialDelay - Delay before starting in milliseconds (default: 0)
- * @param waitTime - Time to wait between words in milliseconds (default: 2000)
- * @param deleteSpeed - Speed of deletion in milliseconds (default: 30)
- * @param loop - Whether to loop through texts (default: true)
- * @param className - Additional CSS classes
- * @param showCursor - Whether to show the cursor (default: true)
- * @param hideCursorOnType - Whether to hide cursor while typing (default: false)
- * @param cursorChar - Custom cursor character (default: "|")
- * @param cursorClassName - Additional CSS classes for cursor
- * @param cursorAnimationVariants - Custom animation variants for cursor
- * @param iconSrc - Optional icon to display after text
- */
-export const Typewriter = ({
+export const Typewriter: React.FC<TypewriterProps> = ({
   text,
   speed = 50,
-  initialDelay = 0,
-  waitTime = 2000,
   deleteSpeed = 30,
-  loop = true,
+  waitTime = 2000,
   className,
-  showCursor = true,
-  hideCursorOnType = false,
   cursorChar = "|",
-  cursorClassName = "ml-1",
-  cursorAnimationVariants = {
-    initial: { opacity: 0 },
-    animate: {
-      opacity: 1,
-      transition: {
-        duration: 0.01,
-        repeat: Infinity,
-        repeatDelay: 0.4,
-        repeatType: "reverse",
-      },
-    },
-  },
   iconSrc,
-}: TypewriterProps) => {
-  const texts = Array.isArray(text) ? text : [text];
-  const { displayText, currentIndex } = useTypewriter({
-    texts,
-    speed,
-    initialDelay,
-    waitTime,
-    deleteSpeed,
-    loop,
-  });
+}) => {
+  const [displayText, setDisplayText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false);
 
-  // Find the longest text to ensure consistent width
-  const longestText = texts.reduce(
-    (longest, current) => (current.length > longest.length ? current : longest),
-    texts[0]
-  );
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    const currentText = text[currentIndex];
+    
+    if (isWaiting) {
+      timeout = setTimeout(() => {
+        setIsWaiting(false);
+        setIsDeleting(true);
+      }, waitTime);
+      return () => clearTimeout(timeout);
+    }
+
+    if (isDeleting) {
+      if (displayText === "") {
+        setIsDeleting(false);
+        setCurrentIndex((prev) => (prev + 1) % text.length);
+      } else {
+        timeout = setTimeout(() => {
+          setDisplayText((prev) => prev.slice(0, -1));
+        }, deleteSpeed);
+      }
+    } else {
+      if (displayText === currentText) {
+        setIsWaiting(true);
+      } else {
+        timeout = setTimeout(() => {
+          setDisplayText((prev) => currentText.slice(0, prev.length + 1));
+        }, speed);
+      }
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayText, currentIndex, isDeleting, isWaiting, text, speed, deleteSpeed, waitTime]);
 
   return (
-    <motion.div
-      className={`inline-flex items-center justify-center min-w-[${longestText.length}ch] ${className}`}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-    >
-      <span>{displayText}</span>
-      {iconSrc && displayText === texts[currentIndex] && (
-        <img src={iconSrc} alt="Icon" className="w-6 h-6 ml-1" />
+    <div className="flex items-center justify-center space-x-2">
+      {iconSrc && (
+        <img 
+          src={iconSrc} 
+          alt="Icon" 
+          className="w-8 h-8 object-contain"
+        />
       )}
-      {showCursor && (
-        <motion.span
-          variants={cursorAnimationVariants}
-          className={cn(
-            cursorClassName,
-            hideCursorOnType &&
-              (displayText.length < texts[currentIndex].length || displayText === "")
-              ? "hidden"
-              : ""
-          )}
-          initial="initial"
-          animate="animate"
-        >
-          {cursorChar}
-        </motion.span>
-      )}
-    </motion.div>
+      <span className={cn("inline-block", className)}>
+        {displayText}
+        <span className="animate-pulse">{cursorChar}</span>
+      </span>
+    </div>
   );
 };
