@@ -6,6 +6,7 @@ import WordleGrid from "@/components/wordle/WordleGrid";
 import Keyboard from "@/components/wordle/Keyboard";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { Sprout } from "lucide-react";
 import wordleWords from "@/data/wordleWords.json";
 
 const CannabisWordle = () => {
@@ -141,17 +142,64 @@ const CannabisWordle = () => {
   return (
     <div className="min-h-screen bg-sage-50 dark:bg-sage-900">
       <Navigation />
-      <main className="container mx-auto px-4 py-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-4xl mx-auto"
-        >
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-sage-500 dark:text-sage-300 mb-4">
-              Cannabis Wordle
-            </h1>
+      
+      {/* Hero Section */}
+      <div className="relative bg-gradient-to-b from-sage-500 to-sage-400 text-white pt-24 pb-32">
+        <div className="container mx-auto px-4">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-5xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-white to-sage-100"
+          >
+            Cannabis Wordle Challenge
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-lg md:text-xl text-center max-w-3xl mx-auto mb-8 text-sage-100"
+          >
+            Test your cannabis knowledge with our daily word puzzle! Guess the 5-letter word related to cannabis culture, strains, or terminology.
+          </motion.p>
+          
+          {/* Quick Guide Steps */}
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-12">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white/10 backdrop-blur-sm rounded-lg p-6"
+            >
+              <h3 className="text-xl font-semibold mb-2">1. Daily Challenge</h3>
+              <p className="text-sage-100">A new cannabis-themed word every 24 hours.</p>
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-white/10 backdrop-blur-sm rounded-lg p-6"
+            >
+              <h3 className="text-xl font-semibold mb-2">2. Color Feedback</h3>
+              <p className="text-sage-100">Green for correct, yellow for close, gray for incorrect.</p>
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="bg-white/10 backdrop-blur-sm rounded-lg p-6"
+            >
+              <h3 className="text-xl font-semibold mb-2">3. Six Attempts</h3>
+              <p className="text-sage-100">Try to solve the puzzle in six tries or less.</p>
+            </motion.div>
+          </div>
+
+          {/* Game Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="max-w-2xl mx-auto bg-white rounded-lg p-8 shadow-lg"
+          >
             <div className="flex justify-center items-center gap-4 mb-4">
               <p className="text-sage-600 dark:text-sage-400">
                 Daily Streak: {streak}
@@ -162,30 +210,49 @@ const CannabisWordle = () => {
                   variant="outline"
                   className="bg-sage-100 hover:bg-sage-200 dark:bg-sage-800 dark:hover:bg-sage-700"
                 >
+                  <Sprout className="w-4 h-4 mr-2" />
                   Use Hint
                 </Button>
               )}
             </div>
-          </div>
+          </motion.div>
+        </div>
 
-          <div className="bg-white dark:bg-sage-800 rounded-lg shadow-lg p-8 mb-8">
-            <WordleGrid
-              guesses={guesses}
-              currentGuess={currentGuess}
-              targetWord={targetWord}
-              maxAttempts={maxAttempts}
+        {/* Bottom wave SVG */}
+        <div className="absolute -bottom-[1px] left-0 w-full overflow-hidden">
+          <svg
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+            className="relative block w-full h-[60px]"
+            style={{ transform: 'rotate(180deg)' }}
+          >
+            <path
+              d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+              className="fill-sage-50"
             />
-          </div>
+          </svg>
+        </div>
+      </div>
 
-          <div className="bg-white dark:bg-sage-800 rounded-lg shadow-lg p-4">
-            <Keyboard
-              onKeyPress={handleKeyPress}
-              onEnter={handleEnter}
-              onBackspace={handleBackspace}
-              usedLetters={usedLetters}
-            />
-          </div>
-        </motion.div>
+      {/* Game Interface */}
+      <main className="container mx-auto px-4 py-8 -mt-16 relative z-10">
+        <div className="bg-white dark:bg-sage-800 rounded-lg shadow-lg p-8 mb-8">
+          <WordleGrid
+            guesses={guesses}
+            currentGuess={currentGuess}
+            targetWord={targetWord}
+            maxAttempts={maxAttempts}
+          />
+        </div>
+
+        <div className="bg-white dark:bg-sage-800 rounded-lg shadow-lg p-4">
+          <Keyboard
+            onKeyPress={handleKeyPress}
+            onEnter={handleEnter}
+            onBackspace={handleBackspace}
+            usedLetters={usedLetters}
+          />
+        </div>
       </main>
       <Footer />
     </div>
