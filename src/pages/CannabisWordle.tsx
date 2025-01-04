@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import WordleGrid from "@/components/wordle/WordleGrid";
 import Keyboard from "@/components/wordle/Keyboard";
-import { WordleStats } from "@/components/wordle/WordleStats";
 import GameStats from "@/components/wordle/GameStats";
 import { useToast } from "@/components/ui/use-toast";
 import { useUserStats } from "@/hooks/useUserStats";
 import wordleWords from "@/data/wordleWords.json";
+import { WordleHero } from "@/components/wordle/WordleHero";
+import { ColorGuide } from "@/components/wordle/stats/ColorGuide";
 
 const CannabisWordle = () => {
   const { toast } = useToast();
@@ -146,40 +146,12 @@ const CannabisWordle = () => {
     <div className="min-h-screen bg-sage-50 dark:bg-sage-900">
       <Navigation />
       
-      {/* Hero Section with Instructions */}
-      <div className="relative bg-gradient-to-b from-sage-500 to-sage-400 text-white pt-24 pb-32">
-        <div className="container mx-auto px-4">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-white to-sage-100"
-          >
-            Cannabis Wordle Challenge
-          </motion.h1>
+      <WordleHero stats={stats} loading={loading} />
+      
+      <div className="container mx-auto px-4 -mt-16 relative z-10 space-y-8">
+        <div className="max-w-2xl mx-auto">
+          <ColorGuide className="mb-8 bg-white dark:bg-sage-800 rounded-lg p-4 shadow-lg" />
           
-          {/* Instructions Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="max-w-2xl mx-auto mb-8 bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white/90"
-          >
-            <h2 className="text-xl font-semibold mb-4">How to Play</h2>
-            <ul className="space-y-2">
-              <li>• Guess the 5-letter cannabis-related word</li>
-              <li>• Each guess must be a valid word</li>
-              <li>• Colors will show how close your guess was</li>
-              <li>• You have 6 attempts to guess the word</li>
-              <li>• Use your keyboard or click the letters below</li>
-            </ul>
-          </motion.div>
-          
-          {/* Stats Section */}
-          <div className="max-w-4xl mx-auto mb-8">
-            <WordleStats stats={stats} loading={loading} />
-          </div>
-
-          {/* Game Interface */}
           <div className="bg-white dark:bg-sage-800 rounded-lg shadow-lg p-8 mb-8">
             <WordleGrid
               guesses={guesses}
@@ -189,7 +161,6 @@ const CannabisWordle = () => {
             />
           </div>
 
-          {/* Game Stats and Color Guide */}
           <GameStats
             streak={stats?.wordle_streak || 0}
             hintUsed={hintUsed}
