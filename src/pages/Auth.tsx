@@ -66,7 +66,7 @@ const Auth = () => {
           <div className="mt-4 p-4 bg-blue-50 rounded-lg flex items-start gap-3">
             <Info className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
             <p className="text-sm text-blue-700">
-              Sign in with your email address. We'll send you a magic link to log in securely without a password, or you can set up a password if you prefer.
+              Sign in with your email address. We'll send you a magic link to log in securely without a password.
             </p>
           </div>
 
@@ -82,12 +82,6 @@ const Auth = () => {
                       brandAccent: '#FF7F5C',
                     },
                   },
-                },
-                className: {
-                  container: 'auth-container',
-                  label: 'auth-label',
-                  button: 'auth-button',
-                  input: 'auth-input',
                 },
               }}
               view="magic_link"
