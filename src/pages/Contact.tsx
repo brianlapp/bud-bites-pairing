@@ -14,7 +14,7 @@ const Contact = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="flex-grow"
+        className="flex-grow pt-16" // Added padding-top here
       >
         {/* Hero Section with Aurora Animation */}
         <div className="relative h-[40vh] flex items-center justify-center overflow-hidden">
