@@ -1,29 +1,16 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
-import { UserInfoSection } from "@/components/profile/UserInfoSection";
-import { GameStatsSection } from "@/components/profile/GameStatsSection";
 import { useToast } from "@/components/ui/use-toast";
+import { ProfileLayout } from "@/components/profile/ProfileLayout";
+import { UserProfile, UserStats } from "@/types/profile";
 
-export interface UserProfile {
-  id: string;
-  display_name: string | null;
-  bio: string | null;
-  favorite_strain: string | null;
-}
-
-export interface UserStats {
-  wordle_games_played: number;
-  wordle_streak: number;
-  wordle_avg_guesses: number;
-  tycoon_total_sales: number;
-  tycoon_top_strain: string | null;
-  tycoon_level: number;
-}
-
+/**
+ * Profile Page Component
+ * 
+ * Manages user profile data and stats, with real-time updates and authentication.
+ * Displays user information and game statistics in a responsive layout.
+ */
 const Profile = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [stats, setStats] = useState<UserStats | null>(null);
@@ -31,6 +18,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Authentication and data fetching
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -46,6 +34,7 @@ const Profile = () => {
       }
 
       try {
+        // Fetch profile and stats data in parallel
         const [profileResult, statsResult] = await Promise.all([
           supabase
             .from("profiles")
@@ -78,8 +67,8 @@ const Profile = () => {
 
     checkAuth();
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    // Set up real-time auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_OUT') {
         navigate('/auth');
       }
@@ -90,6 +79,10 @@ const Profile = () => {
     };
   }, [navigate]);
 
+  /**
+   * Updates the user's profile information in Supabase
+   * @param updatedProfile - Partial profile data to update
+   */
   const handleProfileUpdate = async (updatedProfile: Partial<UserProfile>) => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -125,51 +118,13 @@ const Profile = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-sage-50">
-        <Navigation />
-        <main className="container mx-auto px-4 py-24">
-          <div className="flex justify-center items-center h-[50vh]">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sage-500"></div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-sage-50">
-      <Navigation />
-      
-      <main className="container mx-auto px-4 py-24">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-5xl mx-auto"
-        >
-          <h1 className="text-4xl font-bold text-sage-500 mb-8">Gaming Profile</h1>
-          
-          <div className="grid gap-8 lg:grid-cols-3">
-            {/* Game Stats Section - Takes up 2/3 of the space */}
-            <div className="lg:col-span-2">
-              <GameStatsSection stats={stats} />
-            </div>
-            
-            {/* Personal Info Section - Takes up 1/3 of the space */}
-            <div className="lg:col-span-1">
-              <UserInfoSection
-                profile={profile}
-                onUpdate={handleProfileUpdate}
-              />
-            </div>
-          </div>
-        </motion.div>
-      </main>
-      
-      <Footer />
-    </div>
+    <ProfileLayout
+      loading={loading}
+      profile={profile}
+      stats={stats}
+      onProfileUpdate={handleProfileUpdate}
+    />
   );
 };
 
