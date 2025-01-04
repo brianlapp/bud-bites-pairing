@@ -17,7 +17,7 @@ export const AuroraBackground = ({
     <main>
       <div
         className={cn(
-          "relative flex flex-col h-[40vh] items-center justify-center bg-zinc-50 dark:bg-zinc-900 text-slate-950 transition-bg",
+          "relative flex flex-col h-[40vh] items-center justify-center bg-sage-500 dark:bg-sage-500 text-white transition-bg",
           className
         )}
         {...props}
@@ -26,9 +26,9 @@ export const AuroraBackground = ({
           <div
             className={cn(
               `
-            [--white-gradient:repeating-linear-gradient(100deg,var(--white)_0%,var(--white)_7%,var(--transparent)_10%,var(--transparent)_12%,var(--white)_16%)]
-            [--dark-gradient:repeating-linear-gradient(100deg,var(--black)_0%,var(--black)_7%,var(--transparent)_10%,var(--transparent)_12%,var(--black)_16%)]
-            [--aurora:repeating-linear-gradient(100deg,var(--coral-500)_10%,var(--coral-600)_15%,var(--coral-500)_20%,var(--sage-500)_25%,var(--coral-500)_30%)]
+            [--white-gradient:repeating-linear-gradient(100deg,var(--sage-500)_0%,var(--sage-500)_7%,var(--transparent)_10%,var(--transparent)_12%,var(--sage-500)_16%)]
+            [--dark-gradient:repeating-linear-gradient(100deg,var(--sage-500)_0%,var(--sage-500)_7%,var(--transparent)_10%,var(--transparent)_12%,var(--sage-500)_16%)]
+            [--aurora:repeating-linear-gradient(100deg,var(--coral-500)_10%,var(--coral-600)_15%,var(--coral-500)_20%,var(--coral-600)_25%,var(--coral-500)_30%)]
             [background-image:var(--white-gradient),var(--aurora)]
             dark:[background-image:var(--dark-gradient),var(--aurora)]
             [background-size:300%,_200%]
