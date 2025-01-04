@@ -11,6 +11,7 @@ import CannabisGame from "./pages/CannabisGame";
 import CannabisWordle from "./pages/CannabisWordle";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/games/tycoon" element={<AnimatePresence mode="wait"><CannabisGame /></AnimatePresence>} />
           <Route path="/games/wordle" element={<AnimatePresence mode="wait"><CannabisWordle /></AnimatePresence>} />
           <Route path="/about" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
+          <Route path="/contact" element={<AnimatePresence mode="wait"><Contact /></AnimatePresence>} />
           <Route path="/auth" element={<AnimatePresence mode="wait"><Auth /></AnimatePresence>} />
           <Route path="/profile" element={<AnimatePresence mode="wait"><Profile /></AnimatePresence>} />
         </Routes>

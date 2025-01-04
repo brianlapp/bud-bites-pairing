@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
-import { Github, Twitter, Instagram } from "lucide-react";
 
 const Footer = () => {
   return (
     <footer className="bg-sage-50 border-t border-sage-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
             <h3 className="text-sage-500 font-semibold text-lg">CannaPair</h3>
             <p className="text-sage-400 text-sm">
@@ -26,6 +25,11 @@ const Footer = () => {
                   Budget Planner
                 </Link>
               </li>
+              <li>
+                <Link to="/contact" className="text-sage-400 hover:text-sage-500 text-sm">
+                  Contact Us
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -43,21 +47,6 @@ const Footer = () => {
                 </Link>
               </li>
             </ul>
-          </div>
-
-          <div>
-            <h4 className="font-medium text-sage-500 mb-4">Connect</h4>
-            <div className="flex space-x-4">
-              <a href="#" className="text-sage-400 hover:text-sage-500">
-                <Twitter size={20} />
-              </a>
-              <a href="#" className="text-sage-400 hover:text-sage-500">
-                <Instagram size={20} />
-              </a>
-              <a href="#" className="text-sage-400 hover:text-sage-500">
-                <Github size={20} />
-              </a>
-            </div>
           </div>
         </div>
 
