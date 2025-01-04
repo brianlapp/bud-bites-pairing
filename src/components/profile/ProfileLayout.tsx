@@ -59,10 +59,12 @@ export const ProfileLayout: React.FC<ProfileLayoutProps> = ({
             </div>
           </div>
 
-          <UserInfoSection
-            profile={profile}
-            onUpdate={onProfileUpdate}
-          />
+          <div className="max-w-xl mx-auto">
+            <UserInfoSection
+              profile={profile}
+              onUpdate={onProfileUpdate}
+            />
+          </div>
         </motion.div>
       </main>
       <Footer />
