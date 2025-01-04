@@ -48,7 +48,7 @@ export const ProfileLayout: React.FC<ProfileLayoutProps> = ({
           animate={{ opacity: 1, y: 0 }}
           className="max-w-5xl mx-auto space-y-8"
         >
-          <h1 className="text-4xl font-bold text-sage-500 mb-8">Gaming Profile</h1>
+          <h1 className="text-4xl font-bold text-sage-500 mb-8">Your Profile</h1>
           
           <div className="grid gap-8 lg:grid-cols-3">
             <div className="lg:col-span-2">
