@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { StrainPairing } from "@/types/strain";
 import { PairingCard } from "./PairingCard";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const RecentPairings = () => {
   const { toast } = useToast();
@@ -53,13 +54,11 @@ const RecentPairings = () => {
         <h2 className="text-3xl font-bold text-sage-500 mb-12">Recent Pairings</h2>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {isPairingsLoading ? (
-            <div className="col-span-full text-center py-12">
-              <div className="animate-pulse space-y-4">
-                <div className="h-48 bg-sage-100 rounded-xl" />
-                <div className="h-48 bg-sage-100 rounded-xl" />
-                <div className="h-48 bg-sage-100 rounded-xl" />
-              </div>
-            </div>
+            <>
+              <Skeleton className="h-[600px] w-full rounded-xl" />
+              <Skeleton className="h-[600px] w-full rounded-xl" />
+              <Skeleton className="h-[600px] w-full rounded-xl" />
+            </>
           ) : recentPairings.length > 0 ? (
             recentPairings.map((pair) => (
               <PairingCard key={pair.id} pair={pair} onVote={handleVote} />
