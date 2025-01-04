@@ -18,6 +18,7 @@ interface TypewriterProps {
     animate: Variants["animate"]
   }
   cursorClassName?: string
+  iconSrc?: string
 }
 
 const Typewriter = ({
@@ -44,6 +45,7 @@ const Typewriter = ({
       },
     },
   },
+  iconSrc,
 }: TypewriterProps) => {
   const [displayText, setDisplayText] = useState("")
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -117,6 +119,9 @@ const Typewriter = ({
       animate={{ opacity: 1 }}
     >
       <span>{displayText}</span>
+      {iconSrc && !isDeleting && currentIndex === texts[currentTextIndex].length && (
+        <img src={iconSrc} alt="Icon" className="w-6 h-6 ml-1" />
+      )}
       {showCursor && (
         <motion.span
           variants={cursorAnimationVariants}

@@ -12,7 +12,7 @@ const HeroSection = () => {
               <Typewriter
                 text={[
                   "Blue Dream 🌿",
-                  "OG Kush 🍃",
+                  "OG Kush ",
                   "Sour Diesel 🚀",
                   "Purple Haze 💜",
                   "Girl Scout Cookies 🍪",
@@ -22,6 +22,7 @@ const HeroSection = () => {
                 waitTime={1500}
                 deleteSpeed={40}
                 cursorChar="_"
+                iconSrc="/lovable-uploads/3fa6f999-491e-425c-8394-a740a242bc58.png"
               />
             </div>
           </h1>
