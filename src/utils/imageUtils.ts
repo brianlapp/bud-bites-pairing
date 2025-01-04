@@ -8,13 +8,8 @@ const recipeImages: Record<string, string> = {
   // Add more mappings as needed
 };
 
-const createSearchQuery = (recipeName: string): string => {
-  // Remove common words and create a focused search query
-  const commonWords = ['with', 'and', 'the', 'a', 'an', 'in', 'on', 'at', 'to'];
-  return recipeName
-    .split(' ')
-    .filter(word => !commonWords.includes(word.toLowerCase()))
-    .join(' ') + ' food dish plated';
+const createImagePrompt = (recipeName: string, recipeDescription: string): string => {
+  return `A professional food photography style image of ${recipeName}. ${recipeDescription}. Bright lighting, shallow depth of field, on a clean white plate, restaurant presentation style.`;
 };
 
 export const getMatchingImage = async (
@@ -27,25 +22,7 @@ export const getMatchingImage = async (
       return recipeImages[recipeName];
     }
 
-    // 2. Try Unsplash API
-    const searchQuery = createSearchQuery(recipeName);
-    const unsplashResponse = await fetch(
-      `https://api.unsplash.com/photos/random?query=${encodeURIComponent(
-        searchQuery
-      )}&orientation=landscape`,
-      {
-        headers: {
-          Authorization: `Client-ID YOUR_UNSPLASH_ACCESS_KEY`
-        }
-      }
-    );
-
-    if (unsplashResponse.ok) {
-      const data = await unsplashResponse.json();
-      return data.urls.regular;
-    }
-
-    // 3. Fallback to AI generation
+    // 2. Use AI generation as fallback
     const { data: imageData, error } = await supabase.functions.invoke('generate-recipe-image', {
       body: { recipeName, recipeDescription }
     });
@@ -54,7 +31,7 @@ export const getMatchingImage = async (
       return imageData.imageUrl;
     }
 
-    // 4. Final fallback: default placeholder
+    // 3. Final fallback: default placeholder
     return '/placeholder.svg';
   } catch (error) {
     console.error('Error fetching recipe image:', error);
