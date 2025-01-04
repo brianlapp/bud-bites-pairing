@@ -1,26 +1,18 @@
 import { Medal } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-interface LeaderboardEntry {
-  rank: number;
-  profile: {
-    id: string;
-    display_name: string | null;
-  };
-  points: number;
-}
+import { LeaderboardEntry } from "@/types/social";
 
 interface LeaderboardCardProps {
   entries: LeaderboardEntry[];
 }
 
 export const LeaderboardCard = ({ entries }: LeaderboardCardProps) => {
-  const getMedalColor = (rank: number) => {
-    switch (rank) {
-      case 1: return "text-yellow-500";
-      case 2: return "text-gray-400";
-      case 3: return "text-amber-600";
+  const getMedalColor = (index: number) => {
+    switch (index) {
+      case 0: return "text-yellow-500";
+      case 1: return "text-gray-400";
+      case 2: return "text-amber-600";
       default: return "text-sage-500";
     }
   };
@@ -32,19 +24,19 @@ export const LeaderboardCard = ({ entries }: LeaderboardCardProps) => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {entries.map((entry) => (
-            <div key={entry.profile.id} className="flex items-center justify-between">
+          {entries.map((entry, index) => (
+            <div key={entry.id} className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="flex items-center justify-center w-6">
-                  <Medal className={`h-4 w-4 ${getMedalColor(entry.rank)}`} />
+                  <Medal className={`h-4 w-4 ${getMedalColor(index)}`} />
                 </div>
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${entry.profile.id}`} />
-                  <AvatarFallback>{entry.profile.display_name?.[0] || '?'}</AvatarFallback>
+                  <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${entry.user_id}`} />
+                  <AvatarFallback>{entry.user?.display_name?.[0] || '?'}</AvatarFallback>
                 </Avatar>
-                <span className="font-medium">{entry.profile.display_name || 'Anonymous'}</span>
+                <span className="font-medium">{entry.user?.display_name || 'Anonymous'}</span>
               </div>
-              <span className="text-sage-500 font-semibold">{entry.points} pts</span>
+              <span className="text-sage-500 font-semibold">{entry.score} pts</span>
             </div>
           ))}
         </div>

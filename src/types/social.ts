@@ -31,7 +31,7 @@ export interface Follow {
   following_id: string;
   created_at: string;
   follower?: UserProfile;
-  following_profile?: UserProfile;
+  following?: UserProfile;
 }
 
 export interface LeaderboardEntry {
@@ -41,7 +41,7 @@ export interface LeaderboardEntry {
   score: number;
   month: string;
   created_at: string;
-  profile?: UserProfile;
+  user?: UserProfile;
 }
 
 export interface UserAchievement {

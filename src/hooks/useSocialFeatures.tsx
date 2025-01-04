@@ -7,7 +7,6 @@ export const useSocialFeatures = (userId?: string) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Fetch achievements
   const { data: achievements = [] } = useQuery({
     queryKey: ['achievements'],
     queryFn: async () => {
@@ -20,7 +19,6 @@ export const useSocialFeatures = (userId?: string) => {
     },
   });
 
-  // Fetch user achievements
   const { data: userAchievements = [] } = useQuery({
     queryKey: ['user-achievements', userId],
     queryFn: async () => {
@@ -36,7 +34,6 @@ export const useSocialFeatures = (userId?: string) => {
     enabled: !!userId,
   });
 
-  // Fetch challenges
   const { data: challenges = [] } = useQuery({
     queryKey: ['challenges'],
     queryFn: async () => {
@@ -49,7 +46,6 @@ export const useSocialFeatures = (userId?: string) => {
     },
   });
 
-  // Fetch user challenges
   const { data: userChallenges = [] } = useQuery({
     queryKey: ['user-challenges', userId],
     queryFn: async () => {
@@ -93,7 +89,7 @@ export const useSocialFeatures = (userId?: string) => {
         .from('follows')
         .select(`
           *,
-          following_profile:profiles!following_id(*)
+          following:profiles!following_id(*)
         `)
         .eq('follower_id', userId);
       
@@ -111,7 +107,7 @@ export const useSocialFeatures = (userId?: string) => {
         .from('leaderboards')
         .select(`
           *,
-          profile:profiles(*)
+          user:profiles!user_id(*)
         `)
         .order('score', { ascending: false })
         .limit(10);
@@ -121,7 +117,6 @@ export const useSocialFeatures = (userId?: string) => {
     },
   });
 
-  // Join challenge mutation
   const joinChallenge = useMutation({
     mutationFn: async (challengeId: string) => {
       if (!userId) throw new Error('User must be logged in to join challenges');
