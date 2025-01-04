@@ -1,6 +1,4 @@
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
 interface RecipeInstructionsProps {
@@ -56,27 +54,6 @@ export const RecipeInstructions = ({ recipeSteps, cookingTips }: RecipeInstructi
           <span className="text-base font-normal text-sage-400">(Trust me, bro! 🌿)</span>
         </h3>
         <p className="text-sage-400 text-lg text-left" itemProp="tips">{cookingTips}</p>
-      </motion.div>
-
-      <motion.div
-        className="flex justify-center pt-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-      >
-        <Button
-          variant="outline"
-          className="group"
-          onClick={() => {
-            toast({
-              title: "Coming Soon! 🌿",
-              description: "We'll be linking to the original recipe source in the future. Stay tuned!",
-            });
-          }}
-        >
-          <ExternalLink className="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform" />
-          View Original Recipe
-        </Button>
       </motion.div>
     </motion.div>
   );
