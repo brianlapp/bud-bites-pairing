@@ -30,7 +30,6 @@ export const RecipeCard = ({ pairingData }: RecipeCardProps) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="bg-gradient-to-br from-white via-sage-50/50 to-sage-100/30 rounded-3xl shadow-xl overflow-hidden mt-8 border border-sage-100 transform hover:scale-[1.02] transition-all duration-300"
-      // Add recipe schema markup
       itemScope
       itemType="https://schema.org/Recipe"
     >
@@ -118,7 +117,7 @@ export const RecipeCard = ({ pairingData }: RecipeCardProps) => {
         </motion.div>
 
         <motion.p 
-          className="text-sage-400 leading-relaxed text-lg text-center md:text-left"
+          className="text-sage-400 leading-relaxed text-lg text-left"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5 }}
@@ -139,10 +138,10 @@ export const RecipeCard = ({ pairingData }: RecipeCardProps) => {
           >
             <h3 className="font-bold text-xl text-sage-500 mb-6 flex items-center gap-2">
               <span itemProp="name">Instructions</span>
-              <div className="flex-grow border-b border-sage-200"></div>
+              <div className="flex-grow border-b-2 border-coral-500"></div>
             </h3>
             
-            <ol className="space-y-6" itemProp="recipeInstructions">
+            <ol className="space-y-6 text-left" itemProp="recipeInstructions">
               {recipeSteps.map((step, index) => (
                 <motion.li
                   key={index}
@@ -166,10 +165,11 @@ export const RecipeCard = ({ pairingData }: RecipeCardProps) => {
             whileHover={{ scale: 1.01 }}
           >
             <h3 className="font-bold text-xl text-sage-500 mb-4 flex items-center gap-2">
-              Pro Tips 
+              <span>Pro Tips</span>
+              <div className="flex-grow border-b-2 border-coral-500"></div>
               <span className="text-base font-normal text-sage-400">(Trust me, bro! 🌿)</span>
             </h3>
-            <p className="text-sage-400 text-lg" itemProp="tips">{pairingData.cookingTips}</p>
+            <p className="text-sage-400 text-lg text-left" itemProp="tips">{pairingData.cookingTips}</p>
           </motion.div>
 
           <motion.div
