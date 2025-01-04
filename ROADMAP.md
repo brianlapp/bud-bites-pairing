@@ -18,6 +18,8 @@ This document outlines the planned features and improvements for the Cannabis St
   - [x] Input form for weight and tolerance
   - [x] Dosage recommendations
   - [x] Safety guidelines
+  - [x] Responsive design
+  - [x] Local storage for user preferences
 - [ ] Monthly Budget Planner
   - [ ] Expense tracking
   - [ ] Budget visualization
