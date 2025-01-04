@@ -95,13 +95,19 @@ const Auth = () => {
               view="sign_in"
               showLinks={true}
               redirectTo={window.location.origin}
-              onError={(error) => {
-                console.error('Auth error:', error);
-                toast({
-                  title: "Authentication Error",
-                  description: error.message,
-                  variant: "destructive",
-                });
+              localization={{
+                variables: {
+                  sign_in: {
+                    email_label: 'Email',
+                    password_label: 'Password',
+                  },
+                },
+                error: {
+                  password_required: 'Password is required',
+                  email_required: 'Email is required',
+                  email_invalid: 'Invalid email address',
+                  default: 'Authentication error occurred',
+                }
               }}
             />
           </div>
