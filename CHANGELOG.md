@@ -22,13 +22,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - User statistics dashboard
 - Game stats integration with Supabase
 - Profile management system
+- Enhanced typewriter effect with cannabis leaf icon
+- Improved code organization through component refactoring
 
 ### Changed
 - Updated Tailwind configuration with custom colors and theme variables
 - Improved Wordle game UI layout and positioning
 - Enhanced game stats visualization
+- Refactored Navigation component into smaller, focused components
+- Optimized typewriter component for better maintainability
 
 ### Fixed
 - Border color configuration in Tailwind setup
 - Wordle color guide positioning
 - Game stats persistence and synchronization
+- Image display issues in typewriter component

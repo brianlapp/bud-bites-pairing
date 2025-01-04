@@ -12,6 +12,7 @@ This document outlines the planned features and improvements for the Cannabis St
 - [x] OpenAI integration for meal pairing suggestions
 - [x] Pairing history storage
 - [x] User feedback system
+- [x] Enhanced UI animations and transitions
 
 ### Phase 2: Tools & Calculators ✅
 - [x] Cannabis Dosing Calculator
@@ -47,10 +48,13 @@ This document outlines the planned features and improvements for the Cannabis St
 - [x] Community voting system (Reddit-style)
 - [ ] Favorite pairings
 - [ ] Social sharing features
+- [ ] Enhanced animations and transitions
+- [ ] Improved mobile responsiveness
 
 ## Technical Improvements
 
 ### Performance 🔄
+- [x] Component refactoring for better maintainability
 - [ ] Image optimization
 - [ ] Code splitting
 - [ ] Lazy loading for games and tools
