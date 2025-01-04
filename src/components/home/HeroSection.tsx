@@ -26,7 +26,7 @@ const HeroSection = () => {
             </div>
           </h1>
           <p className="max-w-2xl mx-auto text-lg sm:text-xl text-sage-400">
-            Discover the perfect meal pairings for your favorite cannabis strains, curated by our AI sommelier.
+            Hi there! I'm Bud Bites, your friendly AI Cannabis sommelier. Tell me your favorite strain, and I'll craft the perfect meal pairing just for you! 🌿✨
           </p>
           
           <div className="flex items-center justify-center my-8">
