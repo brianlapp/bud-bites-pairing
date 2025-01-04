@@ -6,6 +6,7 @@ import { PairingData } from "@/types/pairing";
 import { PairingExplanation } from "./PairingExplanation";
 
 interface RecipeCardProps {
+  strain: string;
   pairingData: PairingData;
 }
 
@@ -16,7 +17,7 @@ const funnyLoadingMessages = [
   "Getting baked... the recipe, of course! 🍪",
 ];
 
-export const RecipeCard = ({ pairingData }: RecipeCardProps) => {
+export const RecipeCard = ({ strain, pairingData }: RecipeCardProps) => {
   const { toast } = useToast();
 
   // Split recipe steps into an array
@@ -127,7 +128,7 @@ export const RecipeCard = ({ pairingData }: RecipeCardProps) => {
           {pairingData.description}
         </motion.p>
 
-        <PairingExplanation strain={pairingData.dishName} pairingData={pairingData} />
+        <PairingExplanation strain={strain} pairingData={pairingData} />
 
         <motion.div 
           className="space-y-6"

@@ -5,7 +5,6 @@ import { generateMealPairing } from "@/utils/openai";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { PairingInput } from "./PairingInput";
-import { PairingExplanation } from "./PairingExplanation";
 import { RecipeCard } from "./RecipeCard";
 import { cleanAndParseJSON } from "@/utils/pairingUtils";
 import type { PairingFormState } from "@/types/pairing";
@@ -74,11 +73,10 @@ const StrainForm = () => {
 
         return (
           <div className="mt-8 space-y-6">
-            <PairingExplanation 
-              strain={formState.strain} 
+            <RecipeCard 
+              strain={formState.strain}
               pairingData={pairingData} 
             />
-            <RecipeCard pairingData={pairingData} />
           </div>
         );
       })()}
