@@ -1,5 +1,6 @@
 import { Cannabis } from "lucide-react";
 import { CardHeader } from "@/components/ui/card";
+import { ShareFavoriteButtons } from "./ShareFavoriteButtons";
 
 interface PairingHeaderProps {
   strainName: string;
