@@ -5,6 +5,7 @@ import { Auth as SupabaseAuth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { Info } from "lucide-react";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -62,6 +63,14 @@ const Auth = () => {
           <p className="mt-2 text-center text-sm text-sage-400">
             Sign in or create an account to continue
           </p>
+          
+          <div className="mt-4 p-4 bg-blue-50 rounded-lg flex items-start gap-3">
+            <Info className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+            <p className="text-sm text-blue-700">
+              Sign in with your email address. We'll send you a magic link to log in securely without a password, or you can set up a password if you prefer.
+            </p>
+          </div>
+
           <div className="mt-8">
             <SupabaseAuth
               supabaseClient={supabase}
