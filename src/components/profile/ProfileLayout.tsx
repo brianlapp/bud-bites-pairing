@@ -55,14 +55,14 @@ export const ProfileLayout: React.FC<ProfileLayoutProps> = ({
               <GameStatsSection stats={stats} />
             </div>
             <div className="lg:col-span-1">
-              <UserInfoSection
-                profile={profile}
-                onUpdate={onProfileUpdate}
-              />
+              <FavoritePairingsSection />
             </div>
           </div>
 
-          <FavoritePairingsSection />
+          <UserInfoSection
+            profile={profile}
+            onUpdate={onProfileUpdate}
+          />
         </motion.div>
       </main>
       <Footer />
