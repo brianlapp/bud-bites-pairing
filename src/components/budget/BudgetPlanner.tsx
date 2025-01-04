@@ -4,38 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import {
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-} from "recharts";
-
-interface ExpenseCategory {
-  name: string;
-  amount: number;
-}
-
-interface BudgetData {
-  income: number;
-  expenses: ExpenseCategory[];
-  month: string;
-}
-
-const COLORS = ["#2D4739", "#7d9186", "#a3b3aa", "#FF7F5C"];
-
-const EXPENSE_CATEGORIES = [
-  "Flower",
-  "Edibles",
-  "Concentrates",
-  "Accessories",
-];
+import { ExpenseInput } from "./ExpenseInput";
+import { BudgetCharts } from "./BudgetCharts";
+import { BudgetRecommendations } from "./BudgetRecommendations";
+import { BudgetData, ExpenseCategory, EXPENSE_CATEGORIES } from "./types";
 
 export const BudgetPlanner = () => {
   const [income, setIncome] = useState<string>("");
@@ -85,7 +57,10 @@ export const BudgetPlanner = () => {
     const newBudget: BudgetData = {
       income: Number(income),
       expenses: [...expenses],
-      month: new Date().toLocaleString('default', { month: 'long', year: 'numeric' }),
+      month: new Date().toLocaleString("default", {
+        month: "long",
+        year: "numeric",
+      }),
     };
 
     const updatedHistory = [...budgetHistory, newBudget];
@@ -107,30 +82,13 @@ export const BudgetPlanner = () => {
     });
   };
 
-  const generateSavingsRecommendations = () => {
-    const total = calculateTotal();
-    const recommendations = [];
-
-    if (total > Number(income) * 0.3) {
-      recommendations.push("Consider reducing cannabis expenses to 30% or less of your income.");
-    }
-
-    const highestExpense = expenses.reduce((prev, current) => 
-      prev.amount > current.amount ? prev : current
-    );
-
-    if (highestExpense.amount > total * 0.5) {
-      recommendations.push(`Consider diversifying your ${highestExpense.name.toLowerCase()} spending to other categories.`);
-    }
-
-    return recommendations;
-  };
-
   return (
     <Card className="max-w-4xl mx-auto p-6 bg-white/80 backdrop-blur-sm border-sage-200 shadow-lg rounded-xl">
       <div className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="income" className="text-sage-500">Monthly Income</Label>
+          <Label htmlFor="income" className="text-sage-500">
+            Monthly Income
+          </Label>
           <Input
             id="income"
             type="number"
@@ -145,17 +103,12 @@ export const BudgetPlanner = () => {
           <h3 className="text-lg font-semibold text-sage-500">Expenses</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {expenses.map((expense, index) => (
-              <div key={expense.name} className="space-y-2">
-                <Label htmlFor={`expense-${index}`} className="text-sage-500">{expense.name}</Label>
-                <Input
-                  id={`expense-${index}`}
-                  type="number"
-                  placeholder={`Enter ${expense.name.toLowerCase()} expenses`}
-                  value={expense.amount || ""}
-                  onChange={(e) => handleExpenseChange(index, e.target.value)}
-                  className="border-sage-200 focus:border-coral-500 focus:ring-coral-500"
-                />
-              </div>
+              <ExpenseInput
+                key={expense.name}
+                expense={expense}
+                index={index}
+                onChange={handleExpenseChange}
+              />
             ))}
           </div>
         </div>
@@ -178,67 +131,13 @@ export const BudgetPlanner = () => {
 
         {budgetHistory.length > 0 && (
           <div className="space-y-8 mt-8 animate-fade-in">
-            <h3 className="text-xl font-semibold text-sage-500">Budget Analysis</h3>
-            
-            <div className="grid md:grid-cols-2 gap-8">
-              <Card className="p-4 bg-white/90">
-                <h4 className="text-lg font-medium text-sage-500 mb-4">Expense Breakdown</h4>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={expenses}
-                        dataKey="amount"
-                        nameKey="name"
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={100}
-                        label
-                      >
-                        {expenses.map((_, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              </Card>
+            <h3 className="text-xl font-semibold text-sage-500">
+              Budget Analysis
+            </h3>
 
-              <Card className="p-4 bg-white/90">
-                <h4 className="text-lg font-medium text-sage-500 mb-4">Monthly Trends</h4>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={budgetHistory}>
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Bar dataKey="income" name="Income" fill="#2D4739" />
-                      <Bar 
-                        dataKey={(data) => data.expenses.reduce((sum, exp) => sum + exp.amount, 0)} 
-                        name="Total Expenses" 
-                        fill="#FF7F5C" 
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </Card>
-            </div>
+            <BudgetCharts expenses={expenses} budgetHistory={budgetHistory} />
 
-            <Card className="p-6 bg-white/90">
-              <h4 className="text-lg font-semibold text-sage-500 mb-4">
-                Savings Recommendations
-              </h4>
-              <ul className="list-disc list-inside space-y-2">
-                {generateSavingsRecommendations().map((recommendation, index) => (
-                  <li key={index} className="text-sage-600">
-                    {recommendation}
-                  </li>
-                ))}
-              </ul>
-            </Card>
+            <BudgetRecommendations income={income} expenses={expenses} />
           </div>
         )}
       </div>
