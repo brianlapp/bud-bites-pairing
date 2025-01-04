@@ -14,7 +14,6 @@ const Index = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Fetch recent pairings
   const { data: recentPairings = [], isLoading: isPairingsLoading } = useQuery({
     queryKey: ['recent-pairings'],
     queryFn: async () => {
@@ -69,7 +68,9 @@ const Index = () => {
       const { error } = await supabase
         .from('strain_pairings')
         .update({
-          [isHelpful ? 'helpful_votes' : 'not_helpful_votes']: supabase.sql`${isHelpful ? 'helpful_votes' : 'not_helpful_votes'} + 1`
+          [isHelpful ? 'helpful_votes' : 'not_helpful_votes']: isHelpful ? 
+            supabase.rpc('increment', { row_id: pairingId, column_name: 'helpful_votes' }) :
+            supabase.rpc('increment', { row_id: pairingId, column_name: 'not_helpful_votes' })
         })
         .eq('id', pairingId);
 
@@ -96,7 +97,6 @@ const Index = () => {
     <div className="min-h-screen flex flex-col bg-sage-50">
       <Navigation />
       
-      <main className="flex-grow pt-16">
         {/* Hero Section */}
         <section className="relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
@@ -153,44 +153,43 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Recent Pairings Section */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <h2 className="text-2xl font-bold text-sage-500 mb-8">Recent Pairings</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {isPairingsLoading ? (
-              <div className="col-span-3 text-center text-sage-400">Loading recent pairings...</div>
-            ) : recentPairings.length > 0 ? (
-              recentPairings.map((pair) => (
-                <div
-                  key={pair.id}
-                  className="bg-white/80 backdrop-blur-md rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow animate-fade-up"
-                >
-                  <h3 className="font-semibold text-sage-500 mb-2">{pair.strain_name}</h3>
-                  <p className="text-sage-400 text-sm mb-4">{pair.pairing_suggestion}</p>
-                  <div className="flex justify-between items-center mt-4 border-t pt-4">
-                    <button
-                      onClick={() => handleVote(pair.id, true)}
-                      className="flex items-center gap-2 text-sm text-sage-500 hover:text-coral-500 transition-colors"
-                    >
-                      <ThumbsUp size={16} />
-                      <span>{pair.helpful_votes}</span>
-                    </button>
-                    <button
-                      onClick={() => handleVote(pair.id, false)}
-                      className="flex items-center gap-2 text-sm text-sage-500 hover:text-coral-500 transition-colors"
-                    >
-                      <ThumbsDown size={16} />
-                      <span>{pair.not_helpful_votes}</span>
-                    </button>
-                  </div>
+      {/* Recent Pairings Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 className="text-2xl font-bold text-sage-500 mb-8">Recent Pairings</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {isPairingsLoading ? (
+            <div className="col-span-3 text-center text-sage-400">Loading recent pairings...</div>
+          ) : recentPairings.length > 0 ? (
+            recentPairings.map((pair) => (
+              <div
+                key={pair.id}
+                className="bg-white/80 backdrop-blur-md rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow animate-fade-up"
+              >
+                <h3 className="font-semibold text-sage-500 mb-2">{pair.strain_name}</h3>
+                <p className="text-sage-400 text-sm mb-4">{pair.pairing_suggestion}</p>
+                <div className="flex justify-between items-center mt-4 border-t pt-4">
+                  <button
+                    onClick={() => handleVote(pair.id, true)}
+                    className="flex items-center gap-2 text-sm text-sage-500 hover:text-coral-500 transition-colors"
+                  >
+                    <ThumbsUp size={16} />
+                    <span>{pair.helpful_votes}</span>
+                  </button>
+                  <button
+                    onClick={() => handleVote(pair.id, false)}
+                    className="flex items-center gap-2 text-sm text-sage-500 hover:text-coral-500 transition-colors"
+                  >
+                    <ThumbsDown size={16} />
+                    <span>{pair.not_helpful_votes}</span>
+                  </button>
                 </div>
-              ))
-            ) : (
-              <div className="col-span-3 text-center text-sage-400">No pairings generated yet. Be the first to create one!</div>
-            )}
-          </div>
-        </section>
-      </main>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-3 text-center text-sage-400">No pairings generated yet. Be the first to create one!</div>
+          )}
+        </div>
+      </section>
 
       <Footer />
     </div>
