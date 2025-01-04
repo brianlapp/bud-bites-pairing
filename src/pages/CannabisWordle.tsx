@@ -4,9 +4,8 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import WordleGrid from "@/components/wordle/WordleGrid";
 import Keyboard from "@/components/wordle/Keyboard";
-import { Button } from "@/components/ui/button";
+import GameStats from "@/components/wordle/GameStats";
 import { useToast } from "@/components/ui/use-toast";
-import { Sprout } from "lucide-react";
 import wordleWords from "@/data/wordleWords.json";
 
 const CannabisWordle = () => {
@@ -193,28 +192,17 @@ const CannabisWordle = () => {
             </motion.div>
           </div>
 
-          {/* Game Stats */}
+          {/* Game Stats Component */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="max-w-2xl mx-auto bg-white rounded-lg p-8 shadow-lg"
           >
-            <div className="flex justify-center items-center gap-4 mb-4">
-              <p className="text-sage-600 dark:text-sage-400">
-                Daily Streak: {streak}
-              </p>
-              {!hintUsed && (
-                <Button
-                  onClick={showHint}
-                  variant="outline"
-                  className="bg-sage-100 hover:bg-sage-200 dark:bg-sage-800 dark:hover:bg-sage-700"
-                >
-                  <Sprout className="w-4 h-4 mr-2" />
-                  Use Hint
-                </Button>
-              )}
-            </div>
+            <GameStats
+              streak={streak}
+              hintUsed={hintUsed}
+              showHint={showHint}
+            />
           </motion.div>
         </div>
 
