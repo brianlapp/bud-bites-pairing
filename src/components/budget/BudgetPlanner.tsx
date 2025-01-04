@@ -127,33 +127,37 @@ export const BudgetPlanner = () => {
   };
 
   return (
-    <Card className="max-w-4xl mx-auto p-6 bg-white/80 backdrop-blur-sm border-sage-200">
+    <Card className="max-w-4xl mx-auto p-6 bg-white/80 backdrop-blur-sm border-sage-200 shadow-lg rounded-xl">
       <div className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="income">Monthly Income</Label>
+          <Label htmlFor="income" className="text-sage-500">Monthly Income</Label>
           <Input
             id="income"
             type="number"
             placeholder="Enter your monthly income"
             value={income}
             onChange={(e) => setIncome(e.target.value)}
+            className="border-sage-200 focus:border-coral-500 focus:ring-coral-500"
           />
         </div>
 
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-sage-500">Expenses</h3>
-          {expenses.map((expense, index) => (
-            <div key={expense.name} className="space-y-2">
-              <Label htmlFor={`expense-${index}`}>{expense.name}</Label>
-              <Input
-                id={`expense-${index}`}
-                type="number"
-                placeholder={`Enter ${expense.name.toLowerCase()} expenses`}
-                value={expense.amount || ""}
-                onChange={(e) => handleExpenseChange(index, e.target.value)}
-              />
-            </div>
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {expenses.map((expense, index) => (
+              <div key={expense.name} className="space-y-2">
+                <Label htmlFor={`expense-${index}`} className="text-sage-500">{expense.name}</Label>
+                <Input
+                  id={`expense-${index}`}
+                  type="number"
+                  placeholder={`Enter ${expense.name.toLowerCase()} expenses`}
+                  value={expense.amount || ""}
+                  onChange={(e) => handleExpenseChange(index, e.target.value)}
+                  className="border-sage-200 focus:border-coral-500 focus:ring-coral-500"
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="flex gap-4">
@@ -166,53 +170,65 @@ export const BudgetPlanner = () => {
           <Button
             onClick={resetForm}
             variant="outline"
-            className="flex-1"
+            className="flex-1 border-sage-200 text-sage-500 hover:bg-sage-50"
           >
             Reset
           </Button>
         </div>
 
         {budgetHistory.length > 0 && (
-          <div className="space-y-6 mt-8">
+          <div className="space-y-8 mt-8 animate-fade-in">
             <h3 className="text-xl font-semibold text-sage-500">Budget Analysis</h3>
             
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={expenses}
-                    dataKey="amount"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={100}
-                    label
-                  >
-                    {expenses.map((_, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+            <div className="grid md:grid-cols-2 gap-8">
+              <Card className="p-4 bg-white/90">
+                <h4 className="text-lg font-medium text-sage-500 mb-4">Expense Breakdown</h4>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={expenses}
+                        dataKey="amount"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={100}
+                        label
+                      >
+                        {expenses.map((_, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-white/90">
+                <h4 className="text-lg font-medium text-sage-500 mb-4">Monthly Trends</h4>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={budgetHistory}>
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="income" name="Income" fill="#2D4739" />
+                      <Bar 
+                        dataKey={(data) => data.expenses.reduce((sum, exp) => sum + exp.amount, 0)} 
+                        name="Total Expenses" 
+                        fill="#FF7F5C" 
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </Card>
             </div>
 
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={budgetHistory}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="income" name="Income" fill="#2D4739" />
-                  <Bar dataKey={(data) => data.expenses.reduce((sum, exp) => sum + exp.amount, 0)} name="Total Expenses" fill="#FF7F5C" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-
-            <div className="mt-6 p-4 bg-sage-100 rounded-lg">
-              <h4 className="text-lg font-semibold text-sage-500 mb-2">
+            <Card className="p-6 bg-white/90">
+              <h4 className="text-lg font-semibold text-sage-500 mb-4">
                 Savings Recommendations
               </h4>
               <ul className="list-disc list-inside space-y-2">
@@ -222,7 +238,7 @@ export const BudgetPlanner = () => {
                   </li>
                 ))}
               </ul>
-            </div>
+            </Card>
           </div>
         )}
       </div>
