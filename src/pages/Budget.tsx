@@ -27,21 +27,10 @@ const Budget = () => {
         </AuroraBackground>
 
         <div className="relative">
-          {/* Top wave SVG */}
-          <div className="absolute -top-[1px] left-0 w-full overflow-hidden z-10">
-            <svg
-              viewBox="0 0 1200 120"
-              preserveAspectRatio="none"
-              className="relative block w-full h-[60px] text-coral-500 fill-current"
-            >
-              <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" />
-            </svg>
-          </div>
-
-          <div className="container mx-auto px-4 py-8">
-            <div className="max-w-4xl mx-auto mb-12 text-center">
-              <h2 className="text-2xl font-semibold text-sage-500 mb-8">How to Use the Budget Planner</h2>
-              <div className="grid md:grid-cols-3 gap-6 text-left">
+          <div className="container mx-auto px-4 py-12">
+            <div className="max-w-4xl mx-auto mb-16 text-center">
+              <h2 className="text-3xl md:text-4xl font-bold text-sage-500 mb-12">How to Use the Budget Planner</h2>
+              <div className="grid md:grid-cols-3 gap-8 text-left">
                 <div className="p-6 rounded-lg bg-white shadow-sm border border-sage-200 relative">
                   <div className="absolute -top-4 -left-4 w-8 h-8 bg-coral-500 rounded-full flex items-center justify-center text-white font-semibold">
                     <CircleIcon className="w-6 h-6 stroke-[3]" />
@@ -72,8 +61,8 @@ const Budget = () => {
             <BudgetPlanner />
           </div>
 
-          {/* Bottom wave SVG */}
-          <div className="absolute bottom-0 left-0 w-full overflow-hidden transform rotate-180 z-10">
+          {/* Bottom wave SVG with increased top padding */}
+          <div className="absolute bottom-0 left-0 w-full overflow-hidden transform rotate-180 z-10 mt-16">
             <svg
               viewBox="0 0 1200 120"
               preserveAspectRatio="none"
