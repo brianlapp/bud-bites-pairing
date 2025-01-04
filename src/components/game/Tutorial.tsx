@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useGame } from "./GameContext";
-import { Sparkles, Seedling } from "lucide-react";
+import { Sparkles, Sprout } from "lucide-react";
 
 export const Tutorial = () => {
   const { state, dispatch } = useGame();
@@ -41,7 +41,7 @@ export const Tutorial = () => {
                   transition={{ delay: index * 0.1 }}
                   className="flex items-start gap-3 text-sage-400"
                 >
-                  <Seedling className="w-5 h-5 mt-0.5 flex-shrink-0 text-sage-500" />
+                  <Sprout className="w-5 h-5 mt-0.5 flex-shrink-0 text-sage-500" />
                   <span>{step}</span>
                 </motion.li>
               ))}
