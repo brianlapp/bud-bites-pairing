@@ -9,6 +9,39 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      profiles: {
+        Row: {
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          favorite_strain: string | null
+          id: string
+          last_login: string
+          total_helpful_votes: number | null
+          total_pairings_created: number | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          favorite_strain?: string | null
+          id: string
+          last_login?: string
+          total_helpful_votes?: number | null
+          total_pairings_created?: number | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          favorite_strain?: string | null
+          id?: string
+          last_login?: string
+          total_helpful_votes?: number | null
+          total_pairings_created?: number | null
+        }
+        Relationships: []
+      }
       strain_pairings: {
         Row: {
           created_at: string
