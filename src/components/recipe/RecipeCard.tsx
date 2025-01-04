@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Heart } from "lucide-react";
 import { PairingExplanation } from "../home/PairingExplanation";
 import { RecipeHeader } from "./RecipeHeader";
 import { RecipeMetadata } from "./RecipeMetadata";
@@ -6,6 +7,8 @@ import { RecipeInstructions } from "./RecipeInstructions";
 import { PairingData } from "@/types/pairing";
 import { useQuery } from "@tanstack/react-query";
 import { getMatchingImage } from "@/utils/imageUtils";
+import { useToast } from "@/hooks/use-toast";
+import { funnyLoadingMessages } from "./constants";
 
 interface RecipeCardProps {
   strain: string;
@@ -13,6 +16,7 @@ interface RecipeCardProps {
 }
 
 export const RecipeCard = ({ strain, pairingData }: RecipeCardProps) => {
+  const { toast } = useToast();
   // Split recipe steps into an array
   const recipeSteps = pairingData.recipe
     .split(/\d+\./)
@@ -25,6 +29,13 @@ export const RecipeCard = ({ strain, pairingData }: RecipeCardProps) => {
     queryFn: () => getMatchingImage(pairingData.dishName, pairingData.description),
     staleTime: Infinity, // Cache the image URL indefinitely
   });
+
+  const handleSave = () => {
+    toast({
+      title: "Recipe Saved! 🌿",
+      description: funnyLoadingMessages[Math.floor(Math.random() * funnyLoadingMessages.length)],
+    });
+  };
 
   return (
     <motion.div 
@@ -56,6 +67,17 @@ export const RecipeCard = ({ strain, pairingData }: RecipeCardProps) => {
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+        
+        {/* Pinterest-style heart icon overlay */}
+        <motion.button
+          className="absolute top-4 right-4 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-sage-100 hover:bg-white transition-colors group"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleSave}
+          aria-label="Save recipe"
+        >
+          <Heart className="w-6 h-6 text-coral-500 group-hover:scale-110 transition-transform" />
+        </motion.button>
       </motion.div>
 
       <div className="p-10 space-y-8">
