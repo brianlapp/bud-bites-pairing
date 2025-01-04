@@ -116,6 +116,33 @@ export type Database = {
         }
         Relationships: []
       }
+      leaderboards: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          month: string
+          score: number
+          user_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          month?: string
+          score?: number
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          month?: string
+          score?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           bio: string | null
@@ -275,10 +302,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      archive_monthly_leaderboards: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       increment: {
         Args: {
           row_id: string
           column_name: string
+        }
+        Returns: undefined
+      }
+      update_leaderboard_score: {
+        Args: {
+          p_user_id: string
+          p_category: string
+          p_score: number
         }
         Returns: undefined
       }

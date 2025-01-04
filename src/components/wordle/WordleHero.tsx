@@ -8,6 +8,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { AchievementCard } from "../social/AchievementCard";
+import { ChallengeCard } from "../social/ChallengeCard";
+import { LeaderboardCard } from "../social/LeaderboardCard";
+import { useSocialFeatures } from "@/hooks/useSocialFeatures";
+import { useUser } from "@supabase/auth-helpers-react";
 
 interface WordleHeroProps {
   stats: UserStats | null;
@@ -15,6 +20,13 @@ interface WordleHeroProps {
 }
 
 export const WordleHero = ({ stats, loading }: WordleHeroProps) => {
+  const user = useUser();
+  const { achievements, userAchievements, challenges, userChallenges, joinChallenge } = useSocialFeatures(user?.id);
+
+  // Filter Wordle-specific achievements and challenges
+  const wordleAchievements = achievements.filter(a => a.name.toLowerCase().includes('wordle'));
+  const wordleChallenges = challenges.filter(c => c.title.toLowerCase().includes('wordle'));
+
   return (
     <div className="relative bg-gradient-to-b from-sage-500 to-sage-400 text-white pt-24 pb-32">
       <div className="container mx-auto px-4">
@@ -53,6 +65,63 @@ export const WordleHero = ({ stats, loading }: WordleHeroProps) => {
         <div className="max-w-4xl mx-auto mb-8">
           <WordleStats stats={stats} loading={loading} />
         </div>
+
+        {user && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-white">Achievements</h2>
+              {wordleAchievements.map((achievement) => {
+                const userAchievement = userAchievements.find(
+                  ua => ua.achievement_id === achievement.id
+                );
+                return (
+                  <AchievementCard
+                    key={achievement.id}
+                    name={achievement.name}
+                    description={achievement.description}
+                    icon={achievement.icon}
+                    points={achievement.points}
+                    unlocked={!!userAchievement}
+                  />
+                );
+              })}
+            </div>
+
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-white">Active Challenges</h2>
+              {wordleChallenges.map((challenge) => {
+                const userChallenge = userChallenges.find(
+                  uc => uc.challenge_id === challenge.id
+                );
+                const progress = userChallenge?.completed_at ? 100 : 0;
+                return (
+                  <ChallengeCard
+                    key={challenge.id}
+                    title={challenge.title}
+                    description={challenge.description}
+                    startDate={challenge.start_date}
+                    endDate={challenge.end_date}
+                    points={challenge.points}
+                    progress={progress}
+                    onJoin={() => joinChallenge.mutate(challenge.id)}
+                  />
+                );
+              })}
+            </div>
+
+            <div>
+              <h2 className="text-xl font-semibold text-white mb-4">Monthly Leaderboard</h2>
+              <LeaderboardCard
+                entries={[
+                  // We'll implement this data fetching later
+                  { rank: 1, profile: { id: '1', display_name: 'Player 1' }, points: 1000 },
+                  { rank: 2, profile: { id: '2', display_name: 'Player 2' }, points: 800 },
+                  { rank: 3, profile: { id: '3', display_name: 'Player 3' }, points: 600 },
+                ]}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
