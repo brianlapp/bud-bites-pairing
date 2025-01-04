@@ -4,6 +4,8 @@ import { RecipeHeader } from "../recipe/RecipeHeader";
 import { RecipeMetadata } from "../recipe/RecipeMetadata";
 import { RecipeInstructions } from "../recipe/RecipeInstructions";
 import { PairingData } from "@/types/pairing";
+import { useQuery } from "@tanstack/react-query";
+import { getMatchingImage } from "@/utils/imageUtils";
 
 interface RecipeCardProps {
   strain: string;
@@ -16,6 +18,13 @@ export const RecipeCard = ({ strain, pairingData }: RecipeCardProps) => {
     .split(/\d+\./)
     .filter(Boolean)
     .map(step => step.trim());
+
+  // Fetch the appropriate image
+  const { data: imageUrl, isLoading: isImageLoading } = useQuery({
+    queryKey: ['recipe-image', pairingData.dishName],
+    queryFn: () => getMatchingImage(pairingData.dishName, pairingData.description),
+    staleTime: Infinity, // Cache the image URL indefinitely
+  });
 
   return (
     <motion.div 
@@ -32,9 +41,9 @@ export const RecipeCard = ({ strain, pairingData }: RecipeCardProps) => {
         transition={{ duration: 0.2 }}
       >
         <img
-          src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+          src={imageUrl || '/placeholder.svg'}
           alt={pairingData.dishName}
-          className="w-full h-72 object-cover"
+          className="w-full h-44 object-cover" // Reduced height from h-72 to h-44 (≈40% reduction)
           itemProp="image"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
