@@ -25,7 +25,6 @@ const InfoCard = ({ icon: Icon, title, description }: {
 );
 
 export const PairingExplanation = ({ strain, pairingData }: PairingExplanationProps) => {
-  // Split the pairing reason into three aspects for the cards
   const aspects = [
     {
       icon: Info,
@@ -45,35 +44,39 @@ export const PairingExplanation = ({ strain, pairingData }: PairingExplanationPr
   ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
-    >
-      <div className="text-center mb-8">
-        <h3 className="font-serif text-2xl font-bold tracking-tight text-sage-500 mb-2">
-          Why {strain} Works With This Dish
-        </h3>
-        <p className="text-sage-400 max-w-2xl mx-auto">
-          {pairingData.pairingReason}
-        </p>
-      </div>
+    <Card className="p-8 bg-white border border-sage-100">
+      <CardContent className="p-0 space-y-8">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-6"
+        >
+          <div className="text-center space-y-4">
+            <h3 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-sage-500 via-coral-500 to-sage-500 bg-clip-text text-transparent">
+              Why {strain} Works With This Dish
+            </h3>
+            <p className="text-sage-400 max-w-2xl mx-auto">
+              {pairingData.pairingReason}
+            </p>
+          </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {aspects.map((aspect, index) => (
-          <motion.div
-            key={aspect.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ 
-              opacity: 1, 
-              y: 0,
-              transition: { delay: index * 0.1 } 
-            }}
-          >
-            <InfoCard {...aspect} />
-          </motion.div>
-        ))}
-      </div>
-    </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {aspects.map((aspect, index) => (
+              <motion.div
+                key={aspect.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { delay: index * 0.1 } 
+                }}
+              >
+                <InfoCard {...aspect} />
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </CardContent>
+    </Card>
   );
 };
