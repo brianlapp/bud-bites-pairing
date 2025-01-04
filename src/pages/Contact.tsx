@@ -14,7 +14,7 @@ const Contact = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="flex-grow pt-16" // Added padding-top here
+        className="flex-grow pt-16"
       >
         {/* Hero Section with Aurora Animation */}
         <div className="relative h-[40vh] flex items-center justify-center overflow-hidden">
@@ -29,7 +29,7 @@ const Contact = () => {
 
         {/* Form Section */}
         <div className="container mx-auto px-4 py-12">
-          <Card className="max-w-2xl mx-auto shadow-lg">
+          <Card className="max-w-2xl mx-auto bg-white/80 backdrop-blur-sm border-sage-200 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardHeader>
               <CardTitle className="text-2xl text-center text-sage-500">Send us a message</CardTitle>
             </CardHeader>
@@ -43,53 +43,63 @@ const Contact = () => {
                 <input type="hidden" name="form-name" value="contact" />
                 
                 <div className="space-y-2">
-                  <label htmlFor="name" className="block text-sm font-medium text-sage-600">
-                    Name
-                  </label>
                   <Input
                     type="text"
                     name="name"
                     id="name"
                     required
-                    className="w-full border-sage-200 focus:ring-sage-500 focus:border-sage-500"
+                    className="w-full px-6 py-4 rounded-lg border-2 border-sage-200 
+                             focus:ring-2 focus:ring-coral-500 focus:border-transparent 
+                             transition-all duration-300 bg-white/50 backdrop-blur-sm text-lg
+                             placeholder:text-sage-400 text-sage-500
+                             hover:border-coral-500/50"
                     placeholder="Your name"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="email" className="block text-sm font-medium text-sage-600">
-                    Email
-                  </label>
                   <Input
                     type="email"
                     name="email"
                     id="email"
                     required
-                    className="w-full border-sage-200 focus:ring-sage-500 focus:border-sage-500"
+                    className="w-full px-6 py-4 rounded-lg border-2 border-sage-200 
+                             focus:ring-2 focus:ring-coral-500 focus:border-transparent 
+                             transition-all duration-300 bg-white/50 backdrop-blur-sm text-lg
+                             placeholder:text-sage-400 text-sage-500
+                             hover:border-coral-500/50"
                     placeholder="your.email@example.com"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="message" className="block text-sm font-medium text-sage-600">
-                    Message
-                  </label>
                   <Textarea
                     name="message"
                     id="message"
                     rows={4}
                     required
-                    className="w-full border-sage-200 focus:ring-sage-500 focus:border-sage-500"
+                    className="w-full px-6 py-4 rounded-lg border-2 border-sage-200 
+                             focus:ring-2 focus:ring-coral-500 focus:border-transparent 
+                             transition-all duration-300 bg-white/50 backdrop-blur-sm text-lg
+                             placeholder:text-sage-400 text-sage-500
+                             hover:border-coral-500/50 min-h-[150px] resize-none"
                     placeholder="What's on your mind?"
                   />
                 </div>
 
-                <Button
+                <motion.button
                   type="submit"
-                  className="w-full bg-sage-500 hover:bg-sage-600 text-white transition-colors"
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full flex items-center justify-center px-6 py-4 
+                           border border-transparent text-lg font-medium rounded-lg 
+                           text-white bg-coral-500 hover:bg-coral-600 
+                           focus:outline-none focus:ring-2 focus:ring-offset-2 
+                           focus:ring-coral-500 transition-all duration-300 
+                           shadow-md hover:shadow-lg"
                 >
                   Send Message
-                </Button>
+                </motion.button>
               </form>
             </CardContent>
           </Card>
