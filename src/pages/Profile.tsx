@@ -1,20 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
-import { ProfileLayout } from "@/components/profile/ProfileLayout";
 import { UserProfile, UserStats } from "@/types/profile";
 import { useSocialFeatures } from "@/hooks/useSocialFeatures";
-import { UserCard } from "@/components/social/UserCard";
 import { AchievementCard } from "@/components/social/AchievementCard";
 import { ChallengeCard } from "@/components/social/ChallengeCard";
-import { LeaderboardCard } from "@/components/social/LeaderboardCard";
 import { GameStatsSection } from "@/components/profile/GameStatsSection";
 import { UserInfoSection } from "@/components/profile/UserInfoSection";
+import { SocialSection } from "@/components/profile/social/SocialSection";
 
 const Profile = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -22,19 +19,16 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const queryClient = useQueryClient();
 
   const {
     achievements,
     userAchievements,
     challenges,
     userChallenges,
-    followers,
     following,
     joinChallenge,
   } = useSocialFeatures(profile?.id);
 
-  // Authentication and data fetching
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -50,7 +44,6 @@ const Profile = () => {
       }
 
       try {
-        // Fetch profile and stats data in parallel
         const [profileResult, statsResult] = await Promise.all([
           supabase
             .from("profiles")
@@ -83,7 +76,6 @@ const Profile = () => {
 
     checkAuth();
 
-    // Set up real-time auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_OUT') {
         navigate('/auth');
@@ -95,10 +87,6 @@ const Profile = () => {
     };
   }, [navigate]);
 
-  /**
-   * Updates the user's profile information in Supabase
-   * @param updatedProfile - Partial profile data to update
-   */
   const handleProfileUpdate = async (updatedProfile: Partial<UserProfile>) => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -197,33 +185,7 @@ const Profile = () => {
             </TabsContent>
 
             <TabsContent value="social">
-              <div className="grid gap-8 lg:grid-cols-3">
-                <div className="lg:col-span-2 space-y-4">
-                  <h3 className="text-lg font-semibold mb-4">Following</h3>
-                  {following?.map((follow) => (
-                    <UserCard
-                      key={follow.id}
-                      profile={follow.following_profile}
-                      isFollowing={true}
-                      onFollowToggle={() => {
-                        queryClient.invalidateQueries({
-                          queryKey: ['following', profile?.id],
-                        });
-                      }}
-                    />
-                  ))}
-                </div>
-                <div className="lg:col-span-1">
-                  <LeaderboardCard
-                    entries={[
-                      // Example leaderboard data
-                      { rank: 1, profile: { id: '1', display_name: 'User 1' }, points: 1000 },
-                      { rank: 2, profile: { id: '2', display_name: 'User 2' }, points: 800 },
-                      { rank: 3, profile: { id: '3', display_name: 'User 3' }, points: 600 },
-                    ]}
-                  />
-                </div>
-              </div>
+              <SocialSection following={following} profileId={profile?.id} />
             </TabsContent>
           </Tabs>
         </div>
