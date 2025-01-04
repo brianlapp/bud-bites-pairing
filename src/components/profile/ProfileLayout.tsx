@@ -11,6 +11,7 @@ import Footer from '@/components/layout/Footer';
 import { LoadingSpinner } from './LoadingSpinner';
 import { GameStatsSection } from './GameStatsSection';
 import { UserInfoSection } from './UserInfoSection';
+import { FavoritePairingsSection } from './FavoritePairingsSection';
 import { UserProfile, UserStats } from '@/types/profile';
 
 interface ProfileLayoutProps {
@@ -45,7 +46,7 @@ export const ProfileLayout: React.FC<ProfileLayoutProps> = ({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-5xl mx-auto"
+          className="max-w-5xl mx-auto space-y-8"
         >
           <h1 className="text-4xl font-bold text-sage-500 mb-8">Gaming Profile</h1>
           
@@ -60,6 +61,8 @@ export const ProfileLayout: React.FC<ProfileLayoutProps> = ({
               />
             </div>
           </div>
+
+          <FavoritePairingsSection />
         </motion.div>
       </main>
       <Footer />
