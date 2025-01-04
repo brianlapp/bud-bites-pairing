@@ -1,109 +1,151 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Achievement, Challenge, Follow, UserAchievement, UserChallenge } from "@/types/social";
 import { useToast } from "@/components/ui/use-toast";
+import { Achievement, Challenge, Follow, LeaderboardEntry } from "@/types/social";
 
-export const useSocialFeatures = (userId: string | undefined) => {
+export const useSocialFeatures = (userId?: string) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  // Fetch achievements
   const { data: achievements = [] } = useQuery({
-    queryKey: ["achievements"],
+    queryKey: ['achievements'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("achievements")
-        .select("*");
+        .from('achievements')
+        .select('*');
+      
       if (error) throw error;
-      return data;
+      return data as Achievement[];
     },
-    enabled: !!userId,
   });
 
+  // Fetch user achievements
   const { data: userAchievements = [] } = useQuery({
-    queryKey: ["user_achievements", userId],
+    queryKey: ['user-achievements', userId],
     queryFn: async () => {
+      if (!userId) return [];
       const { data, error } = await supabase
-        .from("user_achievements")
-        .select("*, achievements(*)")
-        .eq("user_id", userId);
+        .from('user_achievements')
+        .select('*')
+        .eq('user_id', userId);
+      
       if (error) throw error;
       return data;
     },
     enabled: !!userId,
   });
 
+  // Fetch challenges
   const { data: challenges = [] } = useQuery({
-    queryKey: ["challenges"],
+    queryKey: ['challenges'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("challenges")
-        .select("*");
+        .from('challenges')
+        .select('*');
+      
       if (error) throw error;
-      return data;
+      return data as Challenge[];
     },
-    enabled: !!userId,
   });
 
+  // Fetch user challenges
   const { data: userChallenges = [] } = useQuery({
-    queryKey: ["user_challenges", userId],
+    queryKey: ['user-challenges', userId],
     queryFn: async () => {
+      if (!userId) return [];
       const { data, error } = await supabase
-        .from("user_challenges")
-        .select("*, challenges(*)")
-        .eq("user_id", userId);
+        .from('user_challenges')
+        .select('*')
+        .eq('user_id', userId);
+      
       if (error) throw error;
       return data;
     },
     enabled: !!userId,
   });
 
+  // Fetch followers with profiles
   const { data: followers = [] } = useQuery({
-    queryKey: ["followers", userId],
+    queryKey: ['followers', userId],
     queryFn: async () => {
+      if (!userId) return [];
       const { data, error } = await supabase
-        .from("follows")
-        .select("*, profiles!follower_id(*)")
-        .eq("following_id", userId);
+        .from('follows')
+        .select(`
+          *,
+          follower:profiles!follower_id(*)
+        `)
+        .eq('following_id', userId);
+      
       if (error) throw error;
-      return data;
+      return data as Follow[];
     },
     enabled: !!userId,
   });
 
+  // Fetch following with profiles
   const { data: following = [] } = useQuery({
-    queryKey: ["following", userId],
+    queryKey: ['following', userId],
     queryFn: async () => {
+      if (!userId) return [];
       const { data, error } = await supabase
-        .from("follows")
-        .select("*, profiles!following_id(*)")
-        .eq("follower_id", userId);
+        .from('follows')
+        .select(`
+          *,
+          following_profile:profiles!following_id(*)
+        `)
+        .eq('follower_id', userId);
+      
       if (error) throw error;
-      return data;
+      return data as Follow[];
     },
     enabled: !!userId,
   });
 
+  // Fetch leaderboard entries
+  const { data: leaderboardEntries = [] } = useQuery({
+    queryKey: ['leaderboard'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('leaderboards')
+        .select(`
+          *,
+          profile:profiles(*)
+        `)
+        .order('score', { ascending: false })
+        .limit(10);
+      
+      if (error) throw error;
+      return data as LeaderboardEntry[];
+    },
+  });
+
+  // Join challenge mutation
   const joinChallenge = useMutation({
     mutationFn: async (challengeId: string) => {
+      if (!userId) throw new Error('User must be logged in to join challenges');
+      
       const { error } = await supabase
-        .from("user_challenges")
+        .from('user_challenges')
         .insert({
           user_id: userId,
           challenge_id: challengeId,
         });
+      
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user_challenges", userId] });
+      queryClient.invalidateQueries({ queryKey: ['user-challenges'] });
       toast({
         title: "Success",
-        description: "Successfully joined the challenge!",
+        description: "You've joined the challenge!",
       });
     },
-    onError: (error: Error) => {
+    onError: (error) => {
       toast({
         title: "Error",
-        description: error.message,
+        description: "Failed to join challenge: " + error.message,
         variant: "destructive",
       });
     },
@@ -116,6 +158,7 @@ export const useSocialFeatures = (userId: string | undefined) => {
     userChallenges,
     followers,
     following,
+    leaderboardEntries,
     joinChallenge,
   };
 };
