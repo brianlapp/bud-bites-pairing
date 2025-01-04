@@ -102,11 +102,11 @@ const Auth = () => {
                     password_label: 'Password',
                   },
                 },
-                error: {
+                messages: {
                   password_required: 'Password is required',
                   email_required: 'Email is required',
-                  email_invalid: 'Invalid email address',
-                  default: 'Authentication error occurred',
+                  invalid_email: 'Invalid email address',
+                  invalid_login_credentials: 'Invalid login credentials',
                 }
               }}
             />
