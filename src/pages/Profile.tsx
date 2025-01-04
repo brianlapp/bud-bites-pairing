@@ -32,10 +32,15 @@ const Profile = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to view your profile",
+          variant: "destructive",
+        });
         navigate("/auth");
         return;
       }
@@ -59,10 +64,11 @@ const Profile = () => {
 
         setProfile(profileResult.data);
         setStats(statsResult.data);
-      } catch (error) {
+      } catch (error: any) {
+        console.error("Error fetching profile data:", error);
         toast({
           title: "Error",
-          description: "Failed to load profile data",
+          description: "Failed to load profile data: " + error.message,
           variant: "destructive",
         });
       } finally {
@@ -70,15 +76,36 @@ const Profile = () => {
       }
     };
 
-    fetchUserData();
+    checkAuth();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT') {
+        navigate('/auth');
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [navigate]);
 
   const handleProfileUpdate = async (updatedProfile: Partial<UserProfile>) => {
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({
+          title: "Error",
+          description: "You must be logged in to update your profile",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const { error } = await supabase
         .from("profiles")
         .update(updatedProfile)
-        .eq("id", profile?.id);
+        .eq("id", session.user.id);
 
       if (error) throw error;
 
@@ -88,14 +115,29 @@ const Profile = () => {
         title: "Success",
         description: "Profile updated successfully",
       });
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Error updating profile:", error);
       toast({
         title: "Error",
-        description: "Failed to update profile",
+        description: "Failed to update profile: " + error.message,
         variant: "destructive",
       });
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-sage-50">
+        <Navigation />
+        <main className="container mx-auto px-4 py-24">
+          <div className="flex justify-center items-center h-[50vh]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sage-500"></div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-sage-50">
@@ -109,19 +151,13 @@ const Profile = () => {
         >
           <h1 className="text-4xl font-bold text-sage-500 mb-8">Your Profile</h1>
           
-          {loading ? (
-            <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sage-500 mx-auto"></div>
-            </div>
-          ) : (
-            <div className="grid gap-8 md:grid-cols-2">
-              <UserInfoSection
-                profile={profile}
-                onUpdate={handleProfileUpdate}
-              />
-              <GameStatsSection stats={stats} />
-            </div>
-          )}
+          <div className="grid gap-8 md:grid-cols-2">
+            <UserInfoSection
+              profile={profile}
+              onUpdate={handleProfileUpdate}
+            />
+            <GameStatsSection stats={stats} />
+          </div>
         </motion.div>
       </main>
       
