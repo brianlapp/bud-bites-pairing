@@ -13,17 +13,17 @@ This document outlines the planned features and improvements for the Cannabis St
 - [x] Pairing history storage
 - [x] User feedback system
 
-### Phase 2: Tools & Calculators (In Progress)
+### Phase 2: Tools & Calculators (Completed)
 - [x] Cannabis Dosing Calculator
   - [x] Input form for weight and tolerance
   - [x] Dosage recommendations
   - [x] Safety guidelines
   - [x] Responsive design
   - [x] Local storage for user preferences
-- [ ] Monthly Budget Planner
-  - [ ] Expense tracking
-  - [ ] Budget visualization
-  - [ ] Savings recommendations
+- [x] Monthly Budget Planner
+  - [x] Expense tracking
+  - [x] Budget visualization
+  - [x] Savings recommendations
 
 ### Phase 3: Games & Entertainment
 - [ ] Cannabis Tycoon Game
