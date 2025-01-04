@@ -10,6 +10,7 @@ import Budget from "./pages/Budget";
 import CannabisGame from "./pages/CannabisGame";
 import CannabisWordle from "./pages/CannabisWordle";
 import Auth from "./pages/Auth";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/games/wordle" element={<AnimatePresence mode="wait"><CannabisWordle /></AnimatePresence>} />
           <Route path="/about" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
           <Route path="/auth" element={<AnimatePresence mode="wait"><Auth /></AnimatePresence>} />
+          <Route path="/profile" element={<AnimatePresence mode="wait"><Profile /></AnimatePresence>} />
         </Routes>
         <Toaster />
       </BrowserRouter>

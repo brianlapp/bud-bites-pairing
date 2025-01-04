@@ -69,6 +69,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_stats: {
+        Row: {
+          tycoon_level: number | null
+          tycoon_top_strain: string | null
+          tycoon_total_sales: number | null
+          user_id: string
+          wordle_avg_guesses: number | null
+          wordle_games_played: number | null
+          wordle_streak: number | null
+        }
+        Insert: {
+          tycoon_level?: number | null
+          tycoon_top_strain?: string | null
+          tycoon_total_sales?: number | null
+          user_id: string
+          wordle_avg_guesses?: number | null
+          wordle_games_played?: number | null
+          wordle_streak?: number | null
+        }
+        Update: {
+          tycoon_level?: number | null
+          tycoon_top_strain?: string | null
+          tycoon_total_sales?: number | null
+          user_id?: string
+          wordle_avg_guesses?: number | null
+          wordle_games_played?: number | null
+          wordle_streak?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
