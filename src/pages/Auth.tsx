@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Auth as SupabaseAuth } from "@supabase/auth-ui-react";
@@ -84,7 +83,15 @@ const Auth = () => {
                     },
                   },
                 },
+                className: {
+                  container: 'auth-container',
+                  label: 'auth-label',
+                  button: 'auth-button',
+                  input: 'auth-input',
+                },
               }}
+              view="magic_link"
+              showLinks={false}
               redirectTo={window.location.origin}
             />
           </div>
