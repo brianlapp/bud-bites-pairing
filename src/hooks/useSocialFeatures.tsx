@@ -70,7 +70,7 @@ export const useSocialFeatures = (userId?: string) => {
         .from('follows')
         .select(`
           *,
-          follower:profiles!follower_id(*)
+          follower:profiles!follower_profile_fkey(*)
         `)
         .eq('following_id', userId);
       
@@ -89,7 +89,7 @@ export const useSocialFeatures = (userId?: string) => {
         .from('follows')
         .select(`
           *,
-          following:profiles!following_id(*)
+          following:profiles!following_profile_fkey(*)
         `)
         .eq('follower_id', userId);
       
@@ -107,7 +107,7 @@ export const useSocialFeatures = (userId?: string) => {
         .from('leaderboards')
         .select(`
           *,
-          user:profiles!user_id(*)
+          profile:profiles!leaderboards_user_profile_fkey(*)
         `)
         .order('score', { ascending: false })
         .limit(10);
