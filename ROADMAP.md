@@ -4,7 +4,7 @@ This document outlines the planned features and improvements for the Cannabis St
 
 ## Core Features
 
-### Phase 1: MVP - Strain & Meal Pairing (In Progress)
+### Phase 1: MVP - Strain & Meal Pairing (Completed)
 - [x] Homepage with hero section
 - [x] Strain input form
 - [x] Recent pairings showcase
@@ -13,11 +13,11 @@ This document outlines the planned features and improvements for the Cannabis St
 - [x] Pairing history storage
 - [x] User feedback system
 
-### Phase 2: Tools & Calculators
-- [ ] Cannabis Dosing Calculator
-  - [ ] Input form for weight and tolerance
-  - [ ] Dosage recommendations
-  - [ ] Safety guidelines
+### Phase 2: Tools & Calculators (In Progress)
+- [x] Cannabis Dosing Calculator
+  - [x] Input form for weight and tolerance
+  - [x] Dosage recommendations
+  - [x] Safety guidelines
 - [ ] Monthly Budget Planner
   - [ ] Expense tracking
   - [ ] Budget visualization

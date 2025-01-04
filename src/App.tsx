@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import "./App.css";
 import Index from "./pages/Index";
 import Recipe from "./pages/Recipe";
+import Calculator from "./pages/Calculator";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,14 @@ function App() {
             element={
               <AnimatePresence mode="wait">
                 <Recipe />
+              </AnimatePresence>
+            }
+          />
+          <Route
+            path="/calculator"
+            element={
+              <AnimatePresence mode="wait">
+                <Calculator />
               </AnimatePresence>
             }
           />
