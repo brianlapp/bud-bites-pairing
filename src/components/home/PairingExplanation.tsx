@@ -18,7 +18,7 @@ export const PairingExplanation = ({ strain, pairingData }: PairingExplanationPr
         <CardContent className="p-6">
           <div className="flex items-center gap-3 mb-4">
             <Leaf className="w-6 h-6 text-white" />
-            <h3 className="font-bold text-xl bg-gradient-to-r from-white to-white/90 bg-clip-text text-transparent">
+            <h3 className="font-bold text-xl bg-gradient-to-r from-sage-50 to-sage-100 bg-clip-text text-transparent">
               Why {strain} Works Perfect With This Dish
             </h3>
           </div>
