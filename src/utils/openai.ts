@@ -25,19 +25,30 @@ export const generateMealPairing = async (strain: string): Promise<string> => {
   try {
     const openai = await getOpenAIInstance();
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4o",
       messages: [
         {
           role: "system",
-          content: "You are a culinary expert specializing in cannabis and food pairings. Your responses should be concise (max 2-3 sentences) and focus on suggesting specific dishes or flavor combinations that complement the strain's terpene profile and effects."
+          content: `You are a culinary expert specializing in cannabis and food pairings. Create detailed meal pairings that include:
+          1. A matching meal or snack with a brief recipe
+          2. An explanation of why the pairing works (flavors and effects)
+          3. Optional cooking tips
+          Format the response in JSON with the following structure:
+          {
+            "dishName": "Name of the dish",
+            "description": "Brief description of the dish",
+            "pairingReason": "Why this pairing works with the strain",
+            "recipe": "Brief recipe steps",
+            "cookingTips": "Optional cooking tips or substitutions"
+          }`
         },
         {
           role: "user",
-          content: `Suggest a meal pairing for the cannabis strain "${strain}". Consider the strain's typical flavor profile and effects. Keep the response concise and specific.`
+          content: `Suggest a meal pairing for the cannabis strain "${strain}". Consider the strain's typical flavor profile and effects.`
         }
       ],
       temperature: 0.7,
-      max_tokens: 150
+      max_tokens: 500
     });
 
     return response.choices[0]?.message?.content || "Unable to generate pairing suggestion.";
