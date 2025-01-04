@@ -3,12 +3,13 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import WordleGrid from "@/components/wordle/WordleGrid";
 import Keyboard from "@/components/wordle/Keyboard";
-import GameStats from "@/components/wordle/GameStats";
 import { useToast } from "@/components/ui/use-toast";
 import { useUserStats } from "@/hooks/useUserStats";
 import wordleWords from "@/data/wordleWords.json";
 import { WordleHero } from "@/components/wordle/WordleHero";
 import { ColorGuide } from "@/components/wordle/stats/ColorGuide";
+import { Button } from "@/components/ui/button";
+import { Sprout } from "lucide-react";
 
 const CannabisWordle = () => {
   const { toast } = useToast();
@@ -161,13 +162,19 @@ const CannabisWordle = () => {
             />
           </div>
 
-          <GameStats
-            streak={stats?.wordle_streak || 0}
-            hintUsed={hintUsed}
-            showHint={showHint}
-          />
-
           <div className="bg-white dark:bg-sage-800 rounded-lg shadow-lg p-4 mt-8">
+            <div className="flex justify-center mb-4">
+              {!hintUsed && (
+                <Button
+                  onClick={showHint}
+                  variant="outline"
+                  className="bg-sage-200 hover:bg-sage-300 dark:bg-sage-600 dark:hover:bg-sage-500 text-sage-500 dark:text-sage-200"
+                >
+                  <Sprout className="w-4 h-4 mr-2" />
+                  Use Hint
+                </Button>
+              )}
+            </div>
             <Keyboard
               onKeyPress={handleKeyPress}
               onEnter={handleEnter}

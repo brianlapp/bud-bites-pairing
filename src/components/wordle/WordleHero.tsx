@@ -2,6 +2,12 @@ import { motion } from "framer-motion";
 import { WordleStats } from "./WordleStats";
 import { ColorGuide } from "./stats/ColorGuide";
 import { UserStats } from "@/types/profile";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface WordleHeroProps {
   stats: UserStats | null;
@@ -24,16 +30,24 @@ export const WordleHero = ({ stats, loading }: WordleHeroProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="max-w-2xl mx-auto mb-8 bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white/90"
+          className="max-w-2xl mx-auto mb-8"
         >
-          <h2 className="text-xl font-semibold mb-4">How to Play</h2>
-          <ul className="space-y-2">
-            <li>• Guess the 5-letter cannabis-related word</li>
-            <li>• Each guess must be a valid word</li>
-            <li>• Colors will show how close your guess was</li>
-            <li>• You have 6 attempts to guess the word</li>
-            <li>• Use your keyboard or click the letters below</li>
-          </ul>
+          <Accordion type="single" collapsible>
+            <AccordionItem value="instructions" className="border-white/20">
+              <AccordionTrigger className="text-white hover:no-underline">
+                <span className="text-xl font-semibold">How to Play</span>
+              </AccordionTrigger>
+              <AccordionContent className="text-white/90">
+                <ul className="space-y-2">
+                  <li>• Guess the 5-letter cannabis-related word</li>
+                  <li>• Each guess must be a valid word</li>
+                  <li>• Colors will show how close your guess was</li>
+                  <li>• You have 6 attempts to guess the word</li>
+                  <li>• Use your keyboard or click the letters below</li>
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </motion.div>
         
         <div className="max-w-4xl mx-auto mb-8">
