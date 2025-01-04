@@ -15,7 +15,7 @@ const Budget = () => {
     >
       <Navigation />
       <div className="relative min-h-screen pt-16">
-        <AuroraBackground className="mb-8">
+        <AuroraBackground className="mb-0">
           <div className="absolute inset-0 flex flex-col items-center justify-center px-4 space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold text-white text-center max-w-3xl relative z-10">
               Your Cannabis Budget Planner
@@ -26,7 +26,7 @@ const Budget = () => {
           </div>
         </AuroraBackground>
 
-        <div className="relative">
+        <div className="relative -mt-1">
           {/* Top wave SVG */}
           <div className="absolute top-0 left-0 w-full overflow-hidden z-10">
             <svg
