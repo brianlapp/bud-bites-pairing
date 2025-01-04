@@ -30,10 +30,14 @@ This document outlines the planned features and improvements for the Cannabis St
   - [x] Basic game mechanics
   - [x] Store management
   - [x] Progress tracking
-- [ ] Cannabis-Themed Wordle
+- [ ] Cannabis-Themed Wordle (In Development)
   - [ ] Custom word list
   - [ ] Daily challenges
   - [ ] Score tracking
+  - [ ] Game board UI
+  - [ ] Keyboard input
+  - [ ] Win/lose conditions
+  - [ ] Statistics tracking
 
 ### Phase 4: User Experience Improvements (Not Started)
 - [ ] User authentication

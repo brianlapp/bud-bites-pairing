@@ -8,6 +8,7 @@ import Recipe from "./pages/Recipe";
 import Calculator from "./pages/Calculator";
 import Budget from "./pages/Budget";
 import CannabisGame from "./pages/CannabisGame";
+import CannabisWordle from "./pages/CannabisWordle";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/tools" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
           <Route path="/games" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
           <Route path="/games/tycoon" element={<AnimatePresence mode="wait"><CannabisGame /></AnimatePresence>} />
+          <Route path="/games/wordle" element={<AnimatePresence mode="wait"><CannabisWordle /></AnimatePresence>} />
           <Route path="/about" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
         </Routes>
         <Toaster />
