@@ -44,9 +44,9 @@ This document outlines the planned features and improvements for the Cannabis St
 ### Phase 4: User Experience Improvements 🚀
 - [x] User authentication
 - [x] Personal pairing history
+- [x] Community voting system (Reddit-style)
 - [ ] Favorite pairings
 - [ ] Social sharing features
-- [ ] Community ratings and reviews
 
 ## Technical Improvements
 
