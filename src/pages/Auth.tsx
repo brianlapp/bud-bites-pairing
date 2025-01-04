@@ -63,7 +63,7 @@ const Auth = () => {
           <div className="mt-4 p-4 bg-blue-50 rounded-lg flex items-start gap-3">
             <Info className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
             <p className="text-sm text-blue-700">
-              Sign in with your email and password or use a magic link. Your session will be kept active indefinitely until you explicitly sign out.
+              Create an account or sign in with your email and password or magic link. Your session will be kept active indefinitely until you explicitly sign out.
             </p>
           </div>
 
@@ -82,7 +82,7 @@ const Auth = () => {
                 },
               }}
               providers={[]}
-              view="sign_in"
+              view="sign_up"
               showLinks={true}
               redirectTo={window.location.origin}
             />
