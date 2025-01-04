@@ -149,7 +149,7 @@ const CannabisWordle = () => {
       
       <WordleHero stats={stats} loading={loading} />
       
-      <div className="container mx-auto px-4 -mt-12 relative z-10">
+      <div className="container mx-auto px-4 -mt-24 relative z-10">
         <div className="max-w-2xl mx-auto">
           <ColorGuide className="mb-4 bg-white dark:bg-sage-800 rounded-lg p-4 shadow-lg" />
           
