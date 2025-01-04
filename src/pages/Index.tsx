@@ -65,14 +65,10 @@ const Index = () => {
 
   const handleVote = async (pairingId: string, isHelpful: boolean) => {
     try {
-      const { error } = await supabase
-        .from('strain_pairings')
-        .update({
-          [isHelpful ? 'helpful_votes' : 'not_helpful_votes']: isHelpful ? 
-            supabase.rpc('increment', { row_id: pairingId, column_name: 'helpful_votes' }) :
-            supabase.rpc('increment', { row_id: pairingId, column_name: 'not_helpful_votes' })
-        })
-        .eq('id', pairingId);
+      const { error } = await supabase.rpc('increment', {
+        row_id: pairingId,
+        column_name: isHelpful ? 'helpful_votes' : 'not_helpful_votes'
+      });
 
       if (error) throw error;
 
@@ -97,61 +93,61 @@ const Index = () => {
     <div className="min-h-screen flex flex-col bg-sage-50">
       <Navigation />
       
-        {/* Hero Section */}
-        <section className="relative overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
-            <div className="text-center space-y-8 animate-fade-up">
-              <h1 className="text-4xl sm:text-6xl font-bold text-sage-500 tracking-tight">
-                Elevate Your Dining Experience
-              </h1>
-              <p className="max-w-2xl mx-auto text-lg sm:text-xl text-sage-400">
-                Discover the perfect meal pairings for your favorite cannabis strains, curated by our AI sommelier.
-              </p>
+      {/* Hero Section */}
+      <section className="relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
+          <div className="text-center space-y-8 animate-fade-up">
+            <h1 className="text-4xl sm:text-6xl font-bold text-sage-500 tracking-tight">
+              Elevate Your Dining Experience
+            </h1>
+            <p className="max-w-2xl mx-auto text-lg sm:text-xl text-sage-400">
+              Discover the perfect meal pairings for your favorite cannabis strains, curated by our AI sommelier.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Strain Input Section */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8 animate-fade-up" style={{ animationDelay: "0.2s" }}>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <label htmlFor="strain" className="block text-sm font-medium text-sage-500">
+                Enter your cannabis strain
+              </label>
+              <input
+                type="text"
+                id="strain"
+                value={strain}
+                onChange={(e) => setStrain(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg border border-sage-200 focus:ring-2 focus:ring-coral-500 focus:border-transparent transition-all bg-white/50 backdrop-blur-sm"
+                placeholder="e.g., Blue Dream"
+              />
             </div>
-          </div>
-        </section>
+            <button
+              type="submit"
+              disabled={isLoading || !strain}
+              className="w-full flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-coral-500 hover:bg-coral-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coral-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <Sparkles className="animate-spin" />
+              ) : (
+                <>
+                  Generate Pairing
+                  <ArrowRight className="ml-2" size={20} />
+                </>
+              )}
+            </button>
+          </form>
 
-        {/* Strain Input Section */}
-        <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8 animate-fade-up" style={{ animationDelay: "0.2s" }}>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <label htmlFor="strain" className="block text-sm font-medium text-sage-500">
-                  Enter your cannabis strain
-                </label>
-                <input
-                  type="text"
-                  id="strain"
-                  value={strain}
-                  onChange={(e) => setStrain(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border border-sage-200 focus:ring-2 focus:ring-coral-500 focus:border-transparent transition-all bg-white/50 backdrop-blur-sm"
-                  placeholder="e.g., Blue Dream"
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={isLoading || !strain}
-                className="w-full flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-coral-500 hover:bg-coral-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coral-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isLoading ? (
-                  <Sparkles className="animate-spin" />
-                ) : (
-                  <>
-                    Generate Pairing
-                    <ArrowRight className="ml-2" size={20} />
-                  </>
-                )}
-              </button>
-            </form>
-
-            {pairing && (
-              <div className="mt-8 p-6 bg-white rounded-lg shadow-sm">
-                <h3 className="text-lg font-semibold text-sage-500 mb-2">Your Personalized Pairing</h3>
-                <p className="text-sage-400">{pairing}</p>
-              </div>
-            )}
-          </div>
-        </section>
+          {pairing && (
+            <div className="mt-8 p-6 bg-white rounded-lg shadow-sm">
+              <h3 className="text-lg font-semibold text-sage-500 mb-2">Your Personalized Pairing</h3>
+              <p className="text-sage-400">{pairing}</p>
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* Recent Pairings Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
