@@ -1,4 +1,5 @@
 import { createContext, useContext, useReducer, useEffect } from "react";
+import { useUserStats } from "@/hooks/useUserStats";
 
 export interface Plant {
   id: string;
@@ -89,6 +90,7 @@ const GameContext = createContext<{
 
 export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(gameReducer, initialState);
+  const { updateStats } = useUserStats();
 
   useEffect(() => {
     const savedState = localStorage.getItem("cannabisGame");
@@ -100,6 +102,26 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     localStorage.setItem("cannabisGame", JSON.stringify(state));
   }, [state]);
+
+  // Update stats when relevant game state changes
+  useEffect(() => {
+    const strainCounts: Record<string, number> = {};
+    state.plants.forEach(plant => {
+      strainCounts[plant.strain] = (strainCounts[plant.strain] || 0) + 1;
+    });
+
+    const topStrain = Object.entries(strainCounts).reduce(
+      (max, [strain, count]) => 
+        count > (max.count || 0) ? { strain, count } : max,
+      { strain: "", count: 0 }
+    ).strain;
+
+    updateStats({
+      tycoon_total_sales: state.money,
+      tycoon_top_strain: topStrain || null,
+      tycoon_level: Math.floor(state.points / 100) + 1,
+    });
+  }, [state.money, state.plants, state.points]);
 
   return (
     <GameContext.Provider value={{ state, dispatch }}>
