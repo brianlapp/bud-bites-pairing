@@ -1,17 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navigation from "../components/layout/Navigation";
 import Footer from "../components/layout/Footer";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { initializeOpenAI, generateMealPairing } from "../utils/openai";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const [strain, setStrain] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [pairing, setPairing] = useState<string | null>(null);
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // TODO: Implement OpenAI integration
-    setTimeout(() => setIsLoading(false), 1000);
+    try {
+      const suggestion = await generateMealPairing(strain);
+      setPairing(suggestion);
+      toast({
+        title: "Pairing Generated!",
+        description: "Your meal pairing has been generated successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to generate pairing. Please check your API key.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -65,6 +83,13 @@ const Index = () => {
                 )}
               </button>
             </form>
+
+            {pairing && (
+              <div className="mt-8 p-6 bg-white rounded-lg shadow-sm">
+                <h3 className="text-lg font-semibold text-sage-500 mb-2">Your Personalized Pairing</h3>
+                <p className="text-sage-400">{pairing}</p>
+              </div>
+            )}
           </div>
         </section>
 
