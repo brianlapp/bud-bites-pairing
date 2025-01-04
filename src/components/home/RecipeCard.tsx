@@ -3,6 +3,7 @@ import { Heart, Clock, Users, Leaf, BookmarkPlus, ExternalLink } from "lucide-re
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { PairingData } from "@/types/pairing";
+import { PairingExplanation } from "./PairingExplanation";
 
 interface RecipeCardProps {
   pairingData: PairingData;
@@ -125,6 +126,8 @@ export const RecipeCard = ({ pairingData }: RecipeCardProps) => {
         >
           {pairingData.description}
         </motion.p>
+
+        <PairingExplanation strain={pairingData.dishName} pairingData={pairingData} />
 
         <motion.div 
           className="space-y-6"
