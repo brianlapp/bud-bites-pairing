@@ -1,4 +1,4 @@
-import { ThumbsDown, ThumbsUp } from "lucide-react";
+import { ArrowUp, ArrowDown } from "lucide-react";
 
 interface PairingVoteButtonsProps {
   pairingId: string;
@@ -13,29 +13,30 @@ export const PairingVoteButtons = ({
   notHelpfulVotes,
   onVote,
 }: PairingVoteButtonsProps) => {
+  const voteScore = helpfulVotes - notHelpfulVotes;
+  
   return (
-    <div className="flex justify-between items-center pt-4 border-t border-sage-100">
+    <div className="flex items-center gap-2 pt-4 border-t border-sage-100">
       <button
         onClick={() => onVote(pairingId, true)}
-        className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white transition-colors duration-200 group"
+        className="flex flex-col items-center group"
       >
-        <div className="p-1.5 bg-sage-50 rounded-full group-hover:bg-sage-100 transition-colors duration-200">
-          <ThumbsUp className="w-4 h-4 text-sage-500" />
+        <div className="p-1.5 rounded-full group-hover:bg-sage-100 transition-colors duration-200">
+          <ArrowUp className="w-4 h-4 text-sage-500 group-hover:text-sage-600" />
         </div>
-        <span className="text-sm font-medium text-sage-500">
-          {helpfulVotes} helpful
-        </span>
       </button>
+
+      <span className="text-sm font-medium text-sage-600 min-w-[2rem] text-center">
+        {voteScore}
+      </span>
+
       <button
         onClick={() => onVote(pairingId, false)}
-        className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white transition-colors duration-200 group"
+        className="flex flex-col items-center group"
       >
-        <div className="p-1.5 bg-sage-50 rounded-full group-hover:bg-sage-100 transition-colors duration-200">
-          <ThumbsDown className="w-4 h-4 text-sage-500" />
+        <div className="p-1.5 rounded-full group-hover:bg-sage-100 transition-colors duration-200">
+          <ArrowDown className="w-4 h-4 text-sage-500 group-hover:text-sage-600" />
         </div>
-        <span className="text-sm font-medium text-sage-500">
-          {notHelpfulVotes} not helpful
-        </span>
       </button>
     </div>
   );
