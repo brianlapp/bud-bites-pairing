@@ -14,54 +14,13 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <AnimatePresence mode="wait">
-                <Index />
-              </AnimatePresence>
-            }
-          />
-          <Route
-            path="/recipe/:id"
-            element={
-              <AnimatePresence mode="wait">
-                <Recipe />
-              </AnimatePresence>
-            }
-          />
-          <Route
-            path="/calculator"
-            element={
-              <AnimatePresence mode="wait">
-                <Calculator />
-              </AnimatePresence>
-            }
-          />
-          <Route
-            path="/tools"
-            element={
-              <AnimatePresence mode="wait">
-                <Index />
-              </AnimatePresence>
-            }
-          />
-          <Route
-            path="/games"
-            element={
-              <AnimatePresence mode="wait">
-                <Index />
-              </AnimatePresence>
-            }
-          />
-          <Route
-            path="/about"
-            element={
-              <AnimatePresence mode="wait">
-                <Index />
-              </AnimatePresence>
-            }
-          />
+          <Route path="/" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
+          <Route path="/recipe/:id" element={<AnimatePresence mode="wait"><Recipe /></AnimatePresence>} />
+          <Route path="/calculator" element={<AnimatePresence mode="wait"><Calculator /></AnimatePresence>} />
+          <Route path="/tools/calculator" element={<AnimatePresence mode="wait"><Calculator /></AnimatePresence>} />
+          <Route path="/tools" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
+          <Route path="/games" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
+          <Route path="/about" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
         </Routes>
         <Toaster />
       </BrowserRouter>
