@@ -13,6 +13,10 @@ const Auth = () => {
   // Check if user is already logged in
   supabase.auth.getSession().then(({ data: { session } }) => {
     if (session) {
+      toast({
+        title: "Already logged in",
+        description: "Redirecting to home page...",
+      });
       navigate("/");
     }
   });
@@ -25,6 +29,21 @@ const Auth = () => {
         description: "You have successfully signed in.",
       });
       navigate("/");
+    } else if (event === "SIGNED_OUT") {
+      toast({
+        title: "Signed out",
+        description: "You have been signed out successfully.",
+      });
+    } else if (event === "USER_UPDATED") {
+      toast({
+        title: "Profile updated",
+        description: "Your profile has been updated successfully.",
+      });
+    } else if (event === "PASSWORD_RECOVERY") {
+      toast({
+        title: "Password recovery",
+        description: "Check your email for password reset instructions.",
+      });
     }
   });
 
