@@ -149,12 +149,15 @@ const StrainForm = () => {
                       {pairingData.description}
                     </p>
 
-                    <div className="space-y-4">
-                      <div className="bg-sage-50 rounded-lg p-4">
-                        <h3 className="font-semibold text-sage-500 mb-2">Why This Pairing Works</h3>
-                        <p className="text-sage-400">{pairingData.pairingReason}</p>
+                    <div className="bg-coral-50 rounded-lg p-6 border-2 border-coral-100">
+                      <div className="flex items-center gap-3 mb-4">
+                        <Leaf className="w-5 h-5 text-coral-500" />
+                        <h3 className="font-bold text-lg text-sage-500">Why {strain} Works Perfect With This Dish</h3>
                       </div>
+                      <p className="text-sage-400 leading-relaxed">{pairingData.pairingReason}</p>
+                    </div>
 
+                    <div className="space-y-4">
                       <div className="bg-sage-50 rounded-lg p-4">
                         <h3 className="font-semibold text-sage-500 mb-2">Recipe</h3>
                         <p className="text-sage-400 whitespace-pre-line">{pairingData.recipe}</p>
