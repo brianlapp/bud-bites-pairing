@@ -149,11 +149,11 @@ const CannabisWordle = () => {
       
       <WordleHero stats={stats} loading={loading} />
       
-      <div className="container mx-auto px-4 -mt-16 relative z-10 space-y-8">
+      <div className="container mx-auto px-4 -mt-8 relative z-10">
         <div className="max-w-2xl mx-auto">
-          <ColorGuide className="mb-8 bg-white dark:bg-sage-800 rounded-lg p-4 shadow-lg" />
+          <ColorGuide className="mb-4 bg-white dark:bg-sage-800 rounded-lg p-4 shadow-lg" />
           
-          <div className="bg-white dark:bg-sage-800 rounded-lg shadow-lg p-8 mb-8">
+          <div className="bg-white dark:bg-sage-800 rounded-lg shadow-lg p-6 mb-4">
             <WordleGrid
               guesses={guesses}
               currentGuess={currentGuess}
@@ -162,7 +162,7 @@ const CannabisWordle = () => {
             />
           </div>
 
-          <div className="bg-white dark:bg-sage-800 rounded-lg shadow-lg p-4 mt-8">
+          <div className="bg-white dark:bg-sage-800 rounded-lg shadow-lg p-4">
             <div className="flex justify-center mb-4">
               {!hintUsed && (
                 <Button
