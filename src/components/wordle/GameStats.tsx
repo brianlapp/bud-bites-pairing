@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sprout } from "lucide-react";
+import { Sprout, TrendingUp, Calendar } from "lucide-react";
 import { format } from "date-fns";
 
 interface GameStatsProps {
@@ -23,20 +23,7 @@ const GameStats = ({ streak, hintUsed, showHint }: GameStatsProps) => {
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
               <div className="bg-sage-200 dark:bg-sage-600 rounded-full p-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-sage-500 dark:text-sage-200"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                  />
-                </svg>
+                <TrendingUp className="h-6 w-6 text-sage-500 dark:text-sage-200" />
               </div>
               <div>
                 <p className="text-sage-500 dark:text-sage-200 font-medium text-lg">
@@ -55,20 +42,7 @@ const GameStats = ({ streak, hintUsed, showHint }: GameStatsProps) => {
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
               <div className="bg-sage-200 dark:bg-sage-600 rounded-full p-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-sage-500 dark:text-sage-200"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
+                <Calendar className="h-6 w-6 text-sage-500 dark:text-sage-200" />
               </div>
               <div>
                 <p className="text-sage-500 dark:text-sage-200 font-medium text-lg">
