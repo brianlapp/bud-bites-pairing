@@ -35,7 +35,6 @@ const Index = () => {
       const suggestion = await generateMealPairing(strain);
       setPairing(suggestion);
 
-      // Store the pairing in Supabase
       const { error } = await supabase
         .from('strain_pairings')
         .insert([
@@ -49,7 +48,6 @@ const Index = () => {
         description: "Your meal pairing has been generated and saved successfully.",
       });
 
-      // Refresh the recent pairings list
       queryClient.invalidateQueries({ queryKey: ['recent-pairings'] });
     } catch (error) {
       console.error('Error:', error);
@@ -77,7 +75,6 @@ const Index = () => {
         description: "Thank you for your feedback!",
       });
 
-      // Refresh the recent pairings list
       queryClient.invalidateQueries({ queryKey: ['recent-pairings'] });
     } catch (error) {
       console.error('Error:', error);
@@ -94,8 +91,8 @@ const Index = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
+      <section className="relative overflow-hidden pt-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
           <div className="text-center space-y-8 animate-fade-up">
             <h1 className="text-4xl sm:text-6xl font-bold text-sage-500 tracking-tight">
               Elevate Your Dining Experience
@@ -108,8 +105,8 @@ const Index = () => {
       </section>
 
       {/* Strain Input Section */}
-      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8 animate-fade-up" style={{ animationDelay: "0.2s" }}>
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="max-w-3xl mx-auto bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8 animate-fade-up">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <label htmlFor="strain" className="block text-sm font-medium text-sage-500">
@@ -150,11 +147,11 @@ const Index = () => {
       </section>
 
       {/* Recent Pairings Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h2 className="text-2xl font-bold text-sage-500 mb-8">Recent Pairings</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {isPairingsLoading ? (
-            <div className="col-span-3 text-center text-sage-400">Loading recent pairings...</div>
+            <div className="col-span-full text-center text-sage-400">Loading recent pairings...</div>
           ) : recentPairings.length > 0 ? (
             recentPairings.map((pair) => (
               <div
@@ -182,7 +179,7 @@ const Index = () => {
               </div>
             ))
           ) : (
-            <div className="col-span-3 text-center text-sage-400">No pairings generated yet. Be the first to create one!</div>
+            <div className="col-span-full text-center text-sage-400">No pairings generated yet. Be the first to create one!</div>
           )}
         </div>
       </section>
