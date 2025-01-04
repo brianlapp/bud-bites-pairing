@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Heart, Leaf, Clock, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { generateMealPairing } from "@/utils/openai";
@@ -47,8 +47,18 @@ const StrainForm = () => {
     }
   };
 
+  const cleanAndParseJSON = (jsonString: string) => {
+    try {
+      const cleaned = jsonString.replace(/```json\n|\n```/g, '');
+      return JSON.parse(cleaned);
+    } catch (error) {
+      console.error('Error parsing pairing data:', error);
+      return null;
+    }
+  };
+
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-3xl mx-auto px-4">
       <Card className="bg-white/80 backdrop-blur-sm border-sage-200 shadow-lg hover:shadow-xl transition-all duration-300">
         <CardContent className="pt-6">
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -83,7 +93,7 @@ const StrainForm = () => {
                        shadow-md hover:shadow-lg"
             >
               {isLoading ? (
-                <Sparkles className="animate-spin" />
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white" />
               ) : (
                 <>
                   Generate Pairing
@@ -97,12 +107,67 @@ const StrainForm = () => {
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-8 p-6 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm"
+              className="mt-8"
             >
-              <h3 className="text-lg font-semibold text-sage-500 mb-2">
-                Your Personalized Pairing
-              </h3>
-              <p className="text-sage-400">{pairing}</p>
+              {(() => {
+                const pairingData = cleanAndParseJSON(pairing);
+                if (!pairingData) return null;
+
+                return (
+                  <div className="bg-white rounded-xl shadow-lg p-6 space-y-6">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-sage-50 rounded-full">
+                        <Heart className="w-6 h-6 text-coral-500" />
+                      </div>
+                      <h2 className="text-2xl font-bold text-sage-500">
+                        {pairingData.dishName}
+                      </h2>
+                    </div>
+
+                    <div className="flex flex-wrap gap-4">
+                      <div className="flex items-center gap-2">
+                        <div className="p-2 bg-sage-50 rounded-full">
+                          <Clock className="w-4 h-4 text-sage-500" />
+                        </div>
+                        <span className="text-sm font-medium text-sage-400">30 mins</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="p-2 bg-sage-50 rounded-full">
+                          <Users className="w-4 h-4 text-sage-500" />
+                        </div>
+                        <span className="text-sm font-medium text-sage-400">Serves 4</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="p-2 bg-sage-50 rounded-full">
+                          <Leaf className="w-4 h-4 text-sage-500" />
+                        </div>
+                        <span className="text-sm font-medium text-sage-400">Perfect Match</span>
+                      </div>
+                    </div>
+
+                    <p className="text-sage-400 leading-relaxed">
+                      {pairingData.description}
+                    </p>
+
+                    <div className="space-y-4">
+                      <div className="bg-sage-50 rounded-lg p-4">
+                        <h3 className="font-semibold text-sage-500 mb-2">Why This Pairing Works</h3>
+                        <p className="text-sage-400">{pairingData.pairingReason}</p>
+                      </div>
+
+                      <div className="bg-sage-50 rounded-lg p-4">
+                        <h3 className="font-semibold text-sage-500 mb-2">Recipe</h3>
+                        <p className="text-sage-400 whitespace-pre-line">{pairingData.recipe}</p>
+                      </div>
+
+                      <div className="bg-sage-50 rounded-lg p-4">
+                        <h3 className="font-semibold text-sage-500 mb-2">Pro Tips</h3>
+                        <p className="text-sage-400">{pairingData.cookingTips}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
             </motion.div>
           )}
         </CardContent>
