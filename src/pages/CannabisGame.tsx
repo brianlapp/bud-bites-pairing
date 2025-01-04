@@ -4,6 +4,7 @@ import { GameInterface } from "@/components/game/GameInterface";
 import { Tutorial } from "@/components/game/Tutorial";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import { Sprout } from "lucide-react";
 
 export const CannabisGame = () => {
   return (
@@ -31,7 +32,7 @@ export const CannabisGame = () => {
             </motion.p>
             
             {/* Quick Guide Steps */}
-            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-12">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -60,6 +61,45 @@ export const CannabisGame = () => {
                 <p className="text-sage-100">Sell your harvest and reinvest in your growing empire.</p>
               </motion.div>
             </div>
+
+            {/* Getting Started Guide */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm rounded-lg p-8"
+            >
+              <h3 className="text-2xl font-bold mb-4 text-center">Here's how to get started:</h3>
+              <ul className="space-y-3">
+                {[
+                  "Plant your first seed (costs $100)",
+                  "Water your plants regularly to keep them healthy",
+                  "Harvest when ready and sell for profit",
+                  "Earn points to unlock new strains and upgrades"
+                ].map((step, index) => (
+                  <motion.li
+                    key={index}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.6 + index * 0.1 }}
+                    className="flex items-center gap-3 text-sage-100"
+                  >
+                    <Sprout className="w-5 h-5 flex-shrink-0" />
+                    <span>{step}</span>
+                  </motion.li>
+                ))}
+              </ul>
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1 }}
+                className="w-full mt-6 px-6 py-3 bg-coral-500 text-white rounded-md hover:bg-coral-600 transition-colors flex items-center justify-center gap-2 font-medium"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Got it! Let's grow 🌱
+              </motion.button>
+            </motion.div>
           </div>
 
           {/* Bottom wave SVG */}
