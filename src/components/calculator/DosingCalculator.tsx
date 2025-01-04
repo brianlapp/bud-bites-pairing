@@ -75,8 +75,8 @@ export const DosingCalculator = () => {
   };
 
   return (
-    <div className="relative min-h-screen pt-16"> {/* Added pt-16 for nav height */}
-      <AuroraBackground className="mb-8">
+    <div className="relative min-h-screen">
+      <AuroraBackground>
         <div className="absolute inset-0 flex items-center justify-center px-4">
           <h1 className="text-4xl md:text-5xl font-bold text-white text-center max-w-3xl relative z-10">
             Your Personalized Cannabis Dosing Guide
@@ -84,28 +84,30 @@ export const DosingCalculator = () => {
         </div>
       </AuroraBackground>
 
-      <Card className="max-w-2xl mx-auto p-6 bg-white/80 backdrop-blur-sm border-sage-200">
-        <CalculatorForm
-          weight={weight}
-          weightUnit={weightUnit}
-          tolerance={tolerance}
-          method={method}
-          onWeightChange={setWeight}
-          onWeightUnitChange={setWeightUnit}
-          onToleranceChange={setTolerance}
-          onMethodChange={setMethod}
-          onCalculate={calculateDose}
-        />
-        
-        <AnimatePresence>
-          {result && (
-            <CalculatorResults
-              result={result}
-              tips={tips}
-            />
-          )}
-        </AnimatePresence>
-      </Card>
+      <div className="container mx-auto px-4 py-8 relative z-10">
+        <Card className="max-w-2xl mx-auto p-6 bg-white/80 backdrop-blur-sm border-sage-200">
+          <CalculatorForm
+            weight={weight}
+            weightUnit={weightUnit}
+            tolerance={tolerance}
+            method={method}
+            onWeightChange={setWeight}
+            onWeightUnitChange={setWeightUnit}
+            onToleranceChange={setTolerance}
+            onMethodChange={setMethod}
+            onCalculate={calculateDose}
+          />
+          
+          <AnimatePresence>
+            {result && (
+              <CalculatorResults
+                result={result}
+                tips={tips}
+              />
+            )}
+          </AnimatePresence>
+        </Card>
+      </div>
     </div>
   );
 };
