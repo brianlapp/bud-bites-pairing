@@ -9,7 +9,7 @@ This document outlines the planned features and improvements for the Cannabis St
 - [x] Strain input form
 - [x] Recent pairings showcase
 - [x] Basic responsive design
-- [ ] OpenAI integration for meal pairing suggestions
+- [x] OpenAI integration for meal pairing suggestions
 - [x] Pairing history storage
 - [x] User feedback system
 
