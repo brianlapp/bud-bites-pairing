@@ -7,12 +7,14 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { PairingVoteButtons } from "./PairingVoteButtons";
 
 interface PairingCardProps {
   pair: StrainPairing;
+  onVote: (pairingId: string, isHelpful: boolean) => Promise<void>;
 }
 
-export const PairingCard = ({ pair }: PairingCardProps) => {
+export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
   const cleanAndParseJSON = (jsonString: string) => {
     try {
       const cleaned = jsonString.replace(/```json\n|\n```/g, '');
@@ -56,13 +58,20 @@ export const PairingCard = ({ pair }: PairingCardProps) => {
         </div>
       </CardHeader>
       
-      <CardContent className="p-6 pt-0">
+      <CardContent className="p-6 pt-0 space-y-6">
         <Link to={`/recipe/${pair.id}`}>
           <Button className="w-full group" variant="outline">
             View Full Recipe
             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
         </Link>
+        
+        <PairingVoteButtons
+          pairingId={pair.id}
+          helpfulVotes={pair.helpful_votes}
+          notHelpfulVotes={pair.not_helpful_votes}
+          onVote={onVote}
+        />
       </CardContent>
     </Card>
   );
