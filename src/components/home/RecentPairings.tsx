@@ -48,20 +48,22 @@ const RecentPairings = () => {
   };
 
   return (
-    <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <h2 className="text-3xl font-bold text-sage-500 mb-8">Recent Pairings</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {isPairingsLoading ? (
-          <div className="col-span-full text-center text-sage-400">Loading recent pairings...</div>
-        ) : recentPairings.length > 0 ? (
-          recentPairings.map((pair) => (
-            <PairingCard key={pair.id} pair={pair} onVote={handleVote} />
-          ))
-        ) : (
-          <div className="col-span-full text-center text-sage-400">
-            No pairings generated yet. Be the first to create one!
-          </div>
-        )}
+    <section className="w-full py-16 bg-sage-50">
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-3xl font-bold text-sage-500 mb-12">Recent Pairings</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {isPairingsLoading ? (
+            <div className="col-span-full text-center text-sage-400">Loading recent pairings...</div>
+          ) : recentPairings.length > 0 ? (
+            recentPairings.map((pair) => (
+              <PairingCard key={pair.id} pair={pair} onVote={handleVote} />
+            ))
+          ) : (
+            <div className="col-span-full text-center text-sage-400">
+              No pairings generated yet. Be the first to create one!
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );
