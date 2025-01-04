@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/pagination";
 import { useState } from "react";
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 3; // Changed from 6 to 3 to show only one row
 
 const RecentPairings = () => {
   const { toast } = useToast();
