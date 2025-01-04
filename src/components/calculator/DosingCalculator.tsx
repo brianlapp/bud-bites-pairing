@@ -75,7 +75,7 @@ export const DosingCalculator = () => {
   };
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen pt-16"> {/* Added pt-16 for nav height */}
       <AuroraBackground className="mb-8">
         <div className="absolute inset-0 flex items-center justify-center px-4">
           <h1 className="text-4xl md:text-5xl font-bold text-white text-center max-w-3xl relative z-10">
