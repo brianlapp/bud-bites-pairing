@@ -28,7 +28,7 @@ const Budget = () => {
 
         <div className="relative">
           {/* Top wave SVG */}
-          <div className="absolute -top-[3px] left-0 w-full overflow-hidden z-10">
+          <div className="absolute -top-[5px] left-0 w-full overflow-hidden z-10">
             <svg
               viewBox="0 0 1200 120"
               preserveAspectRatio="none"
