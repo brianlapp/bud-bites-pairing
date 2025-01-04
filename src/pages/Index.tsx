@@ -1,17 +1,18 @@
 import { useState } from "react";
 import Navigation from "../components/layout/Navigation";
 import Footer from "../components/layout/Footer";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, ThumbsDown, ThumbsUp } from "lucide-react";
 import { initializeOpenAI, generateMealPairing } from "../utils/openai";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const Index = () => {
   const [strain, setStrain] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [pairing, setPairing] = useState<string | null>(null);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   // Fetch recent pairings
   const { data: recentPairings = [], isLoading: isPairingsLoading } = useQuery({
@@ -48,6 +49,9 @@ const Index = () => {
         title: "Pairing Generated!",
         description: "Your meal pairing has been generated and saved successfully.",
       });
+
+      // Refresh the recent pairings list
+      queryClient.invalidateQueries({ queryKey: ['recent-pairings'] });
     } catch (error) {
       console.error('Error:', error);
       toast({
@@ -57,6 +61,34 @@ const Index = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleVote = async (pairingId: string, isHelpful: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('strain_pairings')
+        .update({
+          [isHelpful ? 'helpful_votes' : 'not_helpful_votes']: supabase.sql`${isHelpful ? 'helpful_votes' : 'not_helpful_votes'} + 1`
+        })
+        .eq('id', pairingId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Vote Recorded",
+        description: "Thank you for your feedback!",
+      });
+
+      // Refresh the recent pairings list
+      queryClient.invalidateQueries({ queryKey: ['recent-pairings'] });
+    } catch (error) {
+      console.error('Error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to record your vote. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -134,7 +166,23 @@ const Index = () => {
                   className="bg-white/80 backdrop-blur-md rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow animate-fade-up"
                 >
                   <h3 className="font-semibold text-sage-500 mb-2">{pair.strain_name}</h3>
-                  <p className="text-sage-400 text-sm">{pair.pairing_suggestion}</p>
+                  <p className="text-sage-400 text-sm mb-4">{pair.pairing_suggestion}</p>
+                  <div className="flex justify-between items-center mt-4 border-t pt-4">
+                    <button
+                      onClick={() => handleVote(pair.id, true)}
+                      className="flex items-center gap-2 text-sm text-sage-500 hover:text-coral-500 transition-colors"
+                    >
+                      <ThumbsUp size={16} />
+                      <span>{pair.helpful_votes}</span>
+                    </button>
+                    <button
+                      onClick={() => handleVote(pair.id, false)}
+                      className="flex items-center gap-2 text-sm text-sage-500 hover:text-coral-500 transition-colors"
+                    >
+                      <ThumbsDown size={16} />
+                      <span>{pair.not_helpful_votes}</span>
+                    </button>
+                  </div>
                 </div>
               ))
             ) : (

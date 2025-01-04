@@ -12,19 +12,25 @@ export type Database = {
       strain_pairings: {
         Row: {
           created_at: string
+          helpful_votes: number
           id: string
+          not_helpful_votes: number
           pairing_suggestion: string
           strain_name: string
         }
         Insert: {
           created_at?: string
+          helpful_votes?: number
           id?: string
+          not_helpful_votes?: number
           pairing_suggestion: string
           strain_name: string
         }
         Update: {
           created_at?: string
+          helpful_votes?: number
           id?: string
+          not_helpful_votes?: number
           pairing_suggestion?: string
           strain_name?: string
         }
