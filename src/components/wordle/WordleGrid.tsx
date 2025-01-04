@@ -9,7 +9,7 @@ interface WordleGridProps {
 }
 
 const WordleGrid = ({ guesses, currentGuess, targetWord, maxAttempts }: WordleGridProps) => {
-  const emptyRows = Array(maxAttempts - guesses.length - 1).fill('');
+  const emptyRows = Array(Math.max(0, maxAttempts - guesses.length - 1)).fill('');
 
   const getLetterColor = (letter: string, index: number, word: string) => {
     if (!letter) return "bg-sage-100 dark:bg-sage-900";
