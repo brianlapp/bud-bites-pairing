@@ -47,9 +47,14 @@ const Navigation = () => {
     <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-sage-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex items-center">
+          <div className="flex items-center space-x-2">
+            <img 
+              src="/lovable-uploads/3fa6f999-491e-425c-8394-a740a242bc58.png" 
+              alt="BudBites Logo" 
+              className="h-8 w-8"
+            />
             <Link to="/" className="text-sage-500 font-semibold text-xl">
-              CannaPair
+              BudBites
             </Link>
           </div>
 
