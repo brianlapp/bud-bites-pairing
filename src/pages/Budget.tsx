@@ -62,7 +62,7 @@ const Budget = () => {
           </div>
 
           {/* Bottom wave SVG with increased top padding */}
-          <div className="absolute bottom-0 left-0 w-full overflow-hidden transform rotate-180 z-10 mt-16">
+          <div className="absolute bottom-0 left-0 w-full overflow-hidden transform rotate-180 z-10 pt-24">
             <svg
               viewBox="0 0 1200 120"
               preserveAspectRatio="none"
