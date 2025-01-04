@@ -25,17 +25,17 @@ This document outlines the planned features and improvements for the Cannabis St
   - [x] Budget visualization
   - [x] Savings recommendations
 
-### Phase 3: Games & Entertainment
-- [ ] Cannabis Tycoon Game
-  - [ ] Basic game mechanics
-  - [ ] Store management
-  - [ ] Progress tracking
+### Phase 3: Games & Entertainment (In Progress)
+- [x] Cannabis Tycoon Game
+  - [x] Basic game mechanics
+  - [x] Store management
+  - [x] Progress tracking
 - [ ] Cannabis-Themed Wordle
   - [ ] Custom word list
   - [ ] Daily challenges
   - [ ] Score tracking
 
-### Phase 4: User Experience Improvements
+### Phase 4: User Experience Improvements (Not Started)
 - [ ] User authentication
 - [ ] Personal pairing history
 - [ ] Favorite pairings
