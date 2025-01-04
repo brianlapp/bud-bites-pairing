@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import consumptionTips from "@/data/consumptionTips.json";
 import { CalculatorForm } from "./CalculatorForm";
 import { CalculatorResults } from "./CalculatorResults";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 
 export const DosingCalculator = () => {
   const [weight, setWeight] = useState(() => localStorage.getItem("weight") || "");
@@ -75,26 +76,13 @@ export const DosingCalculator = () => {
 
   return (
     <div className="relative min-h-screen">
-      <div className="relative h-[40vh] w-full overflow-hidden rounded-lg mb-8">
-        {/* Background Image with Overlay */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ 
-            backgroundImage: 'url("/placeholder.svg")',
-            backgroundBlendMode: 'overlay'
-          }}
-        >
-          {/* Coral Overlay */}
-          <div className="absolute inset-0 bg-coral-500/60 backdrop-blur-sm" />
-        </div>
-        
-        {/* Content */}
+      <AuroraBackground className="mb-8">
         <div className="absolute inset-0 flex items-center justify-center px-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-white text-center max-w-3xl">
+          <h1 className="text-4xl md:text-5xl font-bold text-white text-center max-w-3xl relative z-10">
             Your Personalized Cannabis Dosing Guide
           </h1>
         </div>
-      </div>
+      </AuroraBackground>
 
       <Card className="max-w-2xl mx-auto p-6 bg-white/80 backdrop-blur-sm border-sage-200">
         <CalculatorForm
