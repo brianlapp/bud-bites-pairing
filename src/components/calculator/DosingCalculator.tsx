@@ -5,7 +5,6 @@ import { useToast } from "@/hooks/use-toast";
 import consumptionTips from "@/data/consumptionTips.json";
 import { CalculatorForm } from "./CalculatorForm";
 import { CalculatorResults } from "./CalculatorResults";
-import { AuroraBackground } from "@/components/ui/aurora-background";
 
 export const DosingCalculator = () => {
   const [weight, setWeight] = useState(() => localStorage.getItem("weight") || "");
@@ -76,14 +75,6 @@ export const DosingCalculator = () => {
 
   return (
     <div className="relative min-h-screen">
-      <AuroraBackground>
-        <div className="absolute inset-0 flex items-center justify-center px-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-white text-center max-w-3xl relative z-10">
-            Your Personalized Cannabis Dosing Guide
-          </h1>
-        </div>
-      </AuroraBackground>
-
       <div className="container mx-auto px-4 py-8 relative z-10">
         <Card className="max-w-2xl mx-auto p-6 bg-white/80 backdrop-blur-sm border-sage-200">
           <CalculatorForm
