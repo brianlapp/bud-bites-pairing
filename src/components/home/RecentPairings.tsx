@@ -3,26 +3,22 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { StrainPairing } from "@/types/strain";
 import { PairingCard } from "./PairingCard";
-import { PairingCarousel } from "./PairingCarousel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import { useState } from "react";
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
-const ITEMS_PER_PAGE = 3; // Changed from 6 to 3 to show only one row
+const ITEMS_PER_PAGE = 3;
 
 const RecentPairings = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const isMobile = useIsMobile();
-  const [currentPage, setCurrentPage] = useState(1);
 
   const { data: session } = useQuery({
     queryKey: ['session'],
@@ -48,25 +44,18 @@ const RecentPairings = () => {
   });
 
   const { data: pairingsData, isLoading: isPairingsLoading } = useQuery({
-    queryKey: ['recent-pairings', currentPage],
+    queryKey: ['recent-pairings'],
     queryFn: async () => {
-      const { data: pairings, error, count } = await supabase
+      const { data: pairings, error } = await supabase
         .from('strain_pairings')
-        .select('*', { count: 'exact' })
+        .select('*')
         .order('created_at', { ascending: false })
-        .range((currentPage - 1) * ITEMS_PER_PAGE, (currentPage * ITEMS_PER_PAGE) - 1);
+        .limit(ITEMS_PER_PAGE);
       
       if (error) throw error;
-      
-      return {
-        pairings: pairings as StrainPairing[],
-        totalCount: count || 0
-      };
+      return pairings as StrainPairing[];
     }
   });
-
-  const totalPages = Math.ceil((pairingsData?.totalCount || 0) / ITEMS_PER_PAGE);
-  const pairings = pairingsData?.pairings || [];
 
   const handleVote = async (pairingId: string, isHelpful: boolean) => {
     try {
@@ -108,7 +97,7 @@ const RecentPairings = () => {
     );
   }
 
-  if (pairings.length === 0) {
+  if (!pairingsData || pairingsData.length === 0) {
     return (
       <section className="w-full py-16 bg-white">
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -126,57 +115,31 @@ const RecentPairings = () => {
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-sage-500 mb-12">Recent Pairings</h2>
         
-        {isMobile ? (
-          <PairingCarousel 
-            pairings={pairings}
-            onVote={handleVote}
-            favorites={favorites}
-          />
-        ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-              {pairings.map((pair) => (
-                <PairingCard 
-                  key={pair.id}
-                  pair={pair}
-                  onVote={handleVote}
-                  isFavorited={favorites.includes(pair.id)}
-                />
+        <div className="relative">
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {pairingsData.map((pair) => (
+                <CarouselItem key={pair.id} className="pl-2 md:pl-4 md:basis-1/3">
+                  <div className="p-1">
+                    <PairingCard
+                      pair={pair}
+                      onVote={handleVote}
+                      isFavorited={favorites.includes(pair.id)}
+                    />
+                  </div>
+                </CarouselItem>
               ))}
-            </div>
-
-            {totalPages > 1 && (
-              <Pagination className="mt-8">
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious 
-                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                      className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
-                    />
-                  </PaginationItem>
-                  
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <PaginationItem key={page}>
-                      <PaginationLink
-                        onClick={() => setCurrentPage(page)}
-                        isActive={currentPage === page}
-                      >
-                        {page}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
-                  
-                  <PaginationItem>
-                    <PaginationNext
-                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                      className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            )}
-          </>
-        )}
+            </CarouselContent>
+            <CarouselPrevious className="hidden md:flex" />
+            <CarouselNext className="hidden md:flex" />
+          </Carousel>
+        </div>
       </div>
     </section>
   );
