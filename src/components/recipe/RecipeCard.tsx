@@ -67,21 +67,21 @@ export const RecipeCard = ({ strain, pairingData }: RecipeCardProps) => {
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-        
-        {/* Pinterest-style heart icon overlay */}
-        <motion.button
-          className="absolute top-4 right-4 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-sage-100 hover:bg-white transition-colors group"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleSave}
-          aria-label="Save recipe"
-        >
-          <Heart className="w-6 h-6 text-coral-500 group-hover:scale-110 transition-transform" />
-        </motion.button>
       </motion.div>
 
       <div className="p-10 space-y-8">
-        <RecipeHeader dishName={pairingData.dishName} />
+        <div className="flex items-center justify-between">
+          <RecipeHeader dishName={pairingData.dishName} />
+          <motion.button
+            className="p-3 bg-sage-50/80 backdrop-blur-sm rounded-full shadow-lg border border-sage-100 hover:bg-white transition-colors group"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleSave}
+            aria-label="Save recipe"
+          >
+            <Heart className="w-6 h-6 text-coral-500 group-hover:scale-110 transition-transform" />
+          </motion.button>
+        </div>
         <RecipeMetadata />
 
         <motion.p 
