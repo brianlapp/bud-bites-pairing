@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Navigation from "@/components/layout/Navigation";
+import Footer from "@/components/layout/Footer";
 import { ProfileLayout } from "@/components/profile/ProfileLayout";
 import { UserProfile, UserStats } from "@/types/profile";
 import { useSocialFeatures } from "@/hooks/useSocialFeatures";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserCard } from "@/components/social/UserCard";
 import { AchievementCard } from "@/components/social/AchievementCard";
 import { ChallengeCard } from "@/components/social/ChallengeCard";
 import { LeaderboardCard } from "@/components/social/LeaderboardCard";
+import { GameStatsSection } from "@/components/profile/GameStatsSection";
+import { UserInfoSection } from "@/components/profile/UserInfoSection";
 
 const Profile = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -17,6 +22,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const {
     achievements,
@@ -177,12 +183,12 @@ const Profile = () => {
                   <ChallengeCard
                     key={challenge.id}
                     {...challenge}
+                    startDate={challenge.start_date}
+                    endDate={challenge.end_date}
                     progress={
                       userChallenges?.find(
                         (uc) => uc.challenge_id === challenge.id
-                      )
-                        ? 100
-                        : 0
+                      )?.completed_at ? 100 : 0
                     }
                     onJoin={() => joinChallenge.mutate(challenge.id)}
                   />
@@ -197,10 +203,9 @@ const Profile = () => {
                   {following?.map((follow) => (
                     <UserCard
                       key={follow.id}
-                      profile={follow.profiles}
+                      profile={follow.following_profile}
                       isFollowing={true}
                       onFollowToggle={() => {
-                        // Refresh following list
                         queryClient.invalidateQueries({
                           queryKey: ['following', profile?.id],
                         });
