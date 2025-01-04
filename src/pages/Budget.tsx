@@ -26,9 +26,9 @@ const Budget = () => {
           </div>
         </AuroraBackground>
 
-        <div className="relative -mt-[1px]">
+        <div className="relative">
           {/* Top wave SVG */}
-          <div className="absolute -top-1 left-0 w-full overflow-hidden z-10">
+          <div className="absolute -top-[2px] left-0 w-full overflow-hidden z-10">
             <svg
               viewBox="0 0 1200 120"
               preserveAspectRatio="none"
