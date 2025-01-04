@@ -3,7 +3,7 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import { BudgetPlanner } from "@/components/budget/BudgetPlanner";
 import { AuroraBackground } from "@/components/ui/aurora-background";
-import { CircleIcon, Wallet, BarChart3 } from "lucide-react";
+import { CircleIcon } from "lucide-react";
 
 const Budget = () => {
   return (
@@ -14,7 +14,7 @@ const Budget = () => {
       className="min-h-screen bg-sage-50"
     >
       <Navigation />
-      <div className="relative min-h-screen pt-16">
+      <div className="relative min-h-screen">
         <AuroraBackground className="mb-0">
           <div className="absolute inset-0 flex flex-col items-center justify-center px-4 space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold text-white text-center max-w-3xl relative z-10">
@@ -26,7 +26,7 @@ const Budget = () => {
           </div>
         </AuroraBackground>
 
-        <div className="relative">
+        <div className="relative pb-32"> {/* Added padding bottom for wave spacing */}
           <div className="container mx-auto px-4 py-12">
             <div className="max-w-4xl mx-auto mb-16 text-center">
               <h2 className="text-3xl md:text-4xl font-bold text-sage-500 mb-12">How to Use the Budget Planner</h2>
@@ -61,8 +61,8 @@ const Budget = () => {
             <BudgetPlanner />
           </div>
 
-          {/* Bottom wave SVG with increased top padding */}
-          <div className="absolute bottom-0 left-0 w-full overflow-hidden transform rotate-180 z-10 pt-24">
+          {/* Wave SVG positioned at the bottom */}
+          <div className="absolute bottom-0 left-0 w-full overflow-hidden transform rotate-180">
             <svg
               viewBox="0 0 1200 120"
               preserveAspectRatio="none"
