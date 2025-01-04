@@ -41,7 +41,7 @@ export interface LeaderboardEntry {
   score: number;
   month: string;
   created_at: string;
-  user?: UserProfile;
+  profile?: UserProfile;
 }
 
 export interface UserAchievement {

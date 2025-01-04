@@ -32,9 +32,9 @@ export const LeaderboardCard = ({ entries }: LeaderboardCardProps) => {
                 </div>
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${entry.user_id}`} />
-                  <AvatarFallback>{entry.user?.display_name?.[0] || '?'}</AvatarFallback>
+                  <AvatarFallback>{entry.profile?.display_name?.[0] || '?'}</AvatarFallback>
                 </Avatar>
-                <span className="font-medium">{entry.user?.display_name || 'Anonymous'}</span>
+                <span className="font-medium">{entry.profile?.display_name || 'Anonymous'}</span>
               </div>
               <span className="text-sage-500 font-semibold">{entry.score} pts</span>
             </div>

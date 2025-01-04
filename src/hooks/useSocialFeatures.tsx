@@ -61,7 +61,6 @@ export const useSocialFeatures = (userId?: string) => {
     enabled: !!userId,
   });
 
-  // Fetch followers with profiles
   const { data: followers = [] } = useQuery({
     queryKey: ['followers', userId],
     queryFn: async () => {
@@ -80,7 +79,6 @@ export const useSocialFeatures = (userId?: string) => {
     enabled: !!userId,
   });
 
-  // Fetch following with profiles
   const { data: following = [] } = useQuery({
     queryKey: ['following', userId],
     queryFn: async () => {
@@ -99,7 +97,6 @@ export const useSocialFeatures = (userId?: string) => {
     enabled: !!userId,
   });
 
-  // Fetch leaderboard entries
   const { data: leaderboardEntries = [] } = useQuery({
     queryKey: ['leaderboard'],
     queryFn: async () => {

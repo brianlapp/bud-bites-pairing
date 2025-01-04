@@ -21,7 +21,7 @@ interface WordleHeroProps {
 
 export const WordleHero = ({ stats, loading }: WordleHeroProps) => {
   const user = useUser();
-  const { achievements, userAchievements, challenges, userChallenges, joinChallenge } = useSocialFeatures(user?.id);
+  const { achievements, userAchievements, challenges, userChallenges, leaderboardEntries, joinChallenge } = useSocialFeatures(user?.id);
 
   // Filter Wordle-specific achievements and challenges
   const wordleAchievements = achievements.filter(a => a.name.toLowerCase().includes('wordle'));
@@ -111,14 +111,7 @@ export const WordleHero = ({ stats, loading }: WordleHeroProps) => {
 
             <div>
               <h2 className="text-xl font-semibold text-white mb-4">Monthly Leaderboard</h2>
-              <LeaderboardCard
-                entries={[
-                  // We'll implement this data fetching later
-                  { rank: 1, profile: { id: '1', display_name: 'Player 1' }, points: 1000 },
-                  { rank: 2, profile: { id: '2', display_name: 'Player 2' }, points: 800 },
-                  { rank: 3, profile: { id: '3', display_name: 'Player 3' }, points: 600 },
-                ]}
-              />
+              <LeaderboardCard entries={leaderboardEntries} />
             </div>
           </div>
         )}
