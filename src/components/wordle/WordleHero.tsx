@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import { WordleStats } from "./WordleStats";
 import { ColorGuide } from "./stats/ColorGuide";
-import { Stats } from "@/types/profile";
+import { UserStats } from "@/types/profile";
 
 interface WordleHeroProps {
-  stats: Stats | null;
+  stats: UserStats | null;
   loading: boolean;
 }
 
