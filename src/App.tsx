@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Recipe from "./pages/Recipe";
 import Calculator from "./pages/Calculator";
 import Budget from "./pages/Budget";
+import CannabisGame from "./pages/CannabisGame";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/tools/budget" element={<AnimatePresence mode="wait"><Budget /></AnimatePresence>} />
           <Route path="/tools" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
           <Route path="/games" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
+          <Route path="/games/tycoon" element={<AnimatePresence mode="wait"><CannabisGame /></AnimatePresence>} />
           <Route path="/about" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
         </Routes>
         <Toaster />
