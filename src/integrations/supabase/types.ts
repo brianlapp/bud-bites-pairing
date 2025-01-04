@@ -158,7 +158,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "leaderboards_user_profile_fkey"
+            foreignKeyName: "leaderboards_profile_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"

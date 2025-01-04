@@ -104,7 +104,7 @@ export const useSocialFeatures = (userId?: string) => {
         .from('leaderboards')
         .select(`
           *,
-          profile:profiles!leaderboards_user_profile_fkey(*)
+          profile:profiles!leaderboards_profile_fkey(*)
         `)
         .order('score', { ascending: false })
         .limit(10);
