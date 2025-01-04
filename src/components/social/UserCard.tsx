@@ -34,8 +34,7 @@ export const UserCard = ({ profile, isFollowing, onFollowToggle }: UserCardProps
         await supabase
           .from('follows')
           .delete()
-          .eq('follower_id', session.user.id)
-          .eq('following_id', profile.id);
+          .match({ follower_id: session.user.id, following_id: profile.id });
       } else {
         await supabase
           .from('follows')

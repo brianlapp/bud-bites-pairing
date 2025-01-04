@@ -15,7 +15,7 @@ export const useSocialFeatures = (userId?: string) => {
         .from('achievements')
         .select('*');
       if (error) throw error;
-      return data;
+      return data as Achievement[];
     },
     enabled: !!userId,
   });
@@ -28,7 +28,7 @@ export const useSocialFeatures = (userId?: string) => {
         .select('*, achievement:achievements(*)')
         .eq('user_id', userId);
       if (error) throw error;
-      return data;
+      return data as UserAchievement[];
     },
     enabled: !!userId,
   });
@@ -41,7 +41,7 @@ export const useSocialFeatures = (userId?: string) => {
         .select('*')
         .gte('end_date', new Date().toISOString());
       if (error) throw error;
-      return data;
+      return data as Challenge[];
     },
     enabled: !!userId,
   });
@@ -54,7 +54,7 @@ export const useSocialFeatures = (userId?: string) => {
         .select('*, challenge:challenges(*)')
         .eq('user_id', userId);
       if (error) throw error;
-      return data;
+      return data as UserChallenge[];
     },
     enabled: !!userId,
   });
@@ -64,10 +64,10 @@ export const useSocialFeatures = (userId?: string) => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('follows')
-        .select('*, follower_profile:profiles!follows_follower_id_fkey(*)')
+        .select('*, follower:profiles!follows_follower_id_fkey(*)')
         .eq('following_id', userId);
       if (error) throw error;
-      return data;
+      return data as Follow[];
     },
     enabled: !!userId,
   });
@@ -77,10 +77,10 @@ export const useSocialFeatures = (userId?: string) => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('follows')
-        .select('*, following_profile:profiles!follows_following_id_fkey(*)')
+        .select('*, following:profiles!follows_following_id_fkey(*)')
         .eq('follower_id', userId);
       if (error) throw error;
-      return data;
+      return data as Follow[];
     },
     enabled: !!userId,
   });
