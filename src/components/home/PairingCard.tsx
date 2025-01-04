@@ -1,22 +1,20 @@
-import { Cannabis, Clock, Users, Utensils } from "lucide-react";
+import { Cannabis, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { StrainPairing } from "@/types/strain";
 import {
   Card,
   CardContent,
   CardHeader,
 } from "@/components/ui/card";
-import { PairingAccordion } from "./PairingAccordion";
-import { PairingVoteButtons } from "./PairingVoteButtons";
+import { Button } from "@/components/ui/button";
 
 interface PairingCardProps {
   pair: StrainPairing;
-  onVote: (pairingId: string, isHelpful: boolean) => Promise<void>;
 }
 
-export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
+export const PairingCard = ({ pair }: PairingCardProps) => {
   const cleanAndParseJSON = (jsonString: string) => {
     try {
-      // Remove markdown backticks and 'json' label if present
       const cleaned = jsonString.replace(/```json\n|\n```/g, '');
       return JSON.parse(cleaned);
     } catch (error) {
@@ -37,7 +35,7 @@ export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
   
   return (
     <Card className="w-full bg-white border-sage-100 shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300">
-      <CardHeader className="p-6 space-y-6 border-b border-sage-100">
+      <CardHeader className="p-6 space-y-6">
         <div className="flex items-center gap-3">
           <div className="p-2.5 bg-sage-50 rounded-full">
             <Cannabis className="w-5 h-5 text-sage-500" />
@@ -52,45 +50,19 @@ export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
             {pairingData.dishName}
           </h4>
           
-          <div className="flex flex-wrap gap-4">
-            <div className="flex items-center gap-2">
-              <div className="p-2 bg-sage-50 rounded-full">
-                <Clock className="w-4 h-4 text-sage-500" />
-              </div>
-              <span className="text-sm font-medium text-sage-400">30 mins</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="p-2 bg-sage-50 rounded-full">
-                <Users className="w-4 h-4 text-sage-500" />
-              </div>
-              <span className="text-sm font-medium text-sage-400">Serves 4</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="p-2 bg-sage-50 rounded-full">
-                <Utensils className="w-4 h-4 text-sage-500" />
-              </div>
-              <span className="text-sm font-medium text-sage-400">Medium</span>
-            </div>
-          </div>
-          
-          <p className="text-sage-400 text-base leading-relaxed">
+          <p className="text-sage-400 text-base leading-relaxed line-clamp-2">
             {pairingData.description}
           </p>
         </div>
       </CardHeader>
       
-      <CardContent className="p-6 space-y-6 bg-sage-50/30">
-        <PairingAccordion
-          pairingReason={pairingData.pairingReason}
-          recipe={pairingData.recipe}
-          cookingTips={pairingData.cookingTips}
-        />
-        <PairingVoteButtons
-          pairingId={pair.id}
-          helpfulVotes={pair.helpful_votes}
-          notHelpfulVotes={pair.not_helpful_votes}
-          onVote={onVote}
-        />
+      <CardContent className="p-6 pt-0">
+        <Link to={`/recipe/${pair.id}`}>
+          <Button className="w-full group" variant="outline">
+            View Full Recipe
+            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Button>
+        </Link>
       </CardContent>
     </Card>
   );

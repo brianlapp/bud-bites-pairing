@@ -4,6 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { Toaster } from "@/components/ui/toaster";
 import "./App.css";
 import Index from "./pages/Index";
+import Recipe from "./pages/Recipe";
 
 const queryClient = new QueryClient();
 
@@ -17,6 +18,14 @@ function App() {
             element={
               <AnimatePresence mode="wait">
                 <Index />
+              </AnimatePresence>
+            }
+          />
+          <Route
+            path="/recipe/:id"
+            element={
+              <AnimatePresence mode="wait">
+                <Recipe />
               </AnimatePresence>
             }
           />
