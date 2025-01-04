@@ -35,15 +35,6 @@ export interface UserChallenge {
   challenge: Challenge;
 }
 
-export interface Follow {
-  id: string;
-  follower_id: string;
-  following_id: string;
-  created_at: string;
-  following_profile?: UserProfile;
-  follower_profile?: UserProfile;
-}
-
 export interface UserProfile {
   id: string;
   display_name: string | null;
@@ -53,4 +44,13 @@ export interface UserProfile {
   last_login: string;
   total_pairings_created: number | null;
   total_helpful_votes: number | null;
+}
+
+export interface Follow {
+  id: string;
+  follower_id: string;
+  following_id: string;
+  created_at: string;
+  following_profile?: UserProfile;
+  follower_profile?: UserProfile;
 }

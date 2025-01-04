@@ -24,7 +24,10 @@ export const useSocialFeatures = (userId: string | undefined) => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("user_achievements")
-        .select("*, achievement(*)")
+        .select(`
+          *,
+          achievement:achievements(*)
+        `)
         .eq("user_id", userId);
       if (error) throw error;
       return data;
@@ -49,7 +52,10 @@ export const useSocialFeatures = (userId: string | undefined) => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("user_challenges")
-        .select("*, challenge(*)")
+        .select(`
+          *,
+          challenge:challenges(*)
+        `)
         .eq("user_id", userId);
       if (error) throw error;
       return data;
@@ -62,7 +68,10 @@ export const useSocialFeatures = (userId: string | undefined) => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("follows")
-        .select("*, follower_profile:profiles!follower_id(*)")
+        .select(`
+          *,
+          follower_profile:profiles!follower_id(*)
+        `)
         .eq("following_id", userId);
       if (error) throw error;
       return data;
@@ -75,7 +84,10 @@ export const useSocialFeatures = (userId: string | undefined) => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("follows")
-        .select("*, following_profile:profiles!following_id(*)")
+        .select(`
+          *,
+          following_profile:profiles!following_id(*)
+        `)
         .eq("follower_id", userId);
       if (error) throw error;
       return data;
