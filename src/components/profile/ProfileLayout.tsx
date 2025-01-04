@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import Navigation from '@/components/layout/Navigation';
 import Footer from '@/components/layout/Footer';
 import { LoadingSpinner } from './LoadingSpinner';
+import { GameStatsSection } from './GameStatsSection';
+import { UserInfoSection } from './UserInfoSection';
 import { UserProfile, UserStats } from '@/types/profile';
 
 interface ProfileLayoutProps {

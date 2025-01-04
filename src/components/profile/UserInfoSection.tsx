@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { UserProfile } from "@/pages/Profile";
+import { UserProfile } from "@/types/profile";
 import { User, Edit } from "lucide-react";
 
 interface UserInfoSectionProps {

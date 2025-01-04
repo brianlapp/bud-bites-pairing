@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { UserStats } from "@/pages/Profile";
+import { UserStats } from "@/types/profile";
 import { Trophy, Star, Award, ChartBar, Gamepad2 } from "lucide-react";
 
 interface GameStatsSectionProps {
