@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { Navigation } from "@/components/layout/Navigation";
-import { Footer } from "@/components/layout/Footer";
+import Navigation from "@/components/layout/Navigation";
+import Footer from "@/components/layout/Footer";
 import { DosingCalculator } from "@/components/calculator/DosingCalculator";
 
 const Calculator = () => {
