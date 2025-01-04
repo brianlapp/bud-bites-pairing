@@ -2,85 +2,83 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Achievement, Challenge, Follow, UserAchievement, UserChallenge } from "@/types/social";
 import { useToast } from "@/components/ui/use-toast";
-import { Database } from "@/types/supabase";
 
-export const useSocialFeatures = (userId?: string) => {
-  const queryClient = useQueryClient();
+export const useSocialFeatures = (userId: string | undefined) => {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const { data: achievements } = useQuery<Achievement[]>({
-    queryKey: ['achievements'],
+    queryKey: ["achievements"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('achievements')
-        .select('*');
+        .from("achievements")
+        .select("*");
       if (error) throw error;
-      return data as Achievement[];
+      return data;
     },
     enabled: !!userId,
   });
 
   const { data: userAchievements } = useQuery<UserAchievement[]>({
-    queryKey: ['user-achievements', userId],
+    queryKey: ["user_achievements", userId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('user_achievements')
-        .select('*, achievement:achievements(*)')
-        .eq('user_id', userId);
+        .from("user_achievements")
+        .select("*, achievement(*)")
+        .eq("user_id", userId);
       if (error) throw error;
-      return data as UserAchievement[];
+      return data;
     },
     enabled: !!userId,
   });
 
   const { data: challenges } = useQuery<Challenge[]>({
-    queryKey: ['challenges'],
+    queryKey: ["challenges"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('challenges')
-        .select('*')
-        .gte('end_date', new Date().toISOString());
+        .from("challenges")
+        .select("*");
       if (error) throw error;
-      return data as Challenge[];
+      return data;
     },
     enabled: !!userId,
   });
 
   const { data: userChallenges } = useQuery<UserChallenge[]>({
-    queryKey: ['user-challenges', userId],
+    queryKey: ["user_challenges", userId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('user_challenges')
-        .select('*, challenge:challenges(*)')
-        .eq('user_id', userId);
+        .from("user_challenges")
+        .select("*, challenge(*)")
+        .eq("user_id", userId);
       if (error) throw error;
-      return data as UserChallenge[];
+      return data;
     },
     enabled: !!userId,
   });
 
   const { data: followers } = useQuery<Follow[]>({
-    queryKey: ['followers', userId],
+    queryKey: ["followers", userId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('follows')
-        .select('*, follower:profiles!follows_follower_id_fkey(*)')
-        .eq('following_id', userId);
+        .from("follows")
+        .select("*, follower_profile:profiles!follower_id(*)")
+        .eq("following_id", userId);
       if (error) throw error;
-      return data as Follow[];
+      return data;
     },
     enabled: !!userId,
   });
 
   const { data: following } = useQuery<Follow[]>({
-    queryKey: ['following', userId],
+    queryKey: ["following", userId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('follows')
-        .select('*, following:profiles!follows_following_id_fkey(*)')
-        .eq('follower_id', userId);
+        .from("follows")
+        .select("*, following_profile:profiles!following_id(*)")
+        .eq("follower_id", userId);
       if (error) throw error;
-      return data as Follow[];
+      return data;
     },
     enabled: !!userId,
   });
@@ -88,34 +86,36 @@ export const useSocialFeatures = (userId?: string) => {
   const joinChallenge = useMutation({
     mutationFn: async (challengeId: string) => {
       const { error } = await supabase
-        .from('user_challenges')
-        .insert({ user_id: userId, challenge_id: challengeId });
+        .from("user_challenges")
+        .insert({
+          user_id: userId,
+          challenge_id: challengeId,
+        });
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user-challenges', userId] });
+      queryClient.invalidateQueries({ queryKey: ["user_challenges", userId] });
       toast({
         title: "Success",
-        description: "You've joined the challenge!",
+        description: "Successfully joined the challenge!",
       });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Error",
-        description: "Failed to join challenge",
+        description: error.message,
         variant: "destructive",
       });
-      console.error('Error joining challenge:', error);
     },
   });
 
   return {
-    achievements,
-    userAchievements,
-    challenges,
-    userChallenges,
-    followers,
-    following,
+    achievements: achievements || [],
+    userAchievements: userAchievements || [],
+    challenges: challenges || [],
+    userChallenges: userChallenges || [],
+    followers: followers || [],
+    following: following || [],
     joinChallenge,
   };
 };

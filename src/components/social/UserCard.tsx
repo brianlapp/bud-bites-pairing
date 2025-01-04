@@ -1,20 +1,22 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { UserProfile } from "@/types/profile";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserProfile } from "@/types/social";
+import { useToast } from "@/components/ui/use-toast";
 
 interface UserCardProps {
   profile: UserProfile;
   isFollowing: boolean;
-  onFollowToggle?: () => void;
+  onFollowToggle: () => void;
 }
 
 export const UserCard = ({ profile, isFollowing, onFollowToggle }: UserCardProps) => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const handleFollowToggle = async () => {
     try {
@@ -23,38 +25,44 @@ export const UserCard = ({ profile, isFollowing, onFollowToggle }: UserCardProps
       
       if (!session) {
         toast({
-          title: "Authentication required",
-          description: "Please sign in to follow users",
+          title: "Error",
+          description: "You must be logged in to follow users",
           variant: "destructive",
         });
         return;
       }
 
       if (isFollowing) {
-        await supabase
-          .from('follows')
+        const { error } = await supabase
+          .from("follows")
           .delete()
-          .match({ follower_id: session.user.id, following_id: profile.id });
+          .eq("follower_id", session.user.id)
+          .eq("following_id", profile.id);
+        
+        if (error) throw error;
       } else {
-        await supabase
-          .from('follows')
+        const { error } = await supabase
+          .from("follows")
           .insert({
             follower_id: session.user.id,
             following_id: profile.id,
           });
+        
+        if (error) throw error;
       }
 
-      onFollowToggle?.();
-      
+      onFollowToggle();
+      queryClient.invalidateQueries({ queryKey: ["followers"] });
+      queryClient.invalidateQueries({ queryKey: ["following"] });
+
       toast({
-        title: isFollowing ? "Unfollowed" : "Following",
-        description: isFollowing ? `You unfollowed ${profile.display_name}` : `You are now following ${profile.display_name}`,
+        title: "Success",
+        description: isFollowing ? "Unfollowed successfully" : "Followed successfully",
       });
-    } catch (error) {
-      console.error('Error toggling follow:', error);
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "Failed to update follow status",
+        description: error.message,
         variant: "destructive",
       });
     } finally {
@@ -63,26 +71,25 @@ export const UserCard = ({ profile, isFollowing, onFollowToggle }: UserCardProps
   };
 
   return (
-    <Card className="w-full">
+    <Card>
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Avatar className="h-12 w-12">
+            <Avatar>
               <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.id}`} />
               <AvatarFallback>{profile.display_name?.[0] || '?'}</AvatarFallback>
             </Avatar>
             <div>
-              <h3 className="font-semibold text-lg">{profile.display_name || 'Anonymous'}</h3>
-              <p className="text-sm text-sage-500">{profile.bio || 'No bio yet'}</p>
+              <p className="font-medium">{profile.display_name || 'Anonymous'}</p>
+              <p className="text-sm text-muted-foreground">{profile.bio || 'No bio yet'}</p>
             </div>
           </div>
           <Button
             variant={isFollowing ? "outline" : "default"}
-            size="sm"
             onClick={handleFollowToggle}
             disabled={loading}
           >
-            {isFollowing ? 'Unfollow' : 'Follow'}
+            {isFollowing ? "Unfollow" : "Follow"}
           </Button>
         </div>
       </CardContent>

@@ -4,6 +4,7 @@ export interface Achievement {
   description: string;
   icon: string;
   points: number;
+  created_at: string;
 }
 
 export interface UserAchievement {
@@ -11,6 +12,7 @@ export interface UserAchievement {
   user_id: string;
   achievement_id: string;
   unlocked_at: string;
+  created_at: string;
   achievement: Achievement;
 }
 
@@ -21,6 +23,7 @@ export interface Challenge {
   start_date: string;
   end_date: string;
   points: number;
+  created_at: string;
 }
 
 export interface UserChallenge {
@@ -28,6 +31,7 @@ export interface UserChallenge {
   user_id: string;
   challenge_id: string;
   completed_at: string | null;
+  created_at: string;
   challenge: Challenge;
 }
 
@@ -36,4 +40,17 @@ export interface Follow {
   follower_id: string;
   following_id: string;
   created_at: string;
+  following_profile?: UserProfile;
+  follower_profile?: UserProfile;
+}
+
+export interface UserProfile {
+  id: string;
+  display_name: string | null;
+  bio: string | null;
+  favorite_strain: string | null;
+  created_at: string;
+  last_login: string;
+  total_pairings_created: number | null;
+  total_helpful_votes: number | null;
 }
