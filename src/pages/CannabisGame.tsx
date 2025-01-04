@@ -17,15 +17,15 @@ export const CannabisGame = () => {
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-4xl md:text-5xl font-bold mb-6 text-center"
+              className="text-4xl md:text-5xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-white to-sage-100"
             >
-              Cannabis Tycoon
+              Welcome to Cannabis Tycoon!
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-lg md:text-xl text-center max-w-3xl mx-auto mb-8 text-sage-100"
+              className="text-lg md:text-xl text-center max-w-3xl mx-auto mb-8 text-sage-100 font-medium tracking-wide"
             >
               Build your cannabis empire! Grow premium strains, manage your operations, and become the ultimate Cannabis Tycoon.
             </motion.p>

@@ -12,30 +12,38 @@ export const GameInterface = () => {
       <motion.div
         initial={{ x: -20, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        className="bg-white rounded-lg shadow-lg p-6"
+        className="bg-white rounded-lg shadow-lg overflow-hidden"
       >
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center gap-2">
-            <Sprout className="w-8 h-8 text-sage-500" />
-            <h2 className="text-2xl font-bold text-sage-500">Grow Room</h2>
-          </div>
-          <div className="text-sage-500">
-            💰 ${state.money} | 🌟 {state.points} points
+        <div className="bg-sage-100 p-6">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <Sprout className="w-8 h-8 text-sage-500" />
+              <h2 className="text-2xl font-bold text-sage-500">Grow Room</h2>
+            </div>
+            <div className="text-sage-500">
+              💰 ${state.money} | 🌟 {state.points} points
+            </div>
           </div>
         </div>
-        <GrowRoom />
+        <div className="p-6">
+          <GrowRoom />
+        </div>
       </motion.div>
 
       <motion.div
         initial={{ x: 20, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        className="bg-white rounded-lg shadow-lg p-6"
+        className="bg-white rounded-lg shadow-lg overflow-hidden"
       >
-        <div className="flex items-center gap-2 mb-6">
-          <StoreIcon className="w-8 h-8 text-sage-500" />
-          <h2 className="text-2xl font-bold text-sage-500">Store</h2>
+        <div className="bg-coral-500/10 p-6">
+          <div className="flex items-center gap-2">
+            <StoreIcon className="w-8 h-8 text-sage-500" />
+            <h2 className="text-2xl font-bold text-sage-500">Store</h2>
+          </div>
         </div>
-        <Store />
+        <div className="p-6">
+          <Store />
+        </div>
       </motion.div>
     </div>
   );
