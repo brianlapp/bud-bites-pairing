@@ -101,13 +101,14 @@ const Auth = () => {
                     email_label: 'Email',
                     password_label: 'Password',
                   },
-                }
-              }}
-              messages={{
-                password_required: 'Password is required',
-                email_required: 'Email is required',
-                invalid_email: 'Invalid email address',
-                invalid_login_credentials: 'Invalid login credentials',
+                  sign_up: {
+                    email_label: 'Email',
+                    password_label: 'Password',
+                  },
+                  forgotten_password: {
+                    email_label: 'Email',
+                  },
+                },
               }}
             />
           </div>
