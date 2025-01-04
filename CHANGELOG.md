@@ -17,9 +17,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Glass-morphism design elements
 - Custom sage and coral color scheme
 - Basic responsive design implementation
+- Cannabis Wordle game with stats tracking
+- Cannabis Tycoon game with progress tracking
+- User statistics dashboard
+- Game stats integration with Supabase
+- Profile management system
 
 ### Changed
 - Updated Tailwind configuration with custom colors and theme variables
+- Improved Wordle game UI layout and positioning
+- Enhanced game stats visualization
 
 ### Fixed
 - Border color configuration in Tailwind setup
+- Wordle color guide positioning
+- Game stats persistence and synchronization
