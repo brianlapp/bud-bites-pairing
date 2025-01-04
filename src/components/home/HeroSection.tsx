@@ -6,7 +6,7 @@ const HeroSection = () => {
     <section className="relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="text-center space-y-4 animate-fade-up">
-          <h1 className="text-4xl sm:text-6xl font-bold text-sage-500 tracking-tight">
+          <h1 className="text-4xl sm:text-6xl font-bold text-sage-500 tracking-tight pt-8">
             <span>Discover the perfect pairing for </span>
             <div className="h-[72px] sm:h-[96px] flex items-center justify-center">
               <Typewriter
