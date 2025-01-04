@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
-import { Heart, BookmarkPlus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Heart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { funnyLoadingMessages } from "./constants";
 
@@ -11,45 +10,27 @@ interface RecipeHeaderProps {
 export const RecipeHeader = ({ dishName }: RecipeHeaderProps) => {
   const { toast } = useToast();
 
+  const handleSave = () => {
+    toast({
+      title: "Recipe Saved! 🌿",
+      description: funnyLoadingMessages[Math.floor(Math.random() * funnyLoadingMessages.length)],
+    });
+  };
+
   return (
-    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-      <motion.div 
-        className="flex items-center gap-5"
-        initial={{ x: -20, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: 0.2 }}
+    <div className="flex items-center gap-5">
+      <motion.button
+        className="p-4 bg-sage-50/80 backdrop-blur-sm rounded-full shadow-inner border border-sage-100 hover:bg-sage-100/80 transition-colors"
+        whileHover={{ scale: 1.05, rotate: 15 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={handleSave}
+        aria-label="Save recipe"
       >
-        <motion.div 
-          className="p-4 bg-sage-50/80 backdrop-blur-sm rounded-full shadow-inner border border-sage-100"
-          whileHover={{ rotate: 360 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Heart className="w-7 h-7 text-coral-500" />
-        </motion.div>
-        <h2 className="text-3xl font-bold text-sage-500 tracking-tight">
-          {dishName}
-        </h2>
-      </motion.div>
-      
-      <motion.div
-        initial={{ x: 20, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: 0.3 }}
-      >
-        <Button
-          variant="outline"
-          className="flex items-center gap-3 px-6 py-6 h-auto text-lg hover:bg-sage-50 transition-all duration-300 hover:scale-105"
-          onClick={() => {
-            toast({
-              title: "Recipe Saved! 🌿",
-              description: funnyLoadingMessages[Math.floor(Math.random() * funnyLoadingMessages.length)],
-            });
-          }}
-        >
-          <BookmarkPlus className="w-5 h-5" />
-          Save Recipe
-        </Button>
-      </motion.div>
+        <Heart className="w-7 h-7 text-coral-500" />
+      </motion.button>
+      <h2 className="text-3xl font-bold text-sage-500 tracking-tight">
+        {dishName}
+      </h2>
     </div>
   );
 };
