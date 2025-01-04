@@ -1,5 +1,6 @@
-import { Cannabis, ArrowRight } from "lucide-react";
+import { Cannabis, ArrowRight, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { StrainPairing } from "@/types/strain";
 import {
   Card,
@@ -8,10 +9,13 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PairingVoteButtons } from "./PairingVoteButtons";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface PairingCardProps {
   pair: StrainPairing;
   onVote: (pairingId: string, isHelpful: boolean) => Promise<void>;
+  isFavorited?: boolean;
 }
 
 const getStrainType = (strainName: string): 'sativa' | 'indica' | 'hybrid' => {
@@ -24,17 +28,20 @@ const getStrainType = (strainName: string): 'sativa' | 'indica' | 'hybrid' => {
 const getStrainColor = (type: 'sativa' | 'indica' | 'hybrid'): string => {
   switch (type) {
     case 'sativa':
-      return 'text-coral-500'; // Using our site's coral color for sativa
+      return 'text-coral-500';
     case 'indica':
-      return 'text-indigo-500'; // Using indigo for indica
+      return 'text-indigo-500';
     case 'hybrid':
-      return 'text-sage-500'; // Keep existing green color for hybrid
+      return 'text-sage-500';
     default:
       return 'text-sage-500';
   }
 };
 
-export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
+export const PairingCard = ({ pair, onVote, isFavorited = false }: PairingCardProps) => {
+  const [isLiked, setIsLiked] = useState(isFavorited);
+  const { toast } = useToast();
+
   const cleanAndParseJSON = (jsonString: string) => {
     try {
       const cleaned = jsonString.replace(/```json\n|\n```/g, '');
@@ -42,6 +49,59 @@ export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
     } catch (error) {
       console.error('Error parsing pairing data:', error);
       return null;
+    }
+  };
+
+  const handleFavorite = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        toast({
+          title: "Authentication Required",
+          description: "Please sign in to favorite pairings",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (isLiked) {
+        const { error } = await supabase
+          .from('favorite_pairings')
+          .delete()
+          .eq('user_id', session.user.id)
+          .eq('pairing_id', pair.id);
+
+        if (error) throw error;
+        
+        toast({
+          title: "Removed from favorites",
+          description: "Pairing has been removed from your favorites",
+        });
+      } else {
+        const { error } = await supabase
+          .from('favorite_pairings')
+          .insert({
+            user_id: session.user.id,
+            pairing_id: pair.id,
+          });
+
+        if (error) throw error;
+        
+        toast({
+          title: "Added to favorites",
+          description: "Pairing has been added to your favorites",
+        });
+      }
+
+      setIsLiked(!isLiked);
+    } catch (error: any) {
+      console.error('Error toggling favorite:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update favorites. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -60,13 +120,23 @@ export const PairingCard = ({ pair, onVote }: PairingCardProps) => {
   return (
     <Card className="w-full bg-white border-sage-100 shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300">
       <CardHeader className="p-6 space-y-6">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-sage-50 rounded-full">
-            <Cannabis className={`w-5 h-5 ${iconColor}`} />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-sage-50 rounded-full">
+              <Cannabis className={`w-5 h-5 ${iconColor}`} />
+            </div>
+            <h3 className="text-lg font-semibold text-sage-500">
+              {pair.strain_name}
+            </h3>
           </div>
-          <h3 className="text-lg font-semibold text-sage-500">
-            {pair.strain_name}
-          </h3>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleFavorite}
+            className={`${isLiked ? 'text-red-500' : 'text-sage-400'} hover:text-red-500`}
+          >
+            <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
+          </Button>
         </div>
         
         <div className="space-y-4">

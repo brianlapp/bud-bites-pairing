@@ -9,6 +9,29 @@ const RecentPairings = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  const { data: session } = useQuery({
+    queryKey: ['session'],
+    queryFn: async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      return session;
+    },
+  });
+
+  const { data: favorites = [] } = useQuery({
+    queryKey: ['favorites'],
+    queryFn: async () => {
+      if (!session?.user.id) return [];
+      const { data, error } = await supabase
+        .from('favorite_pairings')
+        .select('pairing_id')
+        .eq('user_id', session.user.id);
+      
+      if (error) throw error;
+      return data.map(fav => fav.pairing_id);
+    },
+    enabled: !!session?.user.id,
+  });
+
   const { data: recentPairings = [], isLoading: isPairingsLoading } = useQuery({
     queryKey: ['recent-pairings'],
     queryFn: async () => {
@@ -61,7 +84,12 @@ const RecentPairings = () => {
             </>
           ) : recentPairings.length > 0 ? (
             recentPairings.map((pair) => (
-              <PairingCard key={pair.id} pair={pair} onVote={handleVote} />
+              <PairingCard 
+                key={pair.id} 
+                pair={pair} 
+                onVote={handleVote}
+                isFavorited={favorites.includes(pair.id)}
+              />
             ))
           ) : (
             <div className="col-span-full text-center py-12 text-sage-400">
