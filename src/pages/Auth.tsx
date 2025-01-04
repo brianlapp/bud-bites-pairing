@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Auth as SupabaseAuth } from "@supabase/auth-ui-react";
@@ -10,31 +10,23 @@ const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  useEffect(() => {
-    // Check if user is already logged in
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        navigate("/");
-      }
-    };
-    checkUser();
+  // Check if user is already logged in
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (session) {
+      navigate("/");
+    }
+  });
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN") {
-        toast({
-          title: "Welcome!",
-          description: "You have successfully signed in.",
-        });
-        navigate("/");
-      }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [navigate, toast]);
+  // Listen for auth changes
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === "SIGNED_IN") {
+      toast({
+        title: "Welcome!",
+        description: "You have successfully signed in.",
+      });
+      navigate("/");
+    }
+  });
 
   return (
     <div className="min-h-screen bg-sage-50 flex flex-col">
