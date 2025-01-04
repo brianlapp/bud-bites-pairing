@@ -5,47 +5,44 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Info } from "lucide-react";
+import { useEffect } from "react";
 
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Check if user is already logged in
-  supabase.auth.getSession().then(({ data: { session } }) => {
-    if (session) {
-      toast({
-        title: "Already logged in",
-        description: "Redirecting to home page...",
-      });
-      navigate("/");
-    }
-  });
+  useEffect(() => {
+    // Check if user is already logged in
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        toast({
+          title: "Already logged in",
+          description: "Redirecting to home page...",
+        });
+        navigate("/");
+      }
+    });
 
-  // Listen for auth changes
-  supabase.auth.onAuthStateChange((event, session) => {
-    if (event === "SIGNED_IN") {
-      toast({
-        title: "Welcome!",
-        description: "You have successfully signed in.",
-      });
-      navigate("/");
-    } else if (event === "SIGNED_OUT") {
-      toast({
-        title: "Signed out",
-        description: "You have been signed out successfully.",
-      });
-    } else if (event === "USER_UPDATED") {
-      toast({
-        title: "Profile updated",
-        description: "Your profile has been updated successfully.",
-      });
-    } else if (event === "PASSWORD_RECOVERY") {
-      toast({
-        title: "Password recovery",
-        description: "Check your email for password reset instructions.",
-      });
-    }
-  });
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN") {
+        toast({
+          title: "Welcome!",
+          description: "You have successfully signed in.",
+        });
+        navigate("/");
+      } else if (event === "SIGNED_OUT") {
+        toast({
+          title: "Signed out",
+          description: "You have been signed out successfully.",
+        });
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate, toast]);
 
   return (
     <div className="min-h-screen bg-sage-50 flex flex-col">
@@ -66,7 +63,7 @@ const Auth = () => {
           <div className="mt-4 p-4 bg-blue-50 rounded-lg flex items-start gap-3">
             <Info className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
             <p className="text-sm text-blue-700">
-              Sign in with your email address. We'll send you a magic link to log in securely without a password.
+              You can sign in with email and password or use the magic link option. Your session will be remembered.
             </p>
           </div>
 
@@ -85,8 +82,8 @@ const Auth = () => {
                 },
               }}
               providers={[]}
-              view="magic_link"
-              showLinks={false}
+              view="sign_in"
+              showLinks={true}
               redirectTo={window.location.origin}
             />
           </div>
