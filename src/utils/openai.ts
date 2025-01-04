@@ -1,14 +1,31 @@
 import OpenAI from 'openai';
+import { supabase } from "@/integrations/supabase/client";
 
-const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true
-});
+const getOpenAIKey = async () => {
+  const { data: { OPENAI_API_KEY } } = await supabase.functions.invoke('get-secret', {
+    body: { name: 'OPENAI_API_KEY' }
+  });
+  return OPENAI_API_KEY;
+};
+
+let openaiInstance: OpenAI | null = null;
+
+const getOpenAIInstance = async () => {
+  if (!openaiInstance) {
+    const apiKey = await getOpenAIKey();
+    openaiInstance = new OpenAI({
+      apiKey,
+      dangerouslyAllowBrowser: true
+    });
+  }
+  return openaiInstance;
+};
 
 export const generateMealPairing = async (strain: string): Promise<string> => {
   try {
+    const openai = await getOpenAIInstance();
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4",
       messages: [
         {
           role: "system",
@@ -28,4 +45,4 @@ export const generateMealPairing = async (strain: string): Promise<string> => {
     console.error('OpenAI API Error:', error);
     return "Sorry, I couldn't generate a pairing suggestion at this time. Please try again later.";
   }
-}
+};
