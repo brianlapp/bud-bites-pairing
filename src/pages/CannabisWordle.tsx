@@ -165,8 +165,14 @@ const CannabisWordle = () => {
           </div>
 
           <div className={`bg-white dark:bg-sage-800 rounded-lg shadow-lg p-4 ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50' : ''}`}>
-            <div className="flex justify-center mb-4">
-              {!hintUsed && (
+            <Keyboard
+              onKeyPress={handleKeyPress}
+              onEnter={handleEnter}
+              onBackspace={handleBackspace}
+              usedLetters={usedLetters}
+            />
+            {!hintUsed && (
+              <div className="flex justify-center mt-4">
                 <Button
                   onClick={showHint}
                   variant="outline"
@@ -175,14 +181,8 @@ const CannabisWordle = () => {
                   <Sprout className="w-4 h-4 mr-2" />
                   Use Hint
                 </Button>
-              )}
-            </div>
-            <Keyboard
-              onKeyPress={handleKeyPress}
-              onEnter={handleEnter}
-              onBackspace={handleBackspace}
-              usedLetters={usedLetters}
-            />
+              </div>
+            )}
           </div>
         </div>
       </div>
