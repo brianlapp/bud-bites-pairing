@@ -1,15 +1,23 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export const IMAGE_SIZES = {
-  small: 640,
-  medium: 1024,
-  large: 1920
-};
-
-const generateAndCacheImage = async (dishName: string, description: string): Promise<string> => {
+export async function getMatchingImage(dishName: string, description: string): Promise<string> {
   try {
-    const prompt = `A professional food photography style image of ${dishName}. ${description}. Bright lighting, shallow depth of field, on a clean white plate, restaurant presentation style.`;
+    // Check if we have a cached image
+    const { data: cachedImage } = await supabase
+      .from('cached_recipe_images')
+      .select('image_path')
+      .eq('dish_name', dishName)
+      .eq('description', description)
+      .single();
 
+    if (cachedImage?.image_path) {
+      console.log('Using cached image:', cachedImage.image_path);
+      return cachedImage.image_path;
+    }
+
+    // If no cached image, generate a new one
+    const prompt = `A professional, appetizing food photography style image of ${dishName}. ${description}. The image should be well-lit, with a clean background, and focus on the dish's presentation.`;
+    
     // Generate image using our Edge Function
     const { data, error } = await supabase.functions.invoke('generate-recipe-image', {
       body: { prompt, dishName, description }
@@ -20,38 +28,7 @@ const generateAndCacheImage = async (dishName: string, description: string): Pro
 
     return data.imageUrl;
   } catch (error) {
-    console.error('Error generating image:', error);
-    throw error;
+    console.error('Error getting matching image:', error);
+    return '/placeholder.svg';
   }
-};
-
-export const getMatchingImage = async (
-  dishName: string,
-  description: string
-): Promise<string> => {
-  try {
-    // Try to get cached image
-    const { data: cachedImage, error: cacheError } = await supabase
-      .from('cached_recipe_images')
-      .select('image_path')
-      .eq('dish_name', dishName)
-      .eq('description', description)
-      .maybeSingle();
-
-    if (cacheError) {
-      console.error('Error fetching cached image:', cacheError);
-      throw cacheError;
-    }
-
-    // If cached image exists, return it
-    if (cachedImage?.image_path) {
-      return cachedImage.image_path;
-    }
-
-    // Generate and cache new image
-    return await generateAndCacheImage(dishName, description);
-  } catch (error) {
-    console.error('Error in getMatchingImage:', error);
-    return '/placeholder.svg'; // Fallback to placeholder if everything fails
-  }
-};
+}

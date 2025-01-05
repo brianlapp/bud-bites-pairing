@@ -1,6 +1,5 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import "https://deno.land/x/xhr@0.1.0/mod.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -9,7 +8,7 @@ const corsHeaders = {
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders })
+    return new Response('ok', { headers: corsHeaders })
   }
 
   try {
@@ -24,16 +23,17 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: "dall-e-3",
-        prompt,
+        prompt: prompt,
         n: 1,
-        size: "1024x1024"
+        size: "1024x1024",
+        quality: "standard",
+        response_format: "url"
       }),
     })
 
     const data = await response.json()
-    
     if (!data.data?.[0]?.url) {
-      throw new Error('No image URL returned from OpenAI')
+      throw new Error('No image URL in DALL-E response')
     }
 
     // Download the image
@@ -52,14 +52,15 @@ serve(async (req) => {
       .from('recipe-images')
       .upload(fileName, imageBlob, {
         contentType: 'image/png',
+        cacheControl: '3600',
         upsert: false
       })
 
     if (uploadError) {
-      throw uploadError
+      throw new Error(`Failed to upload image: ${uploadError.message}`)
     }
 
-    // Get public URL
+    // Get the public URL
     const { data: { publicUrl } } = supabase.storage
       .from('recipe-images')
       .getPublicUrl(fileName)
