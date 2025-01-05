@@ -10,6 +10,7 @@ import { WordleHero } from "@/components/wordle/WordleHero";
 import { ColorGuide } from "@/components/wordle/stats/ColorGuide";
 import { Button } from "@/components/ui/button";
 import { Sprout } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const CannabisWordle = () => {
   const { toast } = useToast();
@@ -21,6 +22,7 @@ const CannabisWordle = () => {
   const [hint, setHint] = useState("");
   const [hintUsed, setHintUsed] = useState(false);
   const [usedLetters, setUsedLetters] = useState<Record<string, string>>({});
+  const isMobile = useIsMobile();
   const maxAttempts = 6;
 
   useEffect(() => {
@@ -149,7 +151,7 @@ const CannabisWordle = () => {
       
       <WordleHero stats={stats} loading={loading} />
       
-      <div className="container mx-auto px-4 -mt-36 relative z-10">
+      <div className="container mx-auto px-4 -mt-36 relative z-10 pb-24 md:pb-0">
         <div className="max-w-2xl mx-auto">
           <ColorGuide className="mb-4 bg-white dark:bg-sage-800 rounded-lg p-4 shadow-lg" />
           
@@ -162,7 +164,7 @@ const CannabisWordle = () => {
             />
           </div>
 
-          <div className="bg-white dark:bg-sage-800 rounded-lg shadow-lg p-4">
+          <div className={`bg-white dark:bg-sage-800 rounded-lg shadow-lg p-4 ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50' : ''}`}>
             <div className="flex justify-center mb-4">
               {!hintUsed && (
                 <Button
@@ -184,7 +186,7 @@ const CannabisWordle = () => {
           </div>
         </div>
       </div>
-      <Footer />
+      {!isMobile && <Footer />}
     </div>
   );
 };
