@@ -7,20 +7,14 @@ const recipeImages: Record<string, string> = {
   "Chocolate Brownies": "https://images.unsplash.com/photo-1515037893149-de7f840978e2",
 };
 
-// Fallback images for different food categories
-const fallbackImages = [
-  "https://images.unsplash.com/photo-1504674900247-0877df9cc836", // General food
-  "https://images.unsplash.com/photo-1546069901-ba9599a7e63c", // Healthy food
-  "https://images.unsplash.com/photo-1555939594-58d7cb561ad1", // Comfort food
-  "https://images.unsplash.com/photo-1557499305-87bd9049ec2d", // Desserts
-];
-
+// Image quality and format parameters
 const imageParams = {
   quality: 'auto',
   format: 'auto',
   fit: 'crop',
 };
 
+// Responsive image sizes
 export const IMAGE_SIZES = {
   small: 400,
   medium: 800,
@@ -32,44 +26,31 @@ const createImagePrompt = (recipeName: string, recipeDescription: string): strin
 };
 
 const getOptimizedImageUrl = (baseUrl: string, width: number): string => {
-  try {
-    const url = new URL(baseUrl);
-    url.searchParams.set('q', imageParams.quality);
-    url.searchParams.set('fm', imageParams.format);
-    url.searchParams.set('fit', imageParams.fit);
-    url.searchParams.set('w', width.toString());
-    return url.toString();
-  } catch (error) {
-    console.error('Error optimizing image URL:', error);
-    return baseUrl;
-  }
+  const url = new URL(baseUrl);
+  url.searchParams.set('q', imageParams.quality);
+  url.searchParams.set('fm', imageParams.format);
+  url.searchParams.set('fit', imageParams.fit);
+  url.searchParams.set('w', width.toString());
+  return url.toString();
 };
 
-const getFallbackImage = (): string => {
-  const randomIndex = Math.floor(Math.random() * fallbackImages.length);
-  return fallbackImages[randomIndex];
-};
+const checkCachedImage = async (dishName: string, description: string) => {
+  const { data: cachedImage } = await supabase
+    .from('cached_recipe_images')
+    .select('image_path')
+    .eq('dish_name', dishName)
+    .eq('description', description)
+    .single();
 
-const checkCachedImage = async (dishName: string) => {
-  try {
-    const { data: cachedImage } = await supabase
-      .from('cached_recipe_images')
-      .select('image_path')
-      .eq('dish_name', dishName)
-      .maybeSingle();
-
-    if (cachedImage?.image_path) {
-      const { data: imageUrl } = supabase.storage
-        .from('recipe-images')
-        .getPublicUrl(cachedImage.image_path);
-      
-      return imageUrl.publicUrl;
-    }
-    return null;
-  } catch (error) {
-    console.error('Error checking cached image:', error);
-    return null;
+  if (cachedImage) {
+    const { data: imageUrl } = supabase.storage
+      .from('recipe-images')
+      .getPublicUrl(cachedImage.image_path);
+    
+    return imageUrl.publicUrl;
   }
+
+  return null;
 };
 
 const generateAndCacheImage = async (
@@ -77,27 +58,23 @@ const generateAndCacheImage = async (
   recipeDescription: string
 ): Promise<string> => {
   try {
-    // Generate image using edge function
+    // Generate image using OpenAI
     const { data: imageData, error } = await supabase.functions.invoke('generate-recipe-image', {
       body: { recipeName, recipeDescription }
     });
 
     if (error || !imageData?.imageUrl) {
-      console.error('Failed to generate image:', error);
-      return getFallbackImage();
+      throw new Error('Failed to generate image');
     }
 
     // Download the generated image
     const imageResponse = await fetch(imageData.imageUrl);
-    if (!imageResponse.ok) {
-      console.error('Failed to download generated image');
-      return getFallbackImage();
-    }
-
     const imageBlob = await imageResponse.blob();
+
+    // Create a unique filename
     const filename = `${crypto.randomUUID()}.png`;
 
-    // Upload to Supabase Storage with proper authentication
+    // Upload to Supabase Storage
     const { error: uploadError } = await supabase.storage
       .from('recipe-images')
       .upload(filename, imageBlob, {
@@ -106,8 +83,7 @@ const generateAndCacheImage = async (
       });
 
     if (uploadError) {
-      console.error('Failed to upload image:', uploadError);
-      return getFallbackImage();
+      throw uploadError;
     }
 
     // Get the public URL
@@ -115,8 +91,8 @@ const generateAndCacheImage = async (
       .from('recipe-images')
       .getPublicUrl(filename);
 
-    // Cache the image metadata
-    const { error: cacheError } = await supabase
+    // Save to cached_recipe_images table
+    await supabase
       .from('cached_recipe_images')
       .insert({
         dish_name: recipeName,
@@ -124,14 +100,10 @@ const generateAndCacheImage = async (
         image_path: filename,
       });
 
-    if (cacheError) {
-      console.error('Failed to cache image metadata:', cacheError);
-    }
-
     return urlData.publicUrl;
   } catch (error) {
     console.error('Error generating and caching image:', error);
-    return getFallbackImage();
+    return '/placeholder.svg';
   }
 };
 
@@ -147,7 +119,7 @@ export const getMatchingImage = async (
     }
 
     // 2. Check cached images
-    const cachedImageUrl = await checkCachedImage(recipeName);
+    const cachedImageUrl = await checkCachedImage(recipeName, recipeDescription);
     if (cachedImageUrl) {
       return getOptimizedImageUrl(cachedImageUrl, IMAGE_SIZES[size]);
     }
@@ -157,6 +129,6 @@ export const getMatchingImage = async (
     return getOptimizedImageUrl(newImageUrl, IMAGE_SIZES[size]);
   } catch (error) {
     console.error('Error fetching recipe image:', error);
-    return getOptimizedImageUrl(getFallbackImage(), IMAGE_SIZES[size]);
+    return '/placeholder.svg';
   }
 };

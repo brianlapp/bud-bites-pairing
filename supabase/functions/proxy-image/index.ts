@@ -6,41 +6,60 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
 
   try {
-    const { imageUrl } = await req.json()
-    
-    if (!imageUrl) {
-      throw new Error('No image URL provided')
+    const { url } = await req.json()
+    console.log('Proxying image request for URL:', url)
+
+    if (!url) {
+      throw new Error('URL parameter is required')
     }
 
-    console.log('Fetching image from:', imageUrl)
-    
-    const imageResponse = await fetch(imageUrl)
-    
-    if (!imageResponse.ok) {
-      throw new Error(`Failed to fetch image: ${imageResponse.statusText}`)
-    }
+    // Fetch the image with a timeout
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 10000) // 10 second timeout
 
-    const imageBlob = await imageResponse.blob()
-    
-    return new Response(imageBlob, { 
-      headers: {
-        ...corsHeaders,
-        'Content-Type': imageResponse.headers.get('Content-Type') || 'image/png',
-        'Cache-Control': 'public, max-age=31536000'
+    try {
+      const imageResponse = await fetch(url, { 
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+      })
+      
+      clearTimeout(timeout)
+
+      if (!imageResponse.ok) {
+        throw new Error(`Failed to fetch image: ${imageResponse.status} ${imageResponse.statusText}`)
       }
-    })
+
+      const contentType = imageResponse.headers.get('content-type')
+      const imageBlob = await imageResponse.blob()
+
+      return new Response(imageBlob, {
+        headers: {
+          ...corsHeaders,
+          'Content-Type': contentType || 'image/jpeg',
+          'Cache-Control': 'public, max-age=31536000'
+        }
+      })
+    } catch (fetchError) {
+      clearTimeout(timeout)
+      throw fetchError
+    }
   } catch (error) {
-    console.error('Proxy error:', error)
+    console.error('Error in proxy-image function:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500 
+      JSON.stringify({
+        error: error.message || 'An unexpected error occurred while proxying the image'
+      }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
     )
   }
