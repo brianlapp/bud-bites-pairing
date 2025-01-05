@@ -8,7 +8,15 @@ export const Logo = () => {
         alt="BudBites Logo" 
         className="h-8 w-8"
       />
-      <Link to="/" className="text-sage-500 font-semibold text-xl">
+      <Link 
+        to="/" 
+        className="font-black tracking-tighter text-xl"
+        style={{ 
+          fontFamily: "'Roboto', sans-serif",
+          color: "#4d3232",
+          letterSpacing: "-0.05em"
+        }}
+      >
         BudBites
       </Link>
     </div>
