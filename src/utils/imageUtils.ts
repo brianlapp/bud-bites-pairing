@@ -16,7 +16,7 @@ const imageParams = {
 };
 
 // Responsive image sizes
-export const IMAGE_SIZES = {
+const imageSizes = {
   small: 400,
   medium: 800,
   large: 1200,
@@ -38,79 +38,33 @@ const getOptimizedImageUrl = (baseUrl: string, width: number): string => {
   return url.toString();
 };
 
-const getCachedImage = async (recipeName: string, recipeDescription: string) => {
-  try {
-    const { data, error } = await supabase
-      .from('cached_recipe_images')
-      .select('image_path')
-      .eq('dish_name', recipeName)
-      .eq('description', recipeDescription)
-      .maybeSingle(); // Use maybeSingle instead of single to handle no results
-
-    if (error) throw error;
-    return data?.image_path;
-  } catch (error) {
-    console.error('Error fetching cached image:', error);
-    return null;
-  }
-};
-
-const generateAndCacheImage = async (recipeName: string, recipeDescription: string) => {
-  try {
-    // Use Supabase Edge Function to generate image instead of direct OpenAI call
-    const { data: imageData, error } = await supabase.functions.invoke('generate-recipe-image', {
-      body: { recipeName, recipeDescription }
-    });
-
-    if (error) throw error;
-    if (!imageData?.imageUrl) throw new Error('No image URL returned');
-
-    // Cache the generated image
-    const { error: cacheError } = await supabase
-      .from('cached_recipe_images')
-      .insert([
-        {
-          dish_name: recipeName,
-          description: recipeDescription,
-          image_path: imageData.imageUrl
-        }
-      ]);
-
-    if (cacheError) throw cacheError;
-    return imageData.imageUrl;
-  } catch (error) {
-    console.error('Error generating and caching image:', error);
-    return null;
-  }
-};
-
 export const getMatchingImage = async (
   recipeName: string,
   recipeDescription: string,
-  size: keyof typeof IMAGE_SIZES = 'medium'
+  size: keyof typeof imageSizes = 'medium'
 ): Promise<string> => {
   try {
     // 1. Check curated mapping
     if (recipeImages[recipeName]) {
-      return getOptimizedImageUrl(recipeImages[recipeName], IMAGE_SIZES[size]);
+      return getOptimizedImageUrl(recipeImages[recipeName], imageSizes[size]);
     }
 
-    // 2. Check cache
-    const cachedImageUrl = await getCachedImage(recipeName, recipeDescription);
-    if (cachedImageUrl) {
-      return getOptimizedImageUrl(cachedImageUrl, IMAGE_SIZES[size]);
+    // 2. Use AI generation as fallback
+    const { data: imageData, error } = await supabase.functions.invoke('generate-recipe-image', {
+      body: { recipeName, recipeDescription }
+    });
+
+    if (!error && imageData?.imageUrl) {
+      return getOptimizedImageUrl(imageData.imageUrl, imageSizes[size]);
     }
 
-    // 3. Generate new image
-    const generatedImageUrl = await generateAndCacheImage(recipeName, recipeDescription);
-    if (generatedImageUrl) {
-      return getOptimizedImageUrl(generatedImageUrl, IMAGE_SIZES[size]);
-    }
-
-    // 4. Fallback to placeholder
+    // 3. Final fallback: default placeholder
     return '/placeholder.svg';
   } catch (error) {
-    console.error('Error in getMatchingImage:', error);
+    console.error('Error fetching recipe image:', error);
     return '/placeholder.svg';
   }
 };
+
+// Export sizes for use in components
+export const IMAGE_SIZES = imageSizes;

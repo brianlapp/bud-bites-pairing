@@ -36,30 +36,6 @@ export type Database = {
         }
         Relationships: []
       }
-      cached_recipe_images: {
-        Row: {
-          created_at: string
-          description: string
-          dish_name: string
-          id: string
-          image_path: string
-        }
-        Insert: {
-          created_at?: string
-          description: string
-          dish_name: string
-          id?: string
-          image_path: string
-        }
-        Update: {
-          created_at?: string
-          description?: string
-          dish_name?: string
-          id?: string
-          image_path?: string
-        }
-        Relationships: []
-      }
       challenges: {
         Row: {
           created_at: string
