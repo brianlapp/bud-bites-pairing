@@ -5,18 +5,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { StrainPairing } from "@/types/strain";
 
-interface FavoritePairingResponse {
-  pairing_id: string;
-  created_at: string;
-  strain_pairings: StrainPairing;
-}
-
 interface FavoritePairing extends StrainPairing {
   created_at: string;
 }
 
 export const FavoritePairingsSection = () => {
-  const { data: favorites, isLoading, error } = useQuery({
+  const { data: favorites, isLoading } = useQuery({
     queryKey: ['favorite-pairings'],
     queryFn: async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -27,26 +21,17 @@ export const FavoritePairingsSection = () => {
         .select(`
           pairing_id,
           created_at,
-          strain_pairings (
-            id,
-            strain_name,
-            pairing_suggestion,
-            created_at,
-            helpful_votes,
-            not_helpful_votes
-          )
+          strain_pairings (*)
         `)
-        .eq('user_id', session.user.id);
+        .eq('user_id', session.user.id)
+        .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error('Error fetching favorites:', error);
-        throw error;
-      }
+      if (error) throw error;
 
-      return (favoritePairings as unknown as FavoritePairingResponse[]).map(fp => ({
+      return favoritePairings.map(fp => ({
         ...fp.strain_pairings,
         created_at: fp.created_at,
-      }));
+      })) as FavoritePairing[];
     },
   });
 
@@ -76,12 +61,22 @@ export const FavoritePairingsSection = () => {
     );
   }
 
+  const cleanAndParseJSON = (jsonString: string) => {
+    try {
+      const cleaned = jsonString.replace(/```json\n|\n```/g, '');
+      return JSON.parse(cleaned);
+    } catch (error) {
+      console.error('Error parsing pairing data:', error);
+      return null;
+    }
+  };
+
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-semibold text-sage-500">Favorite Pairings</h2>
       <div className="grid gap-4 md:grid-cols-2">
         {favorites.map((pairing) => {
-          const pairingData = JSON.parse(pairing.pairing_suggestion);
+          const pairingData = cleanAndParseJSON(pairing.pairing_suggestion);
           if (!pairingData) return null;
 
           return (
