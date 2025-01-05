@@ -37,16 +37,23 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-sage-200">
+    <nav 
+      className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-sage-200"
+      role="navigation"
+      aria-label="Main navigation"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 relative">
           {/* Mobile menu button - positioned absolutely */}
           <div className="md:hidden absolute left-4 top-1/2 -translate-y-1/2 z-10">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-sage-500 hover:text-sage-600 focus:outline-none"
+              className="text-sage-500 hover:text-sage-600 focus:outline-none focus:ring-2 focus:ring-sage-500 rounded-md"
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              {isOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
             </button>
           </div>
           
