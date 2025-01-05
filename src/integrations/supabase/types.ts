@@ -55,6 +55,7 @@ export type Database = {
         Row: {
           id: string
           total_downvotes: number | null
+          total_pairings_generated: number | null
           total_recipes: number | null
           total_tycoon_players: number | null
           total_upvotes: number | null
@@ -66,6 +67,7 @@ export type Database = {
         Insert: {
           id?: string
           total_downvotes?: number | null
+          total_pairings_generated?: number | null
           total_recipes?: number | null
           total_tycoon_players?: number | null
           total_upvotes?: number | null
@@ -77,6 +79,7 @@ export type Database = {
         Update: {
           id?: string
           total_downvotes?: number | null
+          total_pairings_generated?: number | null
           total_recipes?: number | null
           total_tycoon_players?: number | null
           total_upvotes?: number | null
