@@ -120,12 +120,13 @@ const RecentPairings = () => {
             opts={{
               align: "start",
               loop: true,
+              dragFree: true,
             }}
             className="w-full"
           >
             <CarouselContent className="-ml-2 md:-ml-4">
               {pairingsData.map((pair) => (
-                <CarouselItem key={pair.id} className="pl-2 md:pl-4 md:basis-1/3">
+                <CarouselItem key={pair.id} className="pl-2 md:pl-4 md:basis-1/3 basis-full">
                   <div className="p-1">
                     <PairingCard
                       pair={pair}
