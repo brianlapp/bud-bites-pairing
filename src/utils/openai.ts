@@ -1,9 +1,4 @@
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true
-});
+import { supabase } from "@/integrations/supabase/client";
 
 export const generateMealPairing = async (strain: string): Promise<string> => {
   const prompt = `Create a cannabis and food pairing for ${strain}. Return the response in this exact JSON format:
@@ -16,14 +11,12 @@ export const generateMealPairing = async (strain: string): Promise<string> => {
   }`;
 
   try {
-    const completion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: prompt }],
-      model: "gpt-4",
-      temperature: 0.7,
-      max_tokens: 1000,
+    const { data, error } = await supabase.functions.invoke('generate-meal-pairing', {
+      body: { prompt }
     });
 
-    return completion.choices[0].message.content || "";
+    if (error) throw error;
+    return data.response || "";
   } catch (error) {
     console.error("Error generating pairing:", error);
     throw error;
