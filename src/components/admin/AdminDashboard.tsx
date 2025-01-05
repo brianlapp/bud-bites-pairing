@@ -133,6 +133,20 @@ export const AdminDashboard = () => {
     },
   ];
 
+  const cleanJSONString = (str: string) => {
+    try {
+      // Remove markdown code block syntax if present
+      const cleaned = str.replace(/```json\n|\n```/g, '');
+      return JSON.parse(cleaned);
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
+      return {
+        dishName: 'Error parsing recipe',
+        description: 'There was an error loading this recipe information.'
+      };
+    }
+  };
+
   return (
     <div className="p-8 max-w-[1600px] mx-auto">
       <div className="mb-8">
@@ -165,7 +179,7 @@ export const AdminDashboard = () => {
           <h3 className="text-2xl font-semibold mb-4 text-[#1a1a1a]">Recently Downvoted Pairings</h3>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {downvotedPairings.map((pairing, index) => {
-              const pairingData = JSON.parse(pairing.pairing_suggestion);
+              const pairingData = cleanJSONString(pairing.pairing_suggestion);
               return (
                 <Card key={index} className="bg-white border-none shadow-sm">
                   <CardHeader>
