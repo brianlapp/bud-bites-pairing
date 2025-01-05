@@ -43,12 +43,17 @@ export const PairingCarousel = ({ pairings, onVote, favorites }: PairingCarousel
       
       <div 
         ref={scrollContainerRef}
-        className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory gap-4 px-4 pb-4"
+        className="flex overflow-x-auto gap-4 px-4 pb-4 scrollbar-hide scroll-smooth"
+        style={{
+          scrollSnapType: 'x mandatory',
+          WebkitOverflowScrolling: 'touch',
+        }}
       >
         {pairings.map((pair) => (
           <div 
             key={pair.id} 
-            className="flex-none w-[85vw] sm:w-[calc(33.333%-1rem)] snap-center"
+            className="flex-none w-[calc(100%-2rem)] sm:w-[calc(33.333%-1rem)] scroll-snap-align-start"
+            style={{ scrollSnapAlign: 'start' }}
           >
             <PairingCard
               pair={pair}
