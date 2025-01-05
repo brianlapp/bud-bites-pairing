@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Logo } from "./navigation/Logo";
 
 const Footer = () => {
   return (
@@ -17,7 +18,9 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
-            <h3 className="text-sage-500 font-semibold text-lg">BudBites</h3>
+            <div className="flex items-start">
+              <Logo />
+            </div>
             <p className="text-sage-400 text-sm">
               Discover perfect cannabis and cuisine pairings for an elevated dining experience.
             </p>
