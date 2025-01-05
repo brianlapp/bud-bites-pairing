@@ -5,6 +5,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { useStrainPairings } from "@/hooks/queries/useStrainPairings";
 import { usePairingsData } from "./recent-pairings/usePairingsData";
 import { PairingsCarousel } from "./recent-pairings/PairingsCarousel";
+import { useToast } from "@/hooks/use-toast";
 
 const ErrorFallback = () => (
   <Alert variant="destructive">
@@ -17,8 +18,18 @@ const ErrorFallback = () => (
 );
 
 const RecentPairings = () => {
-  const { data: pairingsData, isLoading } = useStrainPairings();
+  const { data: pairingsData, isLoading, error } = useStrainPairings();
   const { favorites, handleVote } = usePairingsData();
+  const { toast } = useToast();
+
+  // Show error toast if query fails
+  if (error) {
+    toast({
+      title: "Error loading pairings",
+      description: "There was an error loading the recent pairings. Please try again later.",
+      variant: "destructive",
+    });
+  }
 
   if (isLoading) {
     return (

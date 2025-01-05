@@ -17,10 +17,11 @@ export function useStrainPairings() {
       if (error) throw error;
       return data;
     },
-    staleTime: 1000 * 60 * 5, // Data stays fresh for 5 minutes
-    gcTime: 1000 * 60 * 30, // Cache is kept for 30 minutes
-    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60, // Data stays fresh for 1 minute
+    gcTime: 1000 * 60 * 5, // Cache is kept for 5 minutes
+    refetchOnWindowFocus: true,
     refetchOnReconnect: 'always',
+    retry: 3,
   });
 }
 
@@ -40,7 +41,7 @@ export function usePrefetchStrainPairings() {
         if (error) throw error;
         return data;
       },
-      staleTime: 1000 * 60 * 5,
+      staleTime: 1000 * 60,
     });
   };
 }
