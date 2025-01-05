@@ -38,19 +38,23 @@ export const cacheNewImage = async (
   imageUrl: string
 ): Promise<string | null> => {
   try {
-    // Use Supabase Functions.invoke() instead of fetch
-    const { data: proxyData, error: proxyError } = await supabase.functions.invoke('proxy-image', {
+    const { data: proxyResponse, error: proxyError } = await supabase.functions.invoke('proxy-image', {
       body: { imageUrl }
     });
 
-    if (proxyError) {
-      console.error('Error proxying image:', proxyError);
+    if (proxyError || !proxyResponse?.base64) {
+      console.error('Error proxying image:', proxyError || 'No base64 data received');
       throw new Error('Failed to proxy image');
     }
 
     // Convert base64 to blob
-    const base64Response = await fetch(`data:image/png;base64,${proxyData.base64}`);
-    const imageBlob = await base64Response.blob();
+    const byteCharacters = atob(proxyResponse.base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const imageBlob = new Blob([byteArray], { type: 'image/png' });
     
     const imagePath = `${recipeName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.png`;
     
