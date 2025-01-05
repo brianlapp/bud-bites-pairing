@@ -13,19 +13,23 @@ serve(async (req) => {
 
   try {
     const { prompt } = await req.json();
+    console.log('Received prompt:', prompt);
 
     const openai = new OpenAI({
       apiKey: Deno.env.get('OPENAI_API_KEY'),
     });
 
+    console.log('Making OpenAI API request...');
     const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
-      model: "gpt-4",
       temperature: 0.7,
       max_tokens: 1000,
     });
+    console.log('OpenAI API request successful');
 
-    const response = completion.choices[0].message.content || "";
+    const response = completion.choices[0].message.content;
+    console.log('Generated response:', response);
 
     return new Response(
       JSON.stringify({ response }),
@@ -34,9 +38,12 @@ serve(async (req) => {
       },
     );
   } catch (error) {
-    console.error("Error in generate-meal-pairing:", error);
+    console.error('Error in generate-meal-pairing function:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message,
+        details: error.stack 
+      }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500,
