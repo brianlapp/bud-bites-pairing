@@ -5,7 +5,6 @@ const recipeImages: Record<string, string> = {
   "BBQ Pulled Pork Sliders": "https://images.unsplash.com/photo-1513185158878-8d8c2a2a3da3",
   "Lemon Herb Salmon": "https://images.unsplash.com/photo-1485921325833-c519f76c4927",
   "Chocolate Brownies": "https://images.unsplash.com/photo-1515037893149-de7f840978e2",
-  // Add more mappings as needed
 };
 
 // Image quality and format parameters
@@ -28,23 +27,25 @@ const createImagePrompt = (recipeName: string, recipeDescription: string): strin
 
 const getOptimizedImageUrl = (baseUrl: string, width: number): string => {
   const url = new URL(baseUrl);
-  
-  // Add optimization parameters
   url.searchParams.set('q', imageParams.quality);
   url.searchParams.set('fm', imageParams.format);
   url.searchParams.set('fit', imageParams.fit);
   url.searchParams.set('w', width.toString());
-  
   return url.toString();
 };
 
 const getCachedImage = async (recipeName: string, recipeDescription: string): Promise<string | null> => {
   try {
-    const { data: cachedImage } = await supabase
+    const { data: cachedImage, error } = await supabase
       .from('cached_recipe_images')
       .select('image_path')
       .match({ dish_name: recipeName, description: recipeDescription })
       .single();
+
+    if (error) {
+      console.error('Error fetching cached image:', error);
+      return null;
+    }
 
     if (cachedImage) {
       const { data: { publicUrl } } = supabase
