@@ -38,6 +38,30 @@ const getOptimizedImageUrl = (baseUrl: string, width: number): string => {
   return url.toString();
 };
 
+const getCachedImage = async (recipeName: string, recipeDescription: string): Promise<string | null> => {
+  try {
+    const { data: cachedImage } = await supabase
+      .from('cached_recipe_images')
+      .select('image_path')
+      .match({ recipe_name: recipeName, recipe_description: recipeDescription })
+      .single();
+
+    if (cachedImage) {
+      const { data: { publicUrl } } = supabase
+        .storage
+        .from('recipe-images')
+        .getPublicUrl(cachedImage.image_path);
+      
+      return publicUrl;
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('Error fetching cached image:', error);
+    return null;
+  }
+};
+
 export const getMatchingImage = async (
   recipeName: string,
   recipeDescription: string,
@@ -49,16 +73,55 @@ export const getMatchingImage = async (
       return getOptimizedImageUrl(recipeImages[recipeName], imageSizes[size]);
     }
 
-    // 2. Use AI generation as fallback
+    // 2. Check cached images
+    const cachedImageUrl = await getCachedImage(recipeName, recipeDescription);
+    if (cachedImageUrl) {
+      return getOptimizedImageUrl(cachedImageUrl, imageSizes[size]);
+    }
+
+    // 3. Generate new image with DALL-E
     const { data: imageData, error } = await supabase.functions.invoke('generate-recipe-image', {
       body: { recipeName, recipeDescription }
     });
 
     if (!error && imageData?.imageUrl) {
+      // Cache the new image
+      const imagePath = `${recipeName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.png`;
+      
+      // Download the image and upload to Supabase Storage
+      const imageResponse = await fetch(imageData.imageUrl);
+      const imageBlob = await imageResponse.blob();
+      
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('recipe-images')
+        .upload(imagePath, imageBlob, {
+          contentType: 'image/png',
+          upsert: false
+        });
+
+      if (!uploadError) {
+        // Save reference in cached_recipe_images table
+        await supabase
+          .from('cached_recipe_images')
+          .insert({
+            recipe_name: recipeName,
+            recipe_description: recipeDescription,
+            image_path: imagePath
+          });
+
+        const { data: { publicUrl } } = supabase
+          .storage
+          .from('recipe-images')
+          .getPublicUrl(imagePath);
+
+        return getOptimizedImageUrl(publicUrl, imageSizes[size]);
+      }
+
+      // If caching fails, return the original DALL-E URL
       return getOptimizedImageUrl(imageData.imageUrl, imageSizes[size]);
     }
 
-    // 3. Final fallback: default placeholder
+    // 4. Final fallback: default placeholder
     return '/placeholder.svg';
   } catch (error) {
     console.error('Error fetching recipe image:', error);
