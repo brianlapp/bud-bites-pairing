@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Suspense, lazy } from "react";
 import "./App.css";
 import Index from "./pages/Index";
+import Contact from "./pages/Contact"; // Change to direct import instead of lazy loading
 
 // Lazy load route components
 const Recipe = lazy(() => import("./pages/Recipe"));
@@ -14,7 +15,6 @@ const CannabisGame = lazy(() => import("./pages/CannabisGame"));
 const CannabisWordle = lazy(() => import("./pages/CannabisWordle"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Profile = lazy(() => import("./pages/Profile"));
-const Contact = lazy(() => import("./pages/Contact"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
