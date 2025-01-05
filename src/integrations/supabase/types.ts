@@ -166,6 +166,38 @@ export type Database = {
           },
         ]
       }
+      pairing_votes: {
+        Row: {
+          created_at: string
+          id: string
+          is_helpful: boolean
+          pairing_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_helpful: boolean
+          pairing_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_helpful?: boolean
+          pairing_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pairing_votes_pairing_id_fkey"
+            columns: ["pairing_id"]
+            isOneToOne: false
+            referencedRelation: "strain_pairings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           bio: string | null
@@ -327,6 +359,14 @@ export type Database = {
     Functions: {
       archive_monthly_leaderboards: {
         Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      handle_pairing_vote: {
+        Args: {
+          p_pairing_id: string
+          p_user_id: string
+          p_is_helpful: boolean
+        }
         Returns: undefined
       }
       increment: {

@@ -9,7 +9,6 @@ export const usePairingsData = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Batch related queries together
   const { data: sessionData, isLoading: isSessionLoading } = useQuery({
     queryKey: ['session'],
     queryFn: async () => {
@@ -52,36 +51,33 @@ export const usePairingsData = () => {
   });
 
   const handleVote = async (pairingId: string, isHelpful: boolean) => {
-    try {
-      // Optimistic update
-      queryClient.setQueryData(['recent-pairings'], (old: StrainPairing[] | undefined) => {
-        if (!old) return old;
-        return old.map(pairing => {
-          if (pairing.id === pairingId) {
-            return {
-              ...pairing,
-              helpful_votes: isHelpful ? pairing.helpful_votes + 1 : pairing.helpful_votes,
-              not_helpful_votes: !isHelpful ? pairing.not_helpful_votes + 1 : pairing.not_helpful_votes,
-            };
-          }
-          return pairing;
-        });
+    if (!sessionData?.user?.id) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to vote on pairings",
+        variant: "destructive",
       });
+      return;
+    }
 
-      const { error } = await supabase.rpc('increment', {
-        row_id: pairingId,
-        column_name: isHelpful ? 'helpful_votes' : 'not_helpful_votes'
+    try {
+      // Call the handle_pairing_vote function
+      const { error } = await supabase.rpc('handle_pairing_vote', {
+        p_pairing_id: pairingId,
+        p_user_id: sessionData.user.id,
+        p_is_helpful: isHelpful
       });
 
       if (error) throw error;
+
+      // Invalidate the query to refresh the data
+      queryClient.invalidateQueries({ queryKey: ['recent-pairings'] });
 
       toast({
         title: "Vote Recorded",
         description: "Thank you for your feedback!",
       });
     } catch (error) {
-      // Revert optimistic update on error
-      queryClient.invalidateQueries({ queryKey: ['recent-pairings'] });
       console.error('Error:', error);
       toast({
         title: "Error",
