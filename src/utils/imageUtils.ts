@@ -8,18 +8,45 @@ const recipeImages: Record<string, string> = {
   // Add more mappings as needed
 };
 
+// Image quality and format parameters
+const imageParams = {
+  quality: 'auto',
+  format: 'auto',
+  fit: 'crop',
+};
+
+// Responsive image sizes
+const imageSizes = {
+  small: 400,
+  medium: 800,
+  large: 1200,
+};
+
 const createImagePrompt = (recipeName: string, recipeDescription: string): string => {
   return `A professional food photography style image of ${recipeName}. ${recipeDescription}. Bright lighting, shallow depth of field, on a clean white plate, restaurant presentation style.`;
 };
 
+const getOptimizedImageUrl = (baseUrl: string, width: number): string => {
+  const url = new URL(baseUrl);
+  
+  // Add optimization parameters
+  url.searchParams.set('q', imageParams.quality);
+  url.searchParams.set('fm', imageParams.format);
+  url.searchParams.set('fit', imageParams.fit);
+  url.searchParams.set('w', width.toString());
+  
+  return url.toString();
+};
+
 export const getMatchingImage = async (
   recipeName: string,
-  recipeDescription: string
+  recipeDescription: string,
+  size: keyof typeof imageSizes = 'medium'
 ): Promise<string> => {
   try {
     // 1. Check curated mapping
     if (recipeImages[recipeName]) {
-      return recipeImages[recipeName];
+      return getOptimizedImageUrl(recipeImages[recipeName], imageSizes[size]);
     }
 
     // 2. Use AI generation as fallback
@@ -28,7 +55,7 @@ export const getMatchingImage = async (
     });
 
     if (!error && imageData?.imageUrl) {
-      return imageData.imageUrl;
+      return getOptimizedImageUrl(imageData.imageUrl, imageSizes[size]);
     }
 
     // 3. Final fallback: default placeholder
@@ -38,3 +65,6 @@ export const getMatchingImage = async (
     return '/placeholder.svg';
   }
 };
+
+// Export sizes for use in components
+export const IMAGE_SIZES = imageSizes;
