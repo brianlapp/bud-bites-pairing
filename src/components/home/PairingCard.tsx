@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { PairingVoteButtons } from "./PairingVoteButtons";
 import { PairingHeader } from "./pairing-card/PairingHeader";
+import { PairingImage } from "./pairing-card/PairingImage";
 import { getStrainType, getStrainColor, cleanAndParseJSON } from "./pairing-card/utils";
 import { usePairingActions } from "./pairing-card/usePairingActions";
 
@@ -44,6 +45,14 @@ export const PairingCard = ({ pair, onVote, isFavorited = false }: PairingCardPr
         onFavorite={handleFavorite}
         isLiked={isLiked}
       />
+      
+      {pairingData.imageUrl && (
+        <PairingImage
+          src={pairingData.imageUrl}
+          alt={pairingData.dishName}
+          className="w-full h-48"
+        />
+      )}
       
       <CardContent className="p-6 pt-0 space-y-6">
         <Link to={`/recipe/${pair.id}`}>

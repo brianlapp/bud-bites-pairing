@@ -11,13 +11,16 @@ export function useStrainPairings() {
       const { data, error } = await supabase
         .from("strain_pairings")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .returns<StrainPairing[]>();
 
       if (error) throw error;
-      return data as StrainPairing[];
+      return data;
     },
     staleTime: 1000 * 60 * 5, // Data stays fresh for 5 minutes
     gcTime: 1000 * 60 * 30, // Cache is kept for 30 minutes
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: 'always',
   });
 }
 
@@ -31,10 +34,11 @@ export function usePrefetchStrainPairings() {
         const { data, error } = await supabase
           .from("strain_pairings")
           .select("*")
-          .order("created_at", { ascending: false });
+          .order("created_at", { ascending: false })
+          .returns<StrainPairing[]>();
 
         if (error) throw error;
-        return data as StrainPairing[];
+        return data;
       },
       staleTime: 1000 * 60 * 5,
     });
