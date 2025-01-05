@@ -18,14 +18,14 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
-            <div className="flex justify-center md:justify-start">
+            <div className="flex justify-center">
               <Logo />
             </div>
-            <p className="text-sage-400 text-sm">
+            <p className="text-sage-400 text-sm text-center">
               Discover perfect cannabis and cuisine pairings for an elevated dining experience.
             </p>
             <ul className="space-y-2">
-              <li>
+              <li className="text-center">
                 <Link to="/contact" className="text-sage-400 hover:text-sage-500 text-sm">
                   Contact Us
                 </Link>
@@ -34,14 +34,14 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-medium text-sage-500 mb-4">Tools</h4>
+            <h4 className="font-medium text-sage-500 mb-4 text-center">Tools</h4>
             <ul className="space-y-2">
-              <li>
+              <li className="text-center">
                 <Link to="/tools/calculator" className="text-sage-400 hover:text-sage-500 text-sm">
                   Dosing Calculator
                 </Link>
               </li>
-              <li>
+              <li className="text-center">
                 <Link to="/tools/budget" className="text-sage-400 hover:text-sage-500 text-sm">
                   Budget Planner
                 </Link>
@@ -50,14 +50,14 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-medium text-sage-500 mb-4">Games</h4>
+            <h4 className="font-medium text-sage-500 mb-4 text-center">Games</h4>
             <ul className="space-y-2">
-              <li>
+              <li className="text-center">
                 <Link to="/games/tycoon" className="text-sage-400 hover:text-sage-500 text-sm">
                   Cannabis Tycoon
                 </Link>
               </li>
-              <li>
+              <li className="text-center">
                 <Link to="/games/wordle" className="text-sage-400 hover:text-sage-500 text-sm">
                   Canna Wordle
                 </Link>
