@@ -36,6 +36,57 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_roles: {
+        Row: {
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      admin_statistics: {
+        Row: {
+          id: string
+          total_downvotes: number | null
+          total_recipes: number | null
+          total_tycoon_players: number | null
+          total_upvotes: number | null
+          total_users: number | null
+          total_wordle_games: number | null
+          total_wordle_players: number | null
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          total_downvotes?: number | null
+          total_recipes?: number | null
+          total_tycoon_players?: number | null
+          total_upvotes?: number | null
+          total_users?: number | null
+          total_wordle_games?: number | null
+          total_wordle_players?: number | null
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          total_downvotes?: number | null
+          total_recipes?: number | null
+          total_tycoon_players?: number | null
+          total_upvotes?: number | null
+          total_users?: number | null
+          total_wordle_games?: number | null
+          total_wordle_players?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       cached_recipe_images: {
         Row: {
           created_at: string
@@ -398,6 +449,10 @@ export type Database = {
           row_id: string
           column_name: string
         }
+        Returns: undefined
+      }
+      update_admin_statistics: {
+        Args: Record<PropertyKey, never>
         Returns: undefined
       }
       update_leaderboard_score: {
