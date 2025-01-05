@@ -16,7 +16,7 @@ interface FavoritePairing extends StrainPairing {
 }
 
 export const FavoritePairingsSection = () => {
-  const { data: favorites, isLoading } = useQuery({
+  const { data: favorites, isLoading, error } = useQuery({
     queryKey: ['favorite-pairings'],
     queryFn: async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -31,7 +31,10 @@ export const FavoritePairingsSection = () => {
         `)
         .eq('user_id', session.user.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching favorites:', error);
+        throw error;
+      }
 
       return (favoritePairings as FavoritePairingResponse[]).map(fp => ({
         ...fp.strain_pairings,
