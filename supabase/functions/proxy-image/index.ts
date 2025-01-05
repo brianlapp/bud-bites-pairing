@@ -26,15 +26,20 @@ serve(async (req) => {
       throw new Error(`Failed to fetch image: ${imageResponse.statusText}`)
     }
 
-    const imageBlob = await imageResponse.blob()
+    const arrayBuffer = await imageResponse.arrayBuffer();
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
 
-    return new Response(imageBlob, { 
-      headers: { 
-        ...corsHeaders,
-        'Content-Type': imageResponse.headers.get('Content-Type') || 'image/png'
+    return new Response(
+      JSON.stringify({ base64 }),
+      { 
+        headers: { 
+          ...corsHeaders,
+          'Content-Type': 'application/json'
+        }
       }
-    })
+    )
   } catch (error) {
+    console.error('Proxy image error:', error);
     return new Response(
       JSON.stringify({ error: error.message }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }

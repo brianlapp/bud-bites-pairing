@@ -1,8 +1,11 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export const getCachedImage = async (recipeName: string, recipeDescription: string): Promise<string | null> => {
+export const getCachedImage = async (
+  recipeName: string,
+  recipeDescription: string
+): Promise<string | null> => {
   try {
-    const { data: cachedImage, error } = await supabase
+    const { data, error } = await supabase
       .from('cached_recipe_images')
       .select('image_path')
       .match({ dish_name: recipeName, description: recipeDescription })
@@ -13,18 +16,18 @@ export const getCachedImage = async (recipeName: string, recipeDescription: stri
       return null;
     }
 
-    if (cachedImage) {
+    if (data) {
       const { data: { publicUrl } } = supabase
         .storage
         .from('recipe-images')
-        .getPublicUrl(cachedImage.image_path);
+        .getPublicUrl(data.image_path);
       
       return publicUrl;
     }
-    
+
     return null;
   } catch (error) {
-    console.error('Error fetching cached image:', error);
+    console.error('Error getting cached image:', error);
     return null;
   }
 };
@@ -35,20 +38,20 @@ export const cacheNewImage = async (
   imageUrl: string
 ): Promise<string | null> => {
   try {
-    // Instead of fetching directly, use the proxy edge function
-    const proxyResponse = await fetch('/api/proxy-image', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ imageUrl }),
+    // Use Supabase Functions.invoke() instead of fetch
+    const { data: proxyData, error: proxyError } = await supabase.functions.invoke('proxy-image', {
+      body: { imageUrl }
     });
 
-    if (!proxyResponse.ok) {
+    if (proxyError) {
+      console.error('Error proxying image:', proxyError);
       throw new Error('Failed to proxy image');
     }
 
-    const imageBlob = await proxyResponse.blob();
+    // Convert base64 to blob
+    const base64Response = await fetch(`data:image/png;base64,${proxyData.base64}`);
+    const imageBlob = await base64Response.blob();
+    
     const imagePath = `${recipeName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.png`;
     
     const { data: uploadData, error: uploadError } = await supabase.storage
