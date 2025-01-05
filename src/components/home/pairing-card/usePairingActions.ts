@@ -36,9 +36,11 @@ export const usePairingActions = (pairingId: string, initialFavorited: boolean =
       } else {
         const { error } = await supabase
           .from('favorite_pairings')
-          .insert({
+          .upsert({
             user_id: session.user.id,
             pairing_id: pairingId,
+          }, {
+            onConflict: 'user_id,pairing_id'
           });
 
         if (error) throw error;
