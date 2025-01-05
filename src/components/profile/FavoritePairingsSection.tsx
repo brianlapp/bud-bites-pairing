@@ -27,7 +27,14 @@ export const FavoritePairingsSection = () => {
         .select(`
           pairing_id,
           created_at,
-          strain_pairings (*)
+          strain_pairings (
+            id,
+            strain_name,
+            pairing_suggestion,
+            created_at,
+            helpful_votes,
+            not_helpful_votes
+          )
         `)
         .eq('user_id', session.user.id);
 
@@ -36,10 +43,10 @@ export const FavoritePairingsSection = () => {
         throw error;
       }
 
-      return (favoritePairings as FavoritePairingResponse[]).map(fp => ({
+      return (favoritePairings as unknown as FavoritePairingResponse[]).map(fp => ({
         ...fp.strain_pairings,
         created_at: fp.created_at,
-      })) as FavoritePairing[];
+      }));
     },
   });
 
