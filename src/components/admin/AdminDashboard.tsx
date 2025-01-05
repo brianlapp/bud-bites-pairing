@@ -14,8 +14,14 @@ interface AdminStats {
   total_pairings_generated: number;
 }
 
+interface DownvotedPairing {
+  strain_name: string;
+  pairing_suggestion: string;
+  not_helpful_votes: number;
+}
+
 export const AdminDashboard = () => {
-  const { data: stats, isLoading } = useQuery({
+  const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["adminStats"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -28,7 +34,22 @@ export const AdminDashboard = () => {
     },
   });
 
-  if (isLoading) {
+  const { data: downvotedPairings, isLoading: pairingsLoading } = useQuery({
+    queryKey: ["downvotedPairings"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("strain_pairings")
+        .select("strain_name, pairing_suggestion, not_helpful_votes")
+        .gt("not_helpful_votes", 0)
+        .order("not_helpful_votes", { ascending: false })
+        .limit(5);
+
+      if (error) throw error;
+      return data as DownvotedPairing[];
+    },
+  });
+
+  if (statsLoading || pairingsLoading) {
     return (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {Array(8).fill(0).map((_, i) => (
@@ -118,7 +139,8 @@ export const AdminDashboard = () => {
         <h2 className="text-4xl font-bold tracking-tight text-[#1a1a1a] mb-2">Admin Dashboard</h2>
         <p className="text-[#8E9196]">Monitor and analyze your platform's key metrics</p>
       </div>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
         {statCards.map((stat) => (
           <Card 
             key={stat.title}
@@ -137,6 +159,39 @@ export const AdminDashboard = () => {
           </Card>
         ))}
       </div>
+
+      {downvotedPairings && downvotedPairings.length > 0 && (
+        <div className="mt-8">
+          <h3 className="text-2xl font-semibold mb-4 text-[#1a1a1a]">Recently Downvoted Pairings</h3>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {downvotedPairings.map((pairing, index) => {
+              const pairingData = JSON.parse(pairing.pairing_suggestion);
+              return (
+                <Card key={index} className="bg-white border-none shadow-sm">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-base font-medium text-[#1a1a1a]">
+                        {pairing.strain_name}
+                      </CardTitle>
+                      <span className="text-sm text-red-400 font-medium">
+                        {pairing.not_helpful_votes} downvotes
+                      </span>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-[#8E9196] mb-2">
+                      Paired with: {pairingData.dishName}
+                    </p>
+                    <p className="text-xs text-[#8E9196] line-clamp-2">
+                      {pairingData.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
