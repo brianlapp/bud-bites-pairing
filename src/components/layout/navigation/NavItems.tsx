@@ -3,7 +3,6 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
@@ -32,18 +31,18 @@ export const NavItems = ({ mobile, onClick }: NavItemsProps) => {
           Budget Planner
         </Link>
         <Link
-          to="/games/tycoon"
-          className="block px-3 py-2 rounded-md text-base font-medium text-sage-500 hover:text-sage-600 hover:bg-sage-50 transition-colors"
-          onClick={onClick}
-        >
-          Tycoon
-        </Link>
-        <Link
           to="/games/wordle"
           className="block px-3 py-2 rounded-md text-base font-medium text-sage-500 hover:text-sage-600 hover:bg-sage-50 transition-colors"
           onClick={onClick}
         >
           Wordle
+        </Link>
+        <Link
+          to="/games/tycoon"
+          className="block px-3 py-2 rounded-md text-base font-medium text-sage-500 hover:text-sage-600 hover:bg-sage-50 transition-colors"
+          onClick={onClick}
+        >
+          Tycoon
         </Link>
         <Link
           to="/contact"
@@ -95,20 +94,20 @@ export const NavItems = ({ mobile, onClick }: NavItemsProps) => {
             <div className="grid gap-3 p-4 w-[200px]">
               <NavigationMenuLink asChild>
                 <Link
-                  to="/games/tycoon"
-                  className="block px-3 py-2 rounded-md text-sm font-medium text-sage-500 hover:text-sage-600 hover:bg-sage-50 transition-colors"
-                  onClick={onClick}
-                >
-                  Tycoon
-                </Link>
-              </NavigationMenuLink>
-              <NavigationMenuLink asChild>
-                <Link
                   to="/games/wordle"
                   className="block px-3 py-2 rounded-md text-sm font-medium text-sage-500 hover:text-sage-600 hover:bg-sage-50 transition-colors"
                   onClick={onClick}
                 >
                   Wordle
+                </Link>
+              </NavigationMenuLink>
+              <NavigationMenuLink asChild>
+                <Link
+                  to="/games/tycoon"
+                  className="block px-3 py-2 rounded-md text-sm font-medium text-sage-500 hover:text-sage-600 hover:bg-sage-50 transition-colors"
+                  onClick={onClick}
+                >
+                  Tycoon
                 </Link>
               </NavigationMenuLink>
             </div>
