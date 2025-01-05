@@ -1,5 +1,5 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { Configuration, OpenAIApi } from "https://esm.sh/openai@3.2.1";
+import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
+import OpenAI from "https://deno.land/x/openai@v4.24.0/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -14,25 +14,23 @@ serve(async (req) => {
   try {
     const { prompt } = await req.json();
 
-    const configuration = new Configuration({
+    const openai = new OpenAI({
       apiKey: Deno.env.get('OPENAI_API_KEY'),
     });
 
-    const openai = new OpenAIApi(configuration);
-
-    const completion = await openai.createChatCompletion({
-      model: "gpt-4",
+    const completion = await openai.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
+      model: "gpt-4",
       temperature: 0.7,
       max_tokens: 1000,
     });
 
-    const response = completion.data.choices[0].message?.content || "";
+    const response = completion.choices[0].message.content || "";
 
     return new Response(
       JSON.stringify({ response }),
       {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       },
     );
   } catch (error) {
@@ -40,8 +38,8 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ error: error.message }),
       {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       },
     );
   }
