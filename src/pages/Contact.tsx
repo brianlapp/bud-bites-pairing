@@ -4,6 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import RegressionTest from "@/components/testing/RegressionTest";
 import { motion } from "framer-motion";
 
 const Contact = () => {
@@ -16,6 +17,9 @@ const Contact = () => {
         exit={{ opacity: 0 }}
         className="flex-grow pt-16"
       >
+        {/* Regression Test Section */}
+        <RegressionTest />
+
         {/* Hero Section with Aurora Animation */}
         <div className="relative h-[40vh] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-sage-500/20 via-coral-500/20 to-sage-500/20 animate-aurora"></div>
