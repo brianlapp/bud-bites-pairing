@@ -5,33 +5,8 @@ import { Button } from "@/components/ui/button";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import { motion } from "framer-motion";
-import { CheckCircle2, Circle } from "lucide-react";
 
 const Contact = () => {
-  const completedFeatures = [
-    "Strain & Meal Pairing System",
-    "Cannabis Dosing Calculator",
-    "Monthly Budget Planner",
-    "Cannabis Tycoon Game",
-    "Cannabis-Themed Wordle",
-    "User Authentication",
-    "Personal Pairing History",
-    "Community Voting",
-    "User Profiles",
-    "Achievement System",
-    "Social Feed",
-    "Platform Optimization"
-  ];
-
-  const upcomingFeatures = [
-    "Mobile App Development",
-    "API Marketplace",
-    "Premium Features",
-    "International Expansion",
-    "AI-powered Recommendations v2",
-    "Voice Interface Integration"
-  ];
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -45,58 +20,15 @@ const Contact = () => {
         <div className="relative h-[40vh] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-sage-500/20 via-coral-500/20 to-sage-500/20 animate-aurora"></div>
           <div className="relative z-10 text-center px-4">
-            <h1 className="text-4xl md:text-5xl font-bold text-sage-500 mb-4">Project Progress</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-sage-500 mb-4">Get in Touch</h1>
             <p className="text-lg md:text-xl text-sage-400 max-w-2xl mx-auto">
-              Track our journey and upcoming features. Have questions or suggestions? Get in touch! 🌿
+              Whether you're looking to collaborate, have questions about our tools, or just want to share your favorite strain pairing – we're all ears! 🌿
             </p>
           </div>
         </div>
 
-        {/* Progress Section */}
+        {/* Form Section */}
         <div className="container mx-auto px-4 py-12">
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {/* Completed Features */}
-            <Card className="bg-white/80 backdrop-blur-sm border-sage-200 shadow-lg">
-              <CardHeader>
-                <CardTitle className="text-2xl text-sage-500 flex items-center gap-2">
-                  <CheckCircle2 className="text-coral-500" />
-                  Completed Features
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3">
-                  {completedFeatures.map((feature, index) => (
-                    <li key={index} className="flex items-center gap-2 text-sage-600">
-                      <CheckCircle2 className="h-5 w-5 text-coral-500" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-
-            {/* Upcoming Features */}
-            <Card className="bg-white/80 backdrop-blur-sm border-sage-200 shadow-lg">
-              <CardHeader>
-                <CardTitle className="text-2xl text-sage-500 flex items-center gap-2">
-                  <Circle className="text-sage-400" />
-                  Coming Soon
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3">
-                  {upcomingFeatures.map((feature, index) => (
-                    <li key={index} className="flex items-center gap-2 text-sage-600">
-                      <Circle className="h-5 w-5 text-sage-400" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Contact Form */}
           <Card className="max-w-2xl mx-auto bg-white/80 backdrop-blur-sm border-sage-200 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardHeader>
               <CardTitle className="text-2xl text-center text-sage-500">Send us a message</CardTitle>
