@@ -1,5 +1,5 @@
-import OpenAI from 'openai';
-import { serve } from 'https://deno.fresh.dev/server/mod.ts';
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { Configuration, OpenAIApi } from "https://esm.sh/openai@3.2.1";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -14,18 +14,20 @@ serve(async (req) => {
   try {
     const { prompt } = await req.json();
 
-    const openai = new OpenAI({
+    const configuration = new Configuration({
       apiKey: Deno.env.get('OPENAI_API_KEY'),
     });
 
-    const completion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: prompt }],
+    const openai = new OpenAIApi(configuration);
+
+    const completion = await openai.createChatCompletion({
       model: "gpt-4",
+      messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
       max_tokens: 1000,
     });
 
-    const response = completion.choices[0].message.content || "";
+    const response = completion.data.choices[0].message?.content || "";
 
     return new Response(
       JSON.stringify({ response }),
@@ -34,6 +36,7 @@ serve(async (req) => {
       },
     );
   } catch (error) {
+    console.error("Error in generate-meal-pairing:", error);
     return new Response(
       JSON.stringify({ error: error.message }),
       {
