@@ -52,7 +52,7 @@ export const PairingCarousel = ({ pairings, onVote, favorites }: PairingCarousel
         {pairings.map((pair) => (
           <div 
             key={pair.id} 
-            className="flex-none w-[280px] min-w-[280px]"
+            className="flex-none w-[280px]"
             style={{ scrollSnapAlign: 'start' }}
           >
             <PairingCard
