@@ -10,6 +10,7 @@ import { StrainPairing } from "@/types/strain";
 import { useEffect, useState } from "react";
 import { usePrefetchStrainPairings } from "@/hooks/queries/useStrainPairings";
 import { Button } from "@/components/ui/button";
+import { type CarouselApi } from "@/components/ui/carousel";
 
 interface PairingsCarouselProps {
   pairings: StrainPairing[];
@@ -20,12 +21,26 @@ interface PairingsCarouselProps {
 export const PairingsCarousel = ({ pairings, favorites, onVote }: PairingsCarouselProps) => {
   const prefetchPairings = usePrefetchStrainPairings();
   const [currentPage, setCurrentPage] = useState(0);
+  const [api, setApi] = useState<CarouselApi>();
   const totalPages = Math.ceil(pairings.length / 3); // Assuming 3 items per page on desktop
+
+  useEffect(() => {
+    if (!api) return;
+
+    api.on("select", () => {
+      setCurrentPage(api.selectedScrollSnap());
+    });
+  }, [api]);
 
   // Prefetch next batch of pairings when component mounts
   useEffect(() => {
     prefetchPairings();
   }, [prefetchPairings]);
+
+  const handlePageChange = (index: number) => {
+    if (!api) return;
+    api.scrollTo(index);
+  };
 
   return (
     <div className="relative">
@@ -35,7 +50,7 @@ export const PairingsCarousel = ({ pairings, favorites, onVote }: PairingsCarous
           loop: true,
         }}
         className="w-full"
-        onSelect={(index) => setCurrentPage(index)}
+        setApi={setApi}
       >
         <CarouselContent className="-ml-2 md:-ml-4">
           {pairings.map((pair) => (
@@ -64,7 +79,7 @@ export const PairingsCarousel = ({ pairings, favorites, onVote }: PairingsCarous
             className={`w-2 h-2 p-0 rounded-full ${
               currentPage === index ? "bg-sage-500" : "bg-sage-200"
             }`}
-            onClick={() => setCurrentPage(index)}
+            onClick={() => handlePageChange(index)}
             aria-label={`Go to page ${index + 1}`}
           />
         ))}
