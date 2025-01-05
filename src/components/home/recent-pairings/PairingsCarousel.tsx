@@ -29,13 +29,12 @@ export const PairingsCarousel = ({ pairings, favorites, onVote }: PairingsCarous
       opts={{
         align: "start",
         loop: true,
-        dragFree: true,
       }}
       className="w-full"
     >
       <CarouselContent className="-ml-2 md:-ml-4">
         {pairings.map((pair) => (
-          <CarouselItem key={pair.id} className="pl-2 md:pl-4 md:basis-1/3 basis-full">
+          <CarouselItem key={pair.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
             <div className="p-1">
               <PairingCard
                 pair={pair}
