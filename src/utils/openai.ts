@@ -25,7 +25,7 @@ export const generateMealPairing = async (strain: string): Promise<string> => {
   try {
     const openai = await getOpenAIInstance();
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4o-mini",  // Fixed model name
       messages: [
         {
           role: "system",
