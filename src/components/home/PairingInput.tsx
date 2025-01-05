@@ -27,7 +27,7 @@ export const PairingInput = ({
                    transition-all duration-300 bg-white/50 backdrop-blur-sm text-lg
                    placeholder:text-sage-400 text-sage-500
                    hover:border-coral-500/50"
-          placeholder="Enter your favorite strain (e.g., Blue Dream)"
+          placeholder="Enter strain for pairing (e.g., Blue Dream)"
         />
       </motion.div>
       <motion.button
