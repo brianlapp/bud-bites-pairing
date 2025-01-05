@@ -4,6 +4,7 @@ import { usePairingsData } from "./recent-pairings/usePairingsData";
 import { ErrorBoundary } from "react-error-boundary";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { useStrainPairings } from "@/hooks/queries/useStrainPairings";
 
 const ErrorFallback = () => (
   <Alert variant="destructive">
@@ -16,7 +17,8 @@ const ErrorFallback = () => (
 );
 
 const RecentPairings = () => {
-  const { pairingsData, isLoading, favorites, handleVote } = usePairingsData();
+  const { data: pairingsData, isLoading } = useStrainPairings();
+  const { favorites, handleVote } = usePairingsData();
 
   if (isLoading) {
     return (
