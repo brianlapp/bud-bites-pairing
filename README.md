@@ -52,7 +52,7 @@ npm run dev
 
 ## What technologies are used for this project?
 
-This project is built with .
+This project is built with:
 
 - Vite
 - TypeScript
@@ -62,8 +62,41 @@ This project is built with .
 
 ## How can I deploy this project?
 
+You have two options for deployment:
+
+### Option 1: Deploy with Lovable
+
 Simply open [Lovable](https://lovable.dev/projects/bf5d767a-3821-415a-bbf4-40a4485a54c8) and click on Share -> Publish.
 
-## I want to use a custom domain - is that possible?
+### Option 2: Deploy with Netlify (Recommended for custom domains)
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+1. **Connect your repository to Netlify**:
+   - Go to [Netlify](https://www.netlify.com) and sign up/login
+   - Click "New site from Git"
+   - Choose GitHub and select your repository
+   - Use these build settings:
+     - Build command: `npm run build`
+     - Publish directory: `dist`
+     - Node version: `18` or higher
+
+2. **Configure environment variables**:
+   - Go to Site settings > Build & deploy > Environment
+   - Add your environment variables from your `.env` file
+
+3. **Add your custom domain**:
+   - Go to Site settings > Domain management
+   - Click "Add custom domain"
+   - Follow Netlify's instructions to configure your domain's DNS settings
+
+4. **Enable HTTPS**:
+   - Netlify will automatically provision an SSL certificate
+   - This might take a few minutes to complete
+
+For more detailed instructions, visit [Netlify's documentation](https://docs.netlify.com/domains-https/custom-domains/).
+
+## Need help with deployment?
+
+If you need assistance with deployment or custom domain setup, check out these resources:
+- [Netlify Deployment Documentation](https://docs.netlify.com/site-deploys/create-deploys/)
+- [Custom Domain Configuration Guide](https://docs.netlify.com/domains-https/custom-domains/configure-external-dns/)
+- [Troubleshooting Guide](https://docs.netlify.com/troubleshooting/common-issues/)
