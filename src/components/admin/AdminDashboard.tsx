@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Book, ThumbsUp, ThumbsDown, GameController, Trophy, Sprout, Sparkles } from "lucide-react";
+import { Users, Book, ThumbsUp, ThumbsDown, Gamepad, Trophy, Sprout, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface AdminStats {
@@ -73,7 +73,7 @@ export const AdminDashboard = () => {
     {
       title: "Wordle Players",
       value: stats?.total_wordle_players || 0,
-      icon: GameController,
+      icon: Gamepad,
       description: "Active players",
     },
     {
