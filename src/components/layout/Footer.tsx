@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="bg-sage-50 border-t border-sage-200 relative">
       {/* Wave SVG at the top */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden rotate-180 -mt-20">
+      <div className="absolute top-0 left-0 w-full overflow-hidden rotate-180 -mt-10">
         <svg
           viewBox="0 0 1200 120"
           preserveAspectRatio="none"
