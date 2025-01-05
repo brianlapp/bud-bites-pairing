@@ -18,7 +18,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
-            <div className="flex items-start">
+            <div className="flex justify-center md:justify-start">
               <Logo />
             </div>
             <p className="text-sage-400 text-sm">
