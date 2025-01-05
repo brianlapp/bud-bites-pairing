@@ -1,6 +1,6 @@
 # BudBites Development Roadmap
 
-## Current Status Overview
+## Status Overview
 🟢 Completed
 🟡 In Progress
 🔴 Planned
@@ -44,47 +44,43 @@
 - Enhanced animations
 - Improved mobile responsiveness
 
-## Phase 5: Community & Social Features 🟡
-### Completed
-- Basic user profiles
-- Following system implementation
-- Achievement system backend
-- Monthly leaderboards backend
-
-### In Progress
-- Profile customization
-- Social interactions polish
-- Achievement UI implementation
-- Leaderboard frontend
-
-### Planned
+## Phase 5: Community & Social Features ✅
+- User profiles
+- Following system
+- Achievement system
+- Monthly leaderboards
 - Community challenges
 - Social feed
 - Comments system
 - Notification system
 
-## Phase 6: Platform Enhancement 🔴
-### Performance
+## Phase 6: Platform Enhancement 🟡
+### Completed ✅
+- Meta tags optimization
+- Schema markup
+- OpenGraph image integration
+- Social media cards
+- Basic SEO implementation
+
+### In Progress
 - Lazy loading implementation
 - Caching strategy
 - Image optimization
 - API response time improvements
 
-### SEO & Accessibility
-- Meta tags optimization
-- Schema markup
-- ARIA labels
-- Keyboard navigation
-- Screen reader compatibility
+### Planned
+- Advanced accessibility features
+  - ARIA labels enhancement
+  - Keyboard navigation improvements
+  - Screen reader optimization
+- Infrastructure
+  - CI/CD pipeline
+  - Automated testing
+  - Error monitoring
+  - Analytics implementation
+  - Documentation
 
-### Infrastructure
-- CI/CD pipeline
-- Automated testing
-- Error monitoring
-- Analytics implementation
-- Documentation
-
-## Future Considerations
+## Future Considerations 🔴
 - Mobile app development
 - API marketplace
 - Premium features
