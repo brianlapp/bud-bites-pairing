@@ -16,7 +16,7 @@ const imageParams = {
 };
 
 // Responsive image sizes
-const imageSizes = {
+export const imageSizes = {
   small: 400,
   medium: 800,
   large: 1200,
@@ -43,7 +43,7 @@ const getCachedImage = async (recipeName: string, recipeDescription: string): Pr
     const { data: cachedImage } = await supabase
       .from('cached_recipe_images')
       .select('image_path')
-      .match({ recipe_name: recipeName, recipe_description: recipeDescription })
+      .match({ dish_name: recipeName, description: recipeDescription })
       .single();
 
     if (cachedImage) {
@@ -104,8 +104,8 @@ export const getMatchingImage = async (
         await supabase
           .from('cached_recipe_images')
           .insert({
-            recipe_name: recipeName,
-            recipe_description: recipeDescription,
+            dish_name: recipeName,
+            description: recipeDescription,
             image_path: imagePath
           });
 
