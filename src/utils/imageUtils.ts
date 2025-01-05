@@ -12,24 +12,11 @@ const generateAndCacheImage = async (dishName: string, description: string): Pro
 
     // Generate image using our Edge Function
     const { data, error } = await supabase.functions.invoke('generate-recipe-image', {
-      body: { prompt }
+      body: { prompt, dishName, description }
     });
 
     if (error) throw error;
     if (!data?.imageUrl) throw new Error('No image URL returned');
-
-    // Cache the image URL
-    const { error: cacheError } = await supabase
-      .from('cached_recipe_images')
-      .insert({
-        dish_name: dishName,
-        description: description,
-        image_path: data.imageUrl
-      });
-
-    if (cacheError) {
-      console.error('Error caching image:', cacheError);
-    }
 
     return data.imageUrl;
   } catch (error) {
