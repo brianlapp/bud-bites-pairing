@@ -4,6 +4,27 @@
 
 **URL**: https://lovable.dev/projects/bf5d767a-3821-415a-bbf4-40a4485a54c8
 
+## Games Available
+
+### Cannabis Wordle
+
+A cannabis-themed version of the popular word game Wordle. Try to guess the 5-letter word related to cannabis culture in 6 attempts or less!
+
+**How to Play:**
+1. Type a 5-letter word and press Enter
+2. The colors will give you hints:
+   - Green: Letter is correct and in the right position
+   - Yellow: Letter is in the word but in the wrong position
+   - Gray: Letter is not in the word
+3. Use the hint button if you need help
+4. Try to maintain your daily streak!
+
+**Features:**
+- Daily challenges
+- Streak tracking
+- Helpful hints
+- Mobile-friendly keyboard
+
 ## How can I edit this code?
 
 There are several ways of editing your application.
