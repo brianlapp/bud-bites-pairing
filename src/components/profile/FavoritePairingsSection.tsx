@@ -5,14 +5,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { StrainPairing } from "@/types/strain";
 
-interface FavoritePairing extends StrainPairing {
-  created_at: string;
-}
-
 interface FavoritePairingResponse {
   pairing_id: string;
   created_at: string;
   strain_pairings: StrainPairing;
+}
+
+interface FavoritePairing extends StrainPairing {
+  created_at: string;
 }
 
 export const FavoritePairingsSection = () => {
@@ -29,12 +29,11 @@ export const FavoritePairingsSection = () => {
           created_at,
           strain_pairings (*)
         `)
-        .eq('user_id', session.user.id)
-        .order('created_at', { ascending: false });
+        .eq('user_id', session.user.id);
 
       if (error) throw error;
 
-      return favoritePairings.map((fp: FavoritePairingResponse) => ({
+      return (favoritePairings as FavoritePairingResponse[]).map(fp => ({
         ...fp.strain_pairings,
         created_at: fp.created_at,
       })) as FavoritePairing[];
@@ -67,22 +66,12 @@ export const FavoritePairingsSection = () => {
     );
   }
 
-  const cleanAndParseJSON = (jsonString: string) => {
-    try {
-      const cleaned = jsonString.replace(/```json\n|\n```/g, '');
-      return JSON.parse(cleaned);
-    } catch (error) {
-      console.error('Error parsing pairing data:', error);
-      return null;
-    }
-  };
-
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-semibold text-sage-500">Favorite Pairings</h2>
       <div className="grid gap-4 md:grid-cols-2">
         {favorites.map((pairing) => {
-          const pairingData = cleanAndParseJSON(pairing.pairing_suggestion);
+          const pairingData = JSON.parse(pairing.pairing_suggestion);
           if (!pairingData) return null;
 
           return (
