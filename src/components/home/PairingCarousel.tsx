@@ -46,7 +46,10 @@ export const PairingCarousel = ({ pairings, onVote, favorites }: PairingCarousel
         className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory gap-4 px-4 pb-4"
       >
         {pairings.map((pair) => (
-          <div key={pair.id} className="flex-none w-[85vw] snap-center">
+          <div 
+            key={pair.id} 
+            className="flex-none w-[85vw] md:w-[calc(33.333%-1rem)] snap-center"
+          >
             <PairingCard
               pair={pair}
               onVote={onVote}
