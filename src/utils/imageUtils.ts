@@ -15,14 +15,12 @@ const fallbackImages = [
   "https://images.unsplash.com/photo-1557499305-87bd9049ec2d", // Desserts
 ];
 
-// Image quality and format parameters
 const imageParams = {
   quality: 'auto',
   format: 'auto',
   fit: 'crop',
 };
 
-// Responsive image sizes
 export const IMAGE_SIZES = {
   small: 400,
   medium: 800,
@@ -52,6 +50,24 @@ const getFallbackImage = (): string => {
   return fallbackImages[randomIndex];
 };
 
+const proxyImage = async (imageUrl: string): Promise<string> => {
+  try {
+    const { data, error } = await supabase.functions.invoke('proxy-image', {
+      body: { imageUrl }
+    });
+
+    if (error) {
+      console.error('Proxy error:', error);
+      throw error;
+    }
+
+    return data.url;
+  } catch (error) {
+    console.error('Failed to proxy image:', error);
+    return getFallbackImage();
+  }
+};
+
 const checkCachedImage = async (dishName: string) => {
   try {
     const { data: cachedImage } = await supabase
@@ -79,7 +95,6 @@ const generateAndCacheImage = async (
   recipeDescription: string
 ): Promise<string> => {
   try {
-    // Generate image using OpenAI
     const { data: imageData, error } = await supabase.functions.invoke('generate-recipe-image', {
       body: { recipeName, recipeDescription }
     });
@@ -89,8 +104,11 @@ const generateAndCacheImage = async (
       return getFallbackImage();
     }
 
-    // Download the generated image
-    const imageResponse = await fetch(imageData.imageUrl);
+    // Proxy the DALLE image through our Edge Function
+    const proxiedImageUrl = await proxyImage(imageData.imageUrl);
+    
+    // Download the proxied image
+    const imageResponse = await fetch(proxiedImageUrl);
     if (!imageResponse.ok) {
       console.error('Failed to download generated image');
       return getFallbackImage();
@@ -99,7 +117,6 @@ const generateAndCacheImage = async (
     const imageBlob = await imageResponse.blob();
     const filename = `${crypto.randomUUID()}.png`;
 
-    // Upload to Supabase Storage
     const { error: uploadError } = await supabase.storage
       .from('recipe-images')
       .upload(filename, imageBlob, {
@@ -112,12 +129,10 @@ const generateAndCacheImage = async (
       return getFallbackImage();
     }
 
-    // Get the public URL
     const { data: urlData } = supabase.storage
       .from('recipe-images')
       .getPublicUrl(filename);
 
-    // Save to cached_recipe_images table
     const { error: cacheError } = await supabase
       .from('cached_recipe_images')
       .insert({
