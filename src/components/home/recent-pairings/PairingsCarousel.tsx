@@ -49,7 +49,7 @@ export const PairingsCarousel = ({ pairings, favorites, onVote }: PairingsCarous
         <CarouselPrevious className="hidden md:flex" />
         <CarouselNext className="hidden md:flex" />
         <div className="flex justify-center gap-2 mt-4 md:hidden">
-          {pairings.map((_, index) => (
+          {[0, 1, 2].map((index) => (
             <div
               key={index}
               className={cn(
