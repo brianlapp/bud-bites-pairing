@@ -10,7 +10,7 @@ export const Logo = () => {
       />
       <Link 
         to="/" 
-        className="font-black tracking-tighter text-xl"
+        className="font-black tracking-tighter text-2xl"
         style={{ 
           fontFamily: "'Roboto', sans-serif",
           color: "#4d3232",
