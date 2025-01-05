@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Book, ThumbsUp, ThumbsDown, Gamepad, Trophy, Sprout, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useEffect } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 interface AdminStats {
   total_users: number;
@@ -15,7 +17,8 @@ interface AdminStats {
 }
 
 export const AdminDashboard = () => {
-  const { data: stats, isLoading } = useQuery({
+  const { toast } = useToast();
+  const { data: stats, isLoading, refetch } = useQuery({
     queryKey: ["adminStats"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -27,6 +30,33 @@ export const AdminDashboard = () => {
       return data as AdminStats;
     },
   });
+
+  useEffect(() => {
+    // Subscribe to changes in the admin_statistics table
+    const channel = supabase
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'admin_statistics'
+        },
+        async () => {
+          // Refetch the stats when changes occur
+          await refetch();
+          toast({
+            title: "Statistics Updated",
+            description: "The admin dashboard has been refreshed with new data.",
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [refetch, toast]);
 
   if (isLoading) {
     return (
