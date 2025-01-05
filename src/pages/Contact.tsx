@@ -1,12 +1,50 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import { motion } from "framer-motion";
+import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
 
 const Contact = () => {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const formData = new FormData(e.currentTarget);
+      const response = await fetch("https://formspree.io/f/xpzvgwrj", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Message sent!",
+          description: "Thanks for reaching out. We'll get back to you soon!",
+        });
+        (e.target as HTMLFormElement).reset();
+      } else {
+        throw new Error("Failed to send message");
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -35,13 +73,9 @@ const Contact = () => {
             </CardHeader>
             <CardContent>
               <form 
-                name="contact" 
-                method="POST" 
-                data-netlify="true"
+                onSubmit={handleSubmit}
                 className="space-y-6"
               >
-                <input type="hidden" name="form-name" value="contact" />
-                
                 <div className="space-y-2">
                   <Input
                     type="text"
@@ -89,6 +123,7 @@ const Contact = () => {
 
                 <motion.button
                   type="submit"
+                  disabled={isSubmitting}
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full flex items-center justify-center px-6 py-4 
@@ -96,9 +131,10 @@ const Contact = () => {
                            text-white bg-coral-500 hover:bg-coral-600 
                            focus:outline-none focus:ring-2 focus:ring-offset-2 
                            focus:ring-coral-500 transition-all duration-300 
-                           shadow-md hover:shadow-lg"
+                           shadow-md hover:shadow-lg disabled:opacity-50 
+                           disabled:cursor-not-allowed"
                 >
-                  Send Message
+                  {isSubmitting ? "Sending..." : "Send Message"}
                 </motion.button>
               </form>
             </CardContent>
