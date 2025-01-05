@@ -26,6 +26,12 @@ const StrainForm = () => {
     try {
       const suggestion = await generateMealPairing(formState.strain);
       
+      // Validate JSON before saving to database
+      const parsedSuggestion = cleanAndParseJSON(suggestion);
+      if (!parsedSuggestion) {
+        throw new Error("Invalid pairing data received");
+      }
+
       const { error } = await supabase
         .from('strain_pairings')
         .insert([
@@ -46,7 +52,7 @@ const StrainForm = () => {
       console.error('Error:', error);
       toast({
         title: "Error",
-        description: "Failed to generate or save pairing. Please try again.",
+        description: error.message || "Failed to generate or save pairing. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -69,7 +75,14 @@ const StrainForm = () => {
 
       {formState.pairing && (() => {
         const pairingData = cleanAndParseJSON(formState.pairing);
-        if (!pairingData) return null;
+        if (!pairingData) {
+          toast({
+            title: "Error",
+            description: "Failed to parse pairing data. Please try again.",
+            variant: "destructive",
+          });
+          return null;
+        }
 
         return (
           <div className="mt-8 space-y-6">

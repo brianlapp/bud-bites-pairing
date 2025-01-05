@@ -51,9 +51,21 @@ export const generateMealPairing = async (strain: string): Promise<string> => {
       max_tokens: 500
     });
 
-    return response.choices[0]?.message?.content || "Unable to generate pairing suggestion.";
+    const content = response.choices[0]?.message?.content;
+    if (!content) {
+      throw new Error("No content received from OpenAI");
+    }
+
+    // Validate JSON before returning
+    try {
+      JSON.parse(content);
+      return content;
+    } catch (parseError) {
+      console.error("Invalid JSON received from OpenAI:", content);
+      throw new Error("Invalid JSON format received from API");
+    }
   } catch (error) {
     console.error('OpenAI API Error:', error);
-    return "Sorry, I couldn't generate a pairing suggestion at this time. Please try again later.";
+    throw new Error(`Failed to generate pairing: ${error.message}`);
   }
 };
