@@ -14,5 +14,3 @@ export interface PairingData {
   recipe: string;
   cookingTips: string;
 }
-
-export type StrainType = 'sativa' | 'indica' | 'hybrid';

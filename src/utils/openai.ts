@@ -1,24 +1,59 @@
+import OpenAI from 'openai';
 import { supabase } from "@/integrations/supabase/client";
 
-export const generateMealPairing = async (strain: string): Promise<string> => {
-  const prompt = `Create a cannabis and food pairing for ${strain}. Return the response in this exact JSON format:
-  {
-    "dishName": "Name of the dish",
-    "description": "A brief description of the dish and how it pairs with the strain",
-    "recipe": "Step by step recipe instructions",
-    "cookingTips": ["tip 1", "tip 2"],
-    "pairingNotes": "Why this pairing works well"
-  }`;
+const getOpenAIKey = async () => {
+  const { data: { OPENAI_API_KEY } } = await supabase.functions.invoke('get-secret', {
+    body: { name: 'OPENAI_API_KEY' }
+  });
+  return OPENAI_API_KEY;
+};
 
+let openaiInstance: OpenAI | null = null;
+
+const getOpenAIInstance = async () => {
+  if (!openaiInstance) {
+    const apiKey = await getOpenAIKey();
+    openaiInstance = new OpenAI({
+      apiKey,
+      dangerouslyAllowBrowser: true
+    });
+  }
+  return openaiInstance;
+};
+
+export const generateMealPairing = async (strain: string): Promise<string> => {
   try {
-    const { data, error } = await supabase.functions.invoke('generate-meal-pairing', {
-      body: { prompt }
+    const openai = await getOpenAIInstance();
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content: `You are a culinary expert specializing in cannabis and food pairings. Create detailed meal pairings that include:
+          1. A matching meal or snack with a brief recipe
+          2. An explanation of why the pairing works (flavors and effects)
+          3. Optional cooking tips
+          Format the response in JSON with the following structure:
+          {
+            "dishName": "Name of the dish",
+            "description": "Brief description of the dish",
+            "pairingReason": "Why this pairing works with the strain",
+            "recipe": "Brief recipe steps",
+            "cookingTips": "Optional cooking tips or substitutions"
+          }`
+        },
+        {
+          role: "user",
+          content: `Suggest a meal pairing for the cannabis strain "${strain}". Consider the strain's typical flavor profile and effects.`
+        }
+      ],
+      temperature: 0.7,
+      max_tokens: 500
     });
 
-    if (error) throw error;
-    return data.response || "";
+    return response.choices[0]?.message?.content || "Unable to generate pairing suggestion.";
   } catch (error) {
-    console.error("Error generating pairing:", error);
-    throw error;
+    console.error('OpenAI API Error:', error);
+    return "Sorry, I couldn't generate a pairing suggestion at this time. Please try again later.";
   }
 };

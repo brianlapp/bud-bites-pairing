@@ -112,36 +112,13 @@ export interface SocialTables {
       user_id: string;
       challenge_id: string;
       completed_at?: string | null;
-      created_at: string;
+      created_at?: string;
     };
     Update: {
       id?: string;
       user_id?: string;
       challenge_id?: string;
       completed_at?: string | null;
-      created_at?: string;
-    };
-  };
-  cached_recipe_images: {
-    Row: {
-      id: string;
-      dish_name: string;
-      description: string;
-      image_path: string;
-      created_at: string;
-    };
-    Insert: {
-      id?: string;
-      dish_name: string;
-      description: string;
-      image_path: string;
-      created_at?: string;
-    };
-    Update: {
-      id?: string;
-      dish_name?: string;
-      description?: string;
-      image_path?: string;
       created_at?: string;
     };
   };
