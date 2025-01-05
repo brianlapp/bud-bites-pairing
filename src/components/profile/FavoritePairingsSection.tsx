@@ -9,6 +9,12 @@ interface FavoritePairing extends StrainPairing {
   created_at: string;
 }
 
+interface FavoritePairingResponse {
+  pairing_id: string;
+  created_at: string;
+  strain_pairings: StrainPairing;
+}
+
 export const FavoritePairingsSection = () => {
   const { data: favorites, isLoading } = useQuery({
     queryKey: ['favorite-pairings'],
@@ -28,7 +34,7 @@ export const FavoritePairingsSection = () => {
 
       if (error) throw error;
 
-      return favoritePairings.map(fp => ({
+      return favoritePairings.map((fp: FavoritePairingResponse) => ({
         ...fp.strain_pairings,
         created_at: fp.created_at,
       })) as FavoritePairing[];
