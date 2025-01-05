@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import { motion } from "framer-motion";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 
 const Contact = () => {
@@ -54,7 +54,6 @@ const Contact = () => {
         exit={{ opacity: 0 }}
         className="flex-grow pt-16"
       >
-        {/* Hero Section with Aurora Animation */}
         <div className="relative h-[40vh] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-sage-500/20 via-coral-500/20 to-sage-500/20 animate-aurora"></div>
           <div className="relative z-10 text-center px-4">
@@ -65,7 +64,6 @@ const Contact = () => {
           </div>
         </div>
 
-        {/* Form Section */}
         <div className="container mx-auto px-4 py-12">
           <Card className="max-w-2xl mx-auto bg-white/80 backdrop-blur-sm border-sage-200 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardHeader>
