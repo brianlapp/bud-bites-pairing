@@ -11,12 +11,8 @@ export const RecipeHero = ({ dishName, description }: RecipeHeroProps) => {
   const { data: imageUrl, isLoading: isImageLoading } = useQuery({
     queryKey: ['recipe-image', dishName],
     queryFn: async () => {
-      const [smallUrl, mediumUrl, largeUrl] = await Promise.all([
-        getMatchingImage(dishName, description, 'small'),
-        getMatchingImage(dishName, description, 'medium'),
-        getMatchingImage(dishName, description, 'large'),
-      ]);
-      return { smallUrl, mediumUrl, largeUrl };
+      const imageUrl = await getMatchingImage(dishName, description);
+      return imageUrl;
     },
     staleTime: Infinity,
   });
@@ -35,17 +31,17 @@ export const RecipeHero = ({ dishName, description }: RecipeHeroProps) => {
         <motion.picture>
           <source
             media={`(min-width: ${IMAGE_SIZES.large}px)`}
-            srcSet={imageUrl?.largeUrl}
+            srcSet={imageUrl}
           />
           <source
             media={`(min-width: ${IMAGE_SIZES.medium}px)`}
-            srcSet={imageUrl?.mediumUrl}
+            srcSet={imageUrl}
           />
           <motion.img
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
-            src={imageUrl?.smallUrl || '/placeholder.svg'}
+            src={imageUrl || '/placeholder.svg'}
             alt={dishName}
             className="w-full h-44 object-cover"
             loading="lazy"

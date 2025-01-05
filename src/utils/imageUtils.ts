@@ -1,5 +1,11 @@
 import { supabase } from "@/integrations/supabase/client";
 
+export const IMAGE_SIZES = {
+  small: 640,
+  medium: 1024,
+  large: 1920
+};
+
 const generateAndCacheImage = async (dishName: string, description: string): Promise<string> => {
   try {
     const prompt = `A professional food photography style image of ${dishName}. ${description}. Bright lighting, shallow depth of field, on a clean white plate, restaurant presentation style.`;
