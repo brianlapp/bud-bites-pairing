@@ -15,6 +15,7 @@ const CannabisWordle = lazy(() => import("./pages/CannabisWordle"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Contact = lazy(() => import("./pages/Contact"));
+const Admin = lazy(() => import("./pages/Admin"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -59,6 +60,7 @@ function App() {
             <Route path="/contact" element={<AnimatePresence mode="wait"><Contact /></AnimatePresence>} />
             <Route path="/auth" element={<AnimatePresence mode="wait"><Auth /></AnimatePresence>} />
             <Route path="/profile" element={<AnimatePresence mode="wait"><Profile /></AnimatePresence>} />
+            <Route path="/admin" element={<AnimatePresence mode="wait"><Admin /></AnimatePresence>} />
           </Routes>
           <Toaster />
         </Suspense>
