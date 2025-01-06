@@ -1,0 +1,21 @@
+{
+  "name": "BudBites",
+  "short_name": "BudBites",
+  "description": "Your Cannabis Food Pairing Guide",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4d3232",
+  "icons": [
+    {
+      "src": "/lovable-uploads/3fa6f999-491e-425c-8394-a740a242bc58.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/lovable-uploads/3fa6f999-491e-425c-8394-a740a242bc58.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
