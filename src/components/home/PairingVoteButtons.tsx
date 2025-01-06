@@ -33,18 +33,21 @@ export const PairingVoteButtons = ({
     try {
       await onVote(pairingId, isHelpful);
     } catch (error) {
-      if (error instanceof Error && error.message.includes('duplicate key value')) {
-        toast({
-          title: "Already Voted",
-          description: "You have already voted on this pairing",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Error",
-          description: "Failed to record your vote. Please try again.",
-          variant: "destructive",
-        });
+      if (error instanceof Error) {
+        if (error.message.includes('duplicate key value')) {
+          toast({
+            title: "Already Voted",
+            description: "You have already voted on this pairing",
+            variant: "destructive",
+          });
+        } else {
+          console.error('Vote error:', error);
+          toast({
+            title: "Error",
+            description: "Failed to record your vote. Please try again.",
+            variant: "destructive",
+          });
+        }
       }
     }
   };

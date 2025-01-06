@@ -1,29 +1,46 @@
-export const getStrainType = (strainName: string): 'sativa' | 'indica' | 'hybrid' => {
+export const getStrainType = (strainName: string): string => {
   const lowerName = strainName.toLowerCase();
-  if (lowerName.includes('sativa')) return 'sativa';
   if (lowerName.includes('indica')) return 'indica';
+  if (lowerName.includes('sativa')) return 'sativa';
   return 'hybrid';
 };
 
-export const getStrainColor = (type: 'sativa' | 'indica' | 'hybrid'): string => {
-  switch (type) {
-    case 'sativa':
-      return 'text-coral-500';
+export const getStrainColor = (strainType: string): string => {
+  switch (strainType.toLowerCase()) {
     case 'indica':
-      return 'text-indigo-500';
-    case 'hybrid':
-      return 'text-sage-500';
+      return 'text-purple-500';
+    case 'sativa':
+      return 'text-green-500';
     default:
       return 'text-sage-500';
   }
 };
 
-export const cleanAndParseJSON = (jsonString: string) => {
+export const cleanAndParseJSON = (jsonString: string): any => {
   try {
-    const cleaned = jsonString.replace(/```json\n|\n```/g, '');
-    return JSON.parse(cleaned);
+    // First attempt: direct parse
+    try {
+      return JSON.parse(jsonString);
+    } catch (e) {
+      // If direct parse fails, try cleaning the string
+      const cleaned = jsonString
+        .replace(/```json\n|\n```/g, '') // Remove markdown code blocks
+        .replace(/\\n/g, ' ') // Replace newlines with spaces
+        .replace(/\\"/g, '"') // Replace escaped quotes
+        .trim(); // Remove whitespace
+
+      // Try parsing the cleaned string
+      return JSON.parse(cleaned);
+    }
   } catch (error) {
     console.error('Error parsing pairing data:', error);
-    return null;
+    // Return a fallback object with required properties
+    return {
+      dishName: 'Error loading recipe',
+      description: 'There was an error loading this recipe. Please try again later.',
+      recipe: '',
+      cookingTips: [],
+      imageUrl: null
+    };
   }
 };

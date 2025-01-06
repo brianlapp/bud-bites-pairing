@@ -11,6 +11,7 @@ import { PairingHeader } from "./pairing-card/PairingHeader";
 import { PairingImage } from "./pairing-card/PairingImage";
 import { getStrainType, getStrainColor, cleanAndParseJSON } from "./pairing-card/utils";
 import { usePairingActions } from "./pairing-card/usePairingActions";
+import { useToast } from "@/hooks/use-toast";
 
 interface PairingCardProps {
   pair: StrainPairing;
@@ -20,10 +21,36 @@ interface PairingCardProps {
 
 export const PairingCard = ({ pair, onVote, isFavorited = false }: PairingCardProps) => {
   const { isLiked, handleFavorite, handleShare } = usePairingActions(pair.id, isFavorited);
+  const { toast } = useToast();
   
   const pairingData = cleanAndParseJSON(pair.pairing_suggestion);
   const strainType = getStrainType(pair.strain_name);
   const iconColor = getStrainColor(strainType);
+  
+  const handleVoteError = (error: Error) => {
+    toast({
+      title: "Error",
+      description: "Failed to record your vote. Please try again.",
+      variant: "destructive",
+    });
+    console.error('Vote error:', error);
+  };
+
+  const handleVoteSuccess = (isHelpful: boolean) => {
+    toast({
+      title: "Vote Recorded",
+      description: `Thank you for your ${isHelpful ? 'positive' : 'negative'} feedback!`,
+    });
+  };
+
+  const safeOnVote = async (pairingId: string, isHelpful: boolean) => {
+    try {
+      await onVote(pairingId, isHelpful);
+      handleVoteSuccess(isHelpful);
+    } catch (error) {
+      handleVoteError(error as Error);
+    }
+  };
   
   if (!pairingData) {
     return (
@@ -66,7 +93,7 @@ export const PairingCard = ({ pair, onVote, isFavorited = false }: PairingCardPr
           pairingId={pair.id}
           helpfulVotes={pair.helpful_votes}
           notHelpfulVotes={pair.not_helpful_votes}
-          onVote={onVote}
+          onVote={safeOnVote}
         />
       </CardContent>
     </Card>
