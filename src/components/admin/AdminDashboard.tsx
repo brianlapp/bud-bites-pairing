@@ -21,13 +21,25 @@ export const AdminDashboard = () => {
   const { data: stats, isLoading, refetch } = useQuery({
     queryKey: ["adminStats"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // First, let's get the admin statistics
+      const { data: adminStats, error: adminError } = await supabase
         .from("admin_statistics")
         .select("*")
         .single();
 
-      if (error) throw error;
-      return data as AdminStats;
+      if (adminError) throw adminError;
+
+      // Let's also get the actual count from strain_pairings for verification
+      const { count: actualPairingsCount, error: pairingsError } = await supabase
+        .from("strain_pairings")
+        .select("*", { count: 'exact' });
+
+      if (pairingsError) throw pairingsError;
+
+      console.log('Actual pairings count:', actualPairingsCount);
+      console.log('Admin stats:', adminStats);
+
+      return adminStats as AdminStats;
     },
   });
 
