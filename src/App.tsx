@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
+import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
 import { Suspense, lazy } from "react";
 import "./App.css";
@@ -43,29 +44,31 @@ const PageLoader = () => (
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            <Route path="/" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
-            <Route path="/recipe/:id" element={<AnimatePresence mode="wait"><Recipe /></AnimatePresence>} />
-            <Route path="/calculator" element={<AnimatePresence mode="wait"><Calculator /></AnimatePresence>} />
-            <Route path="/tools/calculator" element={<AnimatePresence mode="wait"><Calculator /></AnimatePresence>} />
-            <Route path="/tools/budget" element={<AnimatePresence mode="wait"><Budget /></AnimatePresence>} />
-            <Route path="/tools" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
-            <Route path="/games" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
-            <Route path="/games/tycoon" element={<AnimatePresence mode="wait"><CannabisGame /></AnimatePresence>} />
-            <Route path="/games/wordle" element={<AnimatePresence mode="wait"><CannabisWordle /></AnimatePresence>} />
-            <Route path="/about" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
-            <Route path="/contact" element={<AnimatePresence mode="wait"><Contact /></AnimatePresence>} />
-            <Route path="/auth" element={<AnimatePresence mode="wait"><Auth /></AnimatePresence>} />
-            <Route path="/profile" element={<AnimatePresence mode="wait"><Profile /></AnimatePresence>} />
-            <Route path="/admin" element={<AnimatePresence mode="wait"><Admin /></AnimatePresence>} />
-          </Routes>
-          <Toaster />
-        </Suspense>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
+              <Route path="/recipe/:id" element={<AnimatePresence mode="wait"><Recipe /></AnimatePresence>} />
+              <Route path="/calculator" element={<AnimatePresence mode="wait"><Calculator /></AnimatePresence>} />
+              <Route path="/tools/calculator" element={<AnimatePresence mode="wait"><Calculator /></AnimatePresence>} />
+              <Route path="/tools/budget" element={<AnimatePresence mode="wait"><Budget /></AnimatePresence>} />
+              <Route path="/tools" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
+              <Route path="/games" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
+              <Route path="/games/tycoon" element={<AnimatePresence mode="wait"><CannabisGame /></AnimatePresence>} />
+              <Route path="/games/wordle" element={<AnimatePresence mode="wait"><CannabisWordle /></AnimatePresence>} />
+              <Route path="/about" element={<AnimatePresence mode="wait"><Index /></AnimatePresence>} />
+              <Route path="/contact" element={<AnimatePresence mode="wait"><Contact /></AnimatePresence>} />
+              <Route path="/auth" element={<AnimatePresence mode="wait"><Auth /></AnimatePresence>} />
+              <Route path="/profile" element={<AnimatePresence mode="wait"><Profile /></AnimatePresence>} />
+              <Route path="/admin" element={<AnimatePresence mode="wait"><Admin /></AnimatePresence>} />
+            </Routes>
+            <Toaster />
+          </Suspense>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 

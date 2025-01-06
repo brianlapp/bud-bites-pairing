@@ -6,6 +6,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Logo } from "./navigation/Logo";
 import { DesktopNav } from "./navigation/DesktopNav";
 import { MobileNav } from "./navigation/MobileNav";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +39,7 @@ const Navigation = () => {
 
   return (
     <nav 
-      className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-sage-200"
+      className="fixed top-0 w-full bg-white/80 dark:bg-sage-900/80 backdrop-blur-md z-50 border-b border-sage-200 dark:border-sage-800"
       role="navigation"
       aria-label="Main navigation"
     >
@@ -48,7 +49,7 @@ const Navigation = () => {
           <div className="md:hidden absolute left-4 top-1/2 -translate-y-1/2 z-10">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-sage-500 hover:text-sage-600 focus:outline-none focus:ring-2 focus:ring-sage-500 rounded-md"
+              className="text-sage-500 dark:text-sage-400 hover:text-sage-600 dark:hover:text-sage-300 focus:outline-none focus:ring-2 focus:ring-sage-500 rounded-md"
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
               aria-label={isOpen ? "Close menu" : "Open menu"}
@@ -63,7 +64,10 @@ const Navigation = () => {
           </div>
           
           {/* Desktop navigation */}
-          <DesktopNav user={user} handleLogout={handleLogout} />
+          <div className="hidden md:flex items-center space-x-4">
+            <DesktopNav user={user} handleLogout={handleLogout} />
+            <ThemeToggle />
+          </div>
         </div>
       </div>
 
