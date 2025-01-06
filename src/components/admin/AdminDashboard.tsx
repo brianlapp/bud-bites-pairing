@@ -18,28 +18,51 @@ interface AdminStats {
 
 export const AdminDashboard = () => {
   const { toast } = useToast();
-  const { data: stats, isLoading, refetch } = useQuery({
+  const { data: stats, isLoading, error, refetch } = useQuery({
     queryKey: ["adminStats"],
     queryFn: async () => {
-      // First, let's get the admin statistics
-      const { data: adminStats, error: adminError } = await supabase
-        .from("admin_statistics")
-        .select("*")
-        .single();
+      try {
+        // First, let's get the admin statistics
+        const { data: adminStats, error: adminError } = await supabase
+          .from("admin_statistics")
+          .select("*")
+          .single();
 
-      if (adminError) throw adminError;
+        if (adminError) {
+          console.error("Error fetching admin stats:", adminError);
+          throw adminError;
+        }
 
-      // Let's also get the actual count from strain_pairings for verification
-      const { count: actualPairingsCount, error: pairingsError } = await supabase
-        .from("strain_pairings")
-        .select("*", { count: 'exact' });
+        // Let's also get the actual count from strain_pairings for verification
+        const { count: actualPairingsCount, error: pairingsError } = await supabase
+          .from("strain_pairings")
+          .select("*", { count: 'exact', head: true });
 
-      if (pairingsError) throw pairingsError;
+        if (pairingsError) {
+          console.error("Error fetching pairings count:", pairingsError);
+          throw pairingsError;
+        }
 
-      console.log('Actual pairings count:', actualPairingsCount);
-      console.log('Admin stats:', adminStats);
+        console.log('Actual pairings count:', actualPairingsCount);
+        console.log('Admin stats:', adminStats);
 
-      return adminStats as AdminStats;
+        // If there's a mismatch, let's trigger an update of admin statistics
+        if (adminStats && actualPairingsCount !== adminStats.total_pairings_generated) {
+          console.log('Mismatch detected between actual count and admin stats');
+          const { error: updateError } = await supabase.rpc('update_admin_statistics');
+          if (updateError) {
+            console.error("Error updating admin statistics:", updateError);
+          } else {
+            // Refetch the stats after updating
+            return await refetch();
+          }
+        }
+
+        return adminStats as AdminStats;
+      } catch (error) {
+        console.error("Error in queryFn:", error);
+        throw error;
+      }
     },
   });
 
@@ -55,7 +78,6 @@ export const AdminDashboard = () => {
           table: 'admin_statistics'
         },
         async () => {
-          // Refetch the stats when changes occur
           await refetch();
           toast({
             title: "Statistics Updated",
@@ -69,6 +91,15 @@ export const AdminDashboard = () => {
       supabase.removeChannel(channel);
     };
   }, [refetch, toast]);
+
+  if (error) {
+    console.error("Render error:", error);
+    return (
+      <div className="p-8">
+        <div className="text-red-500">Error loading admin statistics. Please try again later.</div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
