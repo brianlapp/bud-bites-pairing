@@ -64,7 +64,7 @@ export const PairingInput = ({
       </div>
 
       <form onSubmit={onSubmit} className="space-y-6">
-        <div className="bg-white/80 backdrop-blur-sm border-2 border-sage-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 dark:bg-sage-900/80 dark:border-sage-700">
+        <div className={`mx-auto bg-white/80 backdrop-blur-sm border-2 border-sage-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 dark:bg-sage-900/80 dark:border-sage-700 ${mode === 'cook' ? 'w-[60%]' : 'w-full'}`}>
           {mode === 'pair' ? (
             <motion.div className="space-y-2" whileTap={{ scale: 0.995 }}>
               <input
