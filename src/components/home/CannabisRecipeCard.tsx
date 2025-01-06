@@ -12,6 +12,18 @@ interface CannabisRecipeCardProps {
 }
 
 export const CannabisRecipeCard = ({ recipe }: CannabisRecipeCardProps) => {
+  // Helper function to safely split instructions
+  const splitInstructions = (instructions: string | unknown) => {
+    if (typeof instructions !== 'string') return [];
+    return instructions.split('\n').filter(Boolean);
+  };
+
+  // Helper function to safely split recipe steps
+  const splitRecipeSteps = (recipe: string | unknown) => {
+    if (typeof recipe !== 'string') return [];
+    return recipe.split(/\d+\./).filter(Boolean);
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -57,7 +69,7 @@ export const CannabisRecipeCard = ({ recipe }: CannabisRecipeCardProps) => {
             <RecipeInstructions
               title="Cannabis Infusion Instructions"
               icon={<Beaker className="w-5 h-5 text-sage-500" />}
-              instructions={recipe.infusionInstructions.split('\n')}
+              instructions={splitInstructions(recipe.infusionInstructions)}
             />
           </CardContent>
         </Card>
@@ -65,7 +77,7 @@ export const CannabisRecipeCard = ({ recipe }: CannabisRecipeCardProps) => {
         <RecipeInstructions
           title="Recipe Instructions"
           icon={<ChefHat className="w-5 h-5 text-coral-500" />}
-          instructions={recipe.recipe.split(/\d+\./).filter(Boolean)}
+          instructions={splitRecipeSteps(recipe.recipe)}
         />
 
         <div className="space-y-4">
