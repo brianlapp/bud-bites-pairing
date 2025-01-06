@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Cannabis } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { consumptionTips } from "@/data/consumptionTips.json";
+import consumptionTips from "@/data/consumptionTips.json";
 
 interface PairingInputProps {
   strain: string;
@@ -75,9 +75,9 @@ export const PairingInput = ({
                   <SelectItem value="distillate">Distillate</SelectItem>
                 </SelectContent>
               </Select>
-              {productType && (
+              {productType && consumptionTips[productType as keyof typeof consumptionTips]?.tips[0] && (
                 <p className="text-sm text-sage-500 dark:text-sage-400">
-                  {consumptionTips[productType as keyof typeof consumptionTips]?.tips[0]}
+                  {consumptionTips[productType as keyof typeof consumptionTips].tips[0]}
                 </p>
               )}
             </div>
