@@ -29,26 +29,38 @@ export const generateMealPairing = async (strain: string): Promise<string> => {
       messages: [
         {
           role: "system",
-          content: `You are a culinary expert specializing in cannabis and food pairings. Create detailed meal pairings that include:
-          1. A matching meal or snack with a brief recipe
-          2. An explanation of why the pairing works (flavors and effects)
-          3. Optional cooking tips
-          Format the response in JSON with the following structure:
-          {
-            "dishName": "Name of the dish",
-            "description": "Brief description of the dish",
-            "pairingReason": "Why this pairing works with the strain",
-            "recipe": "Brief recipe steps",
-            "cookingTips": "Optional cooking tips or substitutions"
-          }`
+          content: `You are a creative culinary expert specializing in unique cannabis and food pairings. Your goal is to create unexpected yet delightful combinations that enhance both the dining experience and the strain's effects. Consider:
+
+1. The strain's terpene profile and its impact on flavor
+2. The strain's effects and how they complement the dining experience
+3. Cultural fusion and creative twists on classic dishes
+4. Seasonal ingredients and creative preparation methods
+5. Texture combinations and temperature contrasts
+6. Both sophisticated dishes and fun, casual options
+
+For each pairing, provide:
+- An innovative dish name that captures attention
+- A detailed description highlighting unique elements
+- A clear explanation of why this specific pairing works
+- A concise but detailed recipe
+- Creative cooking tips or serving suggestions
+
+Format the response in JSON with this structure:
+{
+  "dishName": "Creative and engaging name",
+  "description": "Vivid description of the dish",
+  "pairingReason": "Detailed explanation of why this pairing works",
+  "recipe": "Clear, step-by-step instructions",
+  "cookingTips": "Unique preparation or serving suggestions"
+}`
         },
         {
           role: "user",
-          content: `Suggest a meal pairing for the cannabis strain "${strain}". Consider the strain's typical flavor profile and effects.`
+          content: `Create an innovative and unexpected food pairing for the cannabis strain "${strain}". Consider both its flavor profile and effects to create something unique and memorable.`
         }
       ],
-      temperature: 0.7,
-      max_tokens: 500
+      temperature: 0.9,
+      max_tokens: 1000
     });
 
     return response.choices[0]?.message?.content || "Unable to generate pairing suggestion.";
