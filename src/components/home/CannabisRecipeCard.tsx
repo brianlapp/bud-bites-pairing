@@ -35,7 +35,7 @@ export const CannabisRecipeCard = ({ recipe }: CannabisRecipeCardProps) => {
           className="w-full h-64 object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-6">
+        <div className="absolute bottom-0 left-0 right-0 p-6 text-left">
           <h2 className="text-3xl font-bold text-white mb-2">
             {recipe.dishName}
           </h2>
@@ -67,7 +67,7 @@ export const CannabisRecipeCard = ({ recipe }: CannabisRecipeCardProps) => {
 
         <Alert className="bg-coral-50/50 border-coral-200 dark:bg-coral-900/20 dark:border-coral-800">
           <AlertTriangle className="h-4 w-4 text-coral-500" />
-          <AlertDescription className="text-coral-700 dark:text-coral-300">
+          <AlertDescription className="text-coral-700 dark:text-coral-300 text-left">
             Please consume responsibly and be aware of local laws regarding cannabis use and preparation.
           </AlertDescription>
         </Alert>
@@ -79,7 +79,7 @@ export const CannabisRecipeCard = ({ recipe }: CannabisRecipeCardProps) => {
                 <ChefHat className="w-5 h-5" />
                 Dosage Information
               </h3>
-              <p className="text-sage-500 dark:text-sage-300 leading-relaxed">
+              <p className="text-sage-500 dark:text-sage-300 leading-relaxed text-left">
                 {recipe.dosageInfo}
               </p>
             </div>
@@ -99,7 +99,7 @@ export const CannabisRecipeCard = ({ recipe }: CannabisRecipeCardProps) => {
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-sage-100 flex items-center justify-center text-sage-600 text-sm font-medium dark:bg-sage-700 dark:text-sage-300">
                       {index + 1}
                     </span>
-                    <p className="text-sage-500 dark:text-sage-300">{step}</p>
+                    <p className="text-sage-500 dark:text-sage-300 text-left">{step}</p>
                   </div>
                 ))}
               </div>
@@ -122,7 +122,7 @@ export const CannabisRecipeCard = ({ recipe }: CannabisRecipeCardProps) => {
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-sage-100 flex items-center justify-center text-sage-600 text-sm font-medium dark:bg-sage-700 dark:text-sage-300">
                   {index + 1}
                 </span>
-                <p className="text-sage-500 dark:text-sage-300">{step.trim()}</p>
+                <p className="text-sage-500 dark:text-sage-300 text-left">{step.trim()}</p>
               </li>
             ))}
           </ol>
@@ -134,7 +134,7 @@ export const CannabisRecipeCard = ({ recipe }: CannabisRecipeCardProps) => {
             Pro Tips
           </h3>
           <div className="p-4 bg-white/50 rounded-lg border border-sage-100 dark:bg-sage-800/30 dark:border-sage-700">
-            <p className="text-sage-500 dark:text-sage-300">{recipe.cookingTips}</p>
+            <p className="text-sage-500 dark:text-sage-300 text-left">{recipe.cookingTips}</p>
           </div>
         </div>
       </div>
