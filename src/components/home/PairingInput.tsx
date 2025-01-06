@@ -36,35 +36,37 @@ export const PairingInput = ({
 }: PairingInputProps) => {
   return (
     <div className="space-y-6">
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center mb-6 sm:mb-8">
         <div className="inline-flex p-1 bg-sage-100 rounded-full dark:bg-sage-800 max-w-full overflow-x-auto scrollbar-hide">
           <button
             onClick={() => onModeChange('pair')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 whitespace-nowrap text-sm sm:text-base ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-full transition-all duration-300 whitespace-nowrap text-sm sm:text-base ${
               mode === 'pair'
                 ? 'bg-white text-sage-600 shadow-md dark:bg-sage-700 dark:text-sage-200'
                 : 'text-sage-500 hover:text-sage-600 dark:text-sage-400 dark:hover:text-sage-300'
             }`}
           >
             <Leaf className="w-4 h-4" />
-            Pair with Food
+            <span className="hidden sm:inline">Pair with Food</span>
+            <span className="sm:hidden">Pair with</span>
           </button>
           <button
             onClick={() => onModeChange('cook')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 whitespace-nowrap text-sm sm:text-base ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-full transition-all duration-300 whitespace-nowrap text-sm sm:text-base ${
               mode === 'cook'
                 ? 'bg-white text-sage-600 shadow-md dark:bg-sage-700 dark:text-sage-200'
                 : 'text-sage-500 hover:text-sage-600 dark:text-sage-400 dark:hover:text-sage-300'
             }`}
           >
             <ChefHat className="w-4 h-4" />
-            Cook with Cannabis
+            <span className="hidden sm:inline">Cook with Cannabis</span>
+            <span className="sm:hidden">Cook with</span>
           </button>
         </div>
       </div>
 
       <form onSubmit={onSubmit} className="space-y-6">
-        <div className={`mx-auto bg-white/80 backdrop-blur-sm border-2 border-sage-200 rounded-xl p-4 sm:p-8 shadow-lg hover:shadow-xl transition-all duration-300 dark:bg-sage-900/80 dark:border-sage-700 ${mode === 'cook' ? 'w-full sm:w-[60%]' : 'w-full'}`}>
+        <div className={`mx-auto bg-white/80 backdrop-blur-sm border-2 border-sage-200 rounded-xl p-3 sm:p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 dark:bg-sage-900/80 dark:border-sage-700 ${mode === 'cook' ? 'w-full md:w-[70%] lg:w-[60%]' : 'w-full'}`}>
           {mode === 'pair' ? (
             <motion.div className="space-y-2" whileTap={{ scale: 0.995 }}>
               <input
@@ -72,7 +74,7 @@ export const PairingInput = ({
                 id="strain"
                 value={strain}
                 onChange={(e) => onStrainChange(e.target.value)}
-                className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-lg border-2 border-sage-200 
+                className="w-full px-3 sm:px-4 md:px-6 py-3 sm:py-4 rounded-lg border-2 border-sage-200 
                          focus:ring-2 focus:ring-coral-500 focus:border-transparent 
                          transition-all duration-300 bg-white/50 backdrop-blur-sm text-base sm:text-lg
                          placeholder:text-sage-400 text-sage-500
@@ -83,18 +85,18 @@ export const PairingInput = ({
               />
             </motion.div>
           ) : (
-            <div className="grid gap-6 sm:gap-8">
+            <div className="grid gap-4 sm:gap-6 md:gap-8">
               <motion.div 
-                className="space-y-3"
+                className="space-y-2 sm:space-y-3"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <Label htmlFor="productType" className="text-base sm:text-lg font-medium text-sage-600 dark:text-sage-300">
+                <Label htmlFor="productType" className="text-sm sm:text-base md:text-lg font-medium text-sage-600 dark:text-sage-300">
                   Cannabis Product Type
                 </Label>
                 <Select value={productType} onValueChange={onProductTypeChange}>
-                  <SelectTrigger className="w-full px-4 py-3 sm:py-6 text-base sm:text-lg bg-white/50 dark:bg-sage-900/50 border-2 border-sage-200 dark:border-sage-700 hover:border-coral-500/50 transition-colors">
+                  <SelectTrigger className="w-full px-3 sm:px-4 py-2.5 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg bg-white/50 dark:bg-sage-900/50 border-2 border-sage-200 dark:border-sage-700 hover:border-coral-500/50 transition-colors">
                     <SelectValue placeholder="Select product type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -105,7 +107,7 @@ export const PairingInput = ({
                 </Select>
                 {productType && consumptionTips[productType as keyof typeof consumptionTips]?.tips[0] && (
                   <motion.p 
-                    className="text-sm text-sage-500 dark:text-sage-400 mt-2 italic bg-sage-50 dark:bg-sage-800/50 p-3 rounded-lg"
+                    className="text-xs sm:text-sm text-sage-500 dark:text-sage-400 mt-2 italic bg-sage-50 dark:bg-sage-800/50 p-2 sm:p-3 rounded-lg"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
@@ -168,7 +170,7 @@ export const PairingInput = ({
           disabled={isLoading || (mode === 'pair' ? !strain : (!productType || !desiredDish || !potencyLevel))}
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.98 }}
-          className="w-full flex items-center justify-center px-6 py-4 
+          className="w-full flex items-center justify-center px-4 sm:px-6 py-3 sm:py-4 
                    border border-transparent text-base sm:text-lg font-medium rounded-lg 
                    text-white bg-coral-500 hover:bg-coral-600 
                    focus:outline-none focus:ring-2 focus:ring-offset-2 
