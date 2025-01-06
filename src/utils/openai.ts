@@ -69,3 +69,62 @@ Format the response in JSON with this structure:
     return "Sorry, I couldn't generate a pairing suggestion at this time. Please try again later.";
   }
 };
+
+export const generateCannabisRecipe = async (
+  productType: string,
+  desiredDish: string,
+  potencyLevel: string
+): Promise<string> => {
+  try {
+    const openai = await getOpenAIInstance();
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content: `You are an expert cannabis chef specializing in creating precise and safe cannabis-infused recipes. Your goal is to provide detailed, step-by-step instructions for creating cannabis-infused dishes, with a strong emphasis on safety, proper dosing, and quality results. Consider:
+
+1. The specific requirements for different cannabis products (decarboxylation for flower, temperature control for concentrates)
+2. Proper dosing calculations and safety warnings
+3. Detailed infusion processes
+4. Quality control and storage recommendations
+5. Common mistakes to avoid
+6. Tips for consistent results
+
+For each recipe, provide:
+- A creative name for the infused dish
+- A detailed description of the final product
+- Step-by-step infusion instructions
+- Precise dosage information and recommendations
+- Total cooking time and difficulty level
+- Storage and shelf-life information
+- Safety warnings and best practices
+
+Format the response in JSON with this structure:
+{
+  "dishName": "Creative name for the infused dish",
+  "description": "Detailed description of the final product",
+  "infusionInstructions": "Step-by-step infusion process",
+  "dosageInfo": "Precise dosing information and recommendations",
+  "cookingTime": "Total preparation and cooking time",
+  "recipe": "Detailed recipe instructions",
+  "cookingTips": "Important tips and safety information",
+  "potencyLevel": "Low/Medium/High",
+  "productType": "Flower/Concentrate/Distillate"
+}`
+        },
+        {
+          role: "user",
+          content: `Create a recipe for ${desiredDish} using ${productType} cannabis product with ${potencyLevel} potency. Include detailed infusion instructions and safety information.`
+        }
+      ],
+      temperature: 0.8,
+      max_tokens: 1500
+    });
+
+    return response.choices[0]?.message?.content || "Unable to generate recipe.";
+  } catch (error) {
+    console.error('OpenAI API Error:', error);
+    return "Sorry, I couldn't generate a recipe at this time. Please try again later.";
+  }
+};
