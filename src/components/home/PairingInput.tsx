@@ -64,7 +64,7 @@ export const PairingInput = ({
       </div>
 
       <form onSubmit={onSubmit} className="space-y-6">
-        <div className={`mx-auto bg-white/80 backdrop-blur-sm border-2 border-sage-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 dark:bg-sage-900/80 dark:border-sage-700 ${mode === 'cook' ? 'w-[60%]' : 'w-full'}`}>
+        <div className={`mx-auto bg-white/80 backdrop-blur-sm border-2 border-sage-200 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 dark:bg-sage-900/80 dark:border-sage-700 ${mode === 'cook' ? 'w-[60%]' : 'w-full'}`}>
           {mode === 'pair' ? (
             <motion.div className="space-y-2" whileTap={{ scale: 0.995 }}>
               <input
@@ -83,11 +83,18 @@ export const PairingInput = ({
               />
             </motion.div>
           ) : (
-            <div className="grid gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="productType" className="text-sage-600 dark:text-sage-300">Cannabis Product Type</Label>
+            <div className="grid gap-8">
+              <motion.div 
+                className="space-y-3"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Label htmlFor="productType" className="text-lg font-medium text-sage-600 dark:text-sage-300">
+                  Cannabis Product Type
+                </Label>
                 <Select value={productType} onValueChange={onProductTypeChange}>
-                  <SelectTrigger className="w-full px-4 py-6 text-lg bg-white/50 dark:bg-sage-900/50">
+                  <SelectTrigger className="w-full px-4 py-6 text-lg bg-white/50 dark:bg-sage-900/50 border-2 border-sage-200 dark:border-sage-700 hover:border-coral-500/50 transition-colors">
                     <SelectValue placeholder="Select product type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -97,16 +104,28 @@ export const PairingInput = ({
                   </SelectContent>
                 </Select>
                 {productType && consumptionTips[productType as keyof typeof consumptionTips]?.tips[0] && (
-                  <p className="text-sm text-sage-500 dark:text-sage-400 mt-2 italic">
-                    Tip: {consumptionTips[productType as keyof typeof consumptionTips].tips[0]}
-                  </p>
+                  <motion.p 
+                    className="text-sm text-sage-500 dark:text-sage-400 mt-2 italic bg-sage-50 dark:bg-sage-800/50 p-3 rounded-lg"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    💡 Tip: {consumptionTips[productType as keyof typeof consumptionTips].tips[0]}
+                  </motion.p>
                 )}
-              </div>
+              </motion.div>
 
-              <div className="space-y-2">
-                <Label htmlFor="desiredDish" className="text-sage-600 dark:text-sage-300">Desired Dish</Label>
+              <motion.div 
+                className="space-y-3"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+              >
+                <Label htmlFor="desiredDish" className="text-lg font-medium text-sage-600 dark:text-sage-300">
+                  Desired Dish
+                </Label>
                 <Select value={desiredDish} onValueChange={onDesiredDishChange}>
-                  <SelectTrigger className="w-full px-4 py-6 text-lg bg-white/50 dark:bg-sage-900/50">
+                  <SelectTrigger className="w-full px-4 py-6 text-lg bg-white/50 dark:bg-sage-900/50 border-2 border-sage-200 dark:border-sage-700 hover:border-coral-500/50 transition-colors">
                     <SelectValue placeholder="Select desired dish" />
                   </SelectTrigger>
                   <SelectContent>
@@ -118,12 +137,19 @@ export const PairingInput = ({
                     <SelectItem value="oil">Cannabis Oil</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
+              </motion.div>
 
-              <div className="space-y-2">
-                <Label htmlFor="potencyLevel" className="text-sage-600 dark:text-sage-300">Desired Potency</Label>
+              <motion.div 
+                className="space-y-3"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+              >
+                <Label htmlFor="potencyLevel" className="text-lg font-medium text-sage-600 dark:text-sage-300">
+                  Desired Potency
+                </Label>
                 <Select value={potencyLevel} onValueChange={onPotencyLevelChange}>
-                  <SelectTrigger className="w-full px-4 py-6 text-lg bg-white/50 dark:bg-sage-900/50">
+                  <SelectTrigger className="w-full px-4 py-6 text-lg bg-white/50 dark:bg-sage-900/50 border-2 border-sage-200 dark:border-sage-700 hover:border-coral-500/50 transition-colors">
                     <SelectValue placeholder="Select potency level" />
                   </SelectTrigger>
                   <SelectContent>
@@ -132,7 +158,7 @@ export const PairingInput = ({
                     <SelectItem value="high">High</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
+              </motion.div>
             </div>
           )}
         </div>
