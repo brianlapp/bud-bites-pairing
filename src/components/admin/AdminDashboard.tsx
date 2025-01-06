@@ -1,70 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Book, ThumbsUp, ThumbsDown, Gamepad, Trophy, Sprout, Sparkles } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-
-interface AdminStats {
-  total_users: number;
-  total_recipes: number;
-  total_upvotes: number;
-  total_downvotes: number;
-  total_wordle_players: number;
-  total_wordle_games: number;
-  total_tycoon_players: number;
-  total_pairings_generated: number;
-}
+import { StatCard } from "./StatCard";
+import { useAdminStats } from "./useAdminStats";
 
 export const AdminDashboard = () => {
   const { toast } = useToast();
-  const { data: stats, isLoading, error, refetch } = useQuery({
-    queryKey: ["adminStats"],
-    queryFn: async () => {
-      try {
-        // First, let's get the admin statistics
-        const { data: adminStats, error: adminError } = await supabase
-          .from("admin_statistics")
-          .select("*")
-          .single();
-
-        if (adminError) {
-          console.error("Error fetching admin stats:", adminError);
-          throw adminError;
-        }
-
-        // Let's also get the actual count from strain_pairings for verification
-        const { count: actualPairingsCount, error: pairingsError } = await supabase
-          .from("strain_pairings")
-          .select("*", { count: 'exact', head: true });
-
-        if (pairingsError) {
-          console.error("Error fetching pairings count:", pairingsError);
-          throw pairingsError;
-        }
-
-        console.log('Actual pairings count:', actualPairingsCount);
-        console.log('Admin stats:', adminStats);
-
-        // If there's a mismatch, let's trigger an update of admin statistics
-        if (adminStats && actualPairingsCount !== adminStats.total_pairings_generated) {
-          console.log('Mismatch detected between actual count and admin stats');
-          const { error: updateError } = await supabase.rpc('update_admin_statistics');
-          if (updateError) {
-            console.error("Error updating admin statistics:", updateError);
-          } else {
-            // Refetch the stats after updating
-            return await refetch();
-          }
-        }
-
-        return adminStats as AdminStats;
-      } catch (error) {
-        console.error("Error in queryFn:", error);
-        throw error;
-      }
-    },
-  });
+  const { data: stats, isLoading, error, refetch } = useAdminStats();
 
   useEffect(() => {
     // Subscribe to changes in the admin_statistics table
@@ -105,14 +48,15 @@ export const AdminDashboard = () => {
     return (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {Array(8).fill(0).map((_, i) => (
-          <Card key={i} className="animate-pulse">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Loading...</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-4 w-1/2 bg-sage-100 rounded"></div>
-            </CardContent>
-          </Card>
+          <StatCard
+            key={i}
+            title="Loading..."
+            value={0}
+            icon={Users}
+            description="Loading..."
+            color="bg-sage-100"
+            iconColor="text-sage-500"
+          />
         ))}
       </div>
     );
@@ -193,21 +137,7 @@ export const AdminDashboard = () => {
       </div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {statCards.map((stat) => (
-          <Card 
-            key={stat.title}
-            className={`${stat.color} border-none shadow-sm hover:shadow-md transition-shadow duration-200`}
-          >
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-[#1a1a1a]">{stat.title}</CardTitle>
-              <stat.icon className={`h-4 w-4 ${stat.iconColor}`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-[#1a1a1a] mb-1">
-                {stat.value.toLocaleString()}
-              </div>
-              <p className="text-xs text-[#8E9196]">{stat.description}</p>
-            </CardContent>
-          </Card>
+          <StatCard key={stat.title} {...stat} />
         ))}
       </div>
     </div>
