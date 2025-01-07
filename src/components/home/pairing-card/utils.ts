@@ -1,12 +1,12 @@
-export const getStrainType = (strainName: string): string => {
+export const getStrainType = (strainName: string): "sativa" | "indica" | "hybrid" => {
   const lowerName = strainName.toLowerCase();
   if (lowerName.includes('indica')) return 'indica';
   if (lowerName.includes('sativa')) return 'sativa';
   return 'hybrid';
 };
 
-export const getStrainColor = (strainType: string): string => {
-  switch (strainType.toLowerCase()) {
+export const getStrainColor = (strainType: "sativa" | "indica" | "hybrid"): string => {
+  switch (strainType) {
     case 'indica':
       return 'text-purple-500';
     case 'sativa':

@@ -4,7 +4,7 @@ import { ShareFavoriteButtons } from "./ShareFavoriteButtons";
 
 interface PairingHeaderProps {
   strainName: string;
-  strainType: 'sativa' | 'indica' | 'hybrid';
+  strainType: "sativa" | "indica" | "hybrid";
   iconColor: string;
   dishName: string;
   description: string;
