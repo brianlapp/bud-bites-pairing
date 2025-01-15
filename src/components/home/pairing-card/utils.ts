@@ -1,27 +1,49 @@
-export const getStrainType = (strainName: string): "sativa" | "indica" | "hybrid" => {
+/**
+ * Represents the possible types of cannabis strains
+ */
+export type StrainType = "sativa" | "indica" | "hybrid";
+
+/**
+ * Determines the strain type based on the strain name
+ * @param strainName - The name of the cannabis strain
+ * @returns The determined strain type (sativa, indica, or hybrid)
+ */
+export const getStrainType = (strainName: string): StrainType => {
   const lowerName = strainName.toLowerCase();
   if (lowerName.includes('indica')) return 'indica';
   if (lowerName.includes('sativa')) return 'sativa';
   return 'hybrid';
 };
 
-export const getStrainColor = (strainType: "sativa" | "indica" | "hybrid"): string => {
-  switch (strainType) {
-    case 'indica':
-      return 'text-purple-500';
-    case 'sativa':
-      return 'text-green-500';
-    default:
-      return 'text-sage-500';
-  }
+/**
+ * Maps strain types to their corresponding Tailwind text color classes
+ */
+const STRAIN_COLORS: Record<StrainType, string> = {
+  indica: 'text-purple-500',
+  sativa: 'text-green-500',
+  hybrid: 'text-sage-500'
 };
 
+/**
+ * Gets the color class for a given strain type
+ * @param strainType - The type of strain
+ * @returns The corresponding Tailwind color class
+ */
+export const getStrainColor = (strainType: StrainType): string => {
+  return STRAIN_COLORS[strainType];
+};
+
+/**
+ * Attempts to parse and clean JSON data from a string
+ * @param jsonString - The JSON string to parse
+ * @returns The parsed JSON object or a fallback object if parsing fails
+ */
 export const cleanAndParseJSON = (jsonString: string): any => {
   try {
     // First attempt: direct parse
     try {
       return JSON.parse(jsonString);
-    } catch (e) {
+    } catch {
       // If direct parse fails, try cleaning the string
       const cleaned = jsonString
         .replace(/```json\n|\n```/g, '') // Remove markdown code blocks
@@ -29,7 +51,6 @@ export const cleanAndParseJSON = (jsonString: string): any => {
         .replace(/\\"/g, '"') // Replace escaped quotes
         .trim(); // Remove whitespace
 
-      // Try parsing the cleaned string
       return JSON.parse(cleaned);
     }
   } catch (error) {

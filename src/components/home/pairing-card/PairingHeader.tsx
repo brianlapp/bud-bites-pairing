@@ -1,10 +1,11 @@
 import { Cannabis } from "lucide-react";
 import { CardHeader } from "@/components/ui/card";
 import { ShareFavoriteButtons } from "./ShareFavoriteButtons";
+import { StrainType } from "./utils";
 
 interface PairingHeaderProps {
   strainName: string;
-  strainType: "sativa" | "indica" | "hybrid";
+  strainType: StrainType;
   iconColor: string;
   dishName: string;
   description: string;
@@ -13,6 +14,10 @@ interface PairingHeaderProps {
   isLiked: boolean;
 }
 
+/**
+ * Renders the header section of a cannabis pairing card
+ * Displays strain information, dish details, and interaction buttons
+ */
 export const PairingHeader = ({
   strainName,
   strainType,
